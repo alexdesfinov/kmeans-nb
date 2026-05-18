@@ -1,14 +1,8 @@
 <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 " id="sidenav-main">
   <div class="sidenav-header">
     <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
-    <a class="navbar-brand m-0 d-flex align-items-center" href="?">
-      <div style="width:36px;height:36px;border-radius:12px;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;margin-right:10px;flex-shrink:0;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="white" viewBox="0 0 16 16">
-          <path d="M8 2a.5.5 0 0 1 .5.5V4a.5.5 0 0 1-1 0V2.5A.5.5 0 0 1 8 2M3.732 3.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707M2 8a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8m9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5m.754-4.246a.39.39 0 0 0-.527-.02L7.547 7.31A.91.91 0 1 0 8.85 8.569l3.434-4.297a.39.39 0 0 0-.029-.518z"/>
-          <path fill-rule="evenodd" d="M6.664 15.889A8 8 0 1 1 9.336.11a8 8 0 0 1-2.672 15.78zm-4.665-4.283A11.95 11.95 0 0 1 8 10c2.186 0 4.236.585 6.001 1.606a7 7 0 1 0-12.002 0"/>
-        </svg>
-      </div>
-      <span class="font-weight-bold" style="font-size:1.05rem;letter-spacing:-0.3px;"><?php echo TITLE ?></span>
+    <a class="navbar-brand m-0 d-flex align-items-center justify-content-center text-center w-100" href="?">
+      <span class="font-weight-bold" style="font-size:0.95rem;letter-spacing:0.5px;text-transform:uppercase;color:var(--fadel-primary); text-align: center; width: 100%; display: block;"><?php echo "SD N 16 Timbalun" ?></span>
     </a>
   </div>
   <hr class="horizontal dark mt-0">

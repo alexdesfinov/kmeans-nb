@@ -27,16 +27,16 @@ require_admin();
         </a>
       </div>
 
-      <div class="card-body px-0 pt-0 pb-2">
+      <div class="card-body px-4 pt-3 pb-3">
         <div class="table-responsive p-0">
           <table class="table table-hover align-middle" id="datatables">
-            <thead>
+            <thead class="table-dark">
               <tr>
-                <th style="width:50px;">No</th>
+                <th class="text-center" style="width:60px;" data-orderable="false">No</th>
                 <th>Username</th>
                 <th>Nama</th>
-                <th>Level</th>
-                <th class="text-end" style="width:120px;">Aksi</th>
+                <th class="text-center" style="width:120px;">Level</th>
+                <th class="text-center" style="width:150px;" data-orderable="false">Aksi</th>
               </tr>
             </thead>
             <tbody>
@@ -48,38 +48,39 @@ require_admin();
                 $levelColor = $row['level'] === 'admin' ? 'background:rgba(30,41,59,0.1);color:#1e293b;' : 'background:rgba(23,193,232,0.1);color:#17c1e8;';
               ?>
                 <tr>
-                  <td><?php echo $no; ?></td>
-                  <td style="font-weight:500;"><?php echo htmlspecialchars($row['username']); ?></td>
-                  <td><?php echo htmlspecialchars($row['nama']); ?></td>
-                  <td>
+                  <td class="text-center"><?php echo $no; ?></td>
+                  <td style="font-weight:600; color:var(--fadel-primary);"><?php echo htmlspecialchars($row['username']); ?></td>
+                  <td style="font-weight:500;"><?php echo htmlspecialchars($row['nama']); ?></td>
+                  <td class="text-center">
                     <span class="badge" style="<?= $levelColor ?>font-weight:600;font-size:0.72rem;border-radius:8px;padding:4px 12px;">
                       <?php echo htmlspecialchars(ucfirst($row['level'])); ?>
                     </span>
                   </td>
-                  <td class="text-end">
-                    <a class="btn btn-sm btn-warning" style="border-radius:8px;font-size:0.75rem;"
-                      href="media.php?module=<?php echo urlencode($_GET['module']); ?>&act=edit&id=<?php echo (int)$row['id']; ?>"
-                      title="Edit">
-                      <i class="fa fa-pencil"></i>
-                    </a>
+                  <td class="text-center">
+                    <div class="d-flex justify-content-center align-items-center gap-2">
+                      <a class="btn btn-sm btn-warning" style="border-radius:8px; margin: 0;"
+                        href="media.php?module=<?php echo urlencode($_GET['module']); ?>&act=edit&id=<?php echo (int)$row['id']; ?>"
+                        title="Edit">
+                        <i class="fa fa-pencil"></i>
+                      </a>
 
-                    <?php if ((int)$row['id'] !== (int)($_SESSION['id'] ?? 0)): ?>
-                      <form method="POST"
-                        action="<?php echo $aksi; ?>?module=<?php echo urlencode($_GET['module']); ?>&act=delete"
-                        class="d-inline form-hapus-item">
-                        <input type="hidden" name="id" value="<?php echo (int)$row['id']; ?>">
-                        <button type="submit" class="btn btn-danger btn-sm" title="Hapus" style="border-radius:8px;font-size:0.75rem;">
-                          <i class="fa fa-trash"></i>
-                        </button>
-                      </form>
-                    <?php endif; ?>
-
+                      <?php if ((int)$row['id'] !== (int)($_SESSION['id'] ?? 0)): ?>
+                        <form method="POST"
+                          action="<?php echo $aksi; ?>?module=<?php echo urlencode($_GET['module']); ?>&act=delete"
+                          style="display:inline-flex; margin:0;"
+                          class="d-inline-flex align-items-center form-hapus-item">
+                          <input type="hidden" name="id" value="<?php echo (int)$row['id']; ?>">
+                          <button type="submit" class="btn btn-danger btn-sm" title="Hapus" style="border-radius:8px; margin: 0;">
+                            <i class="fa fa-trash"></i>
+                          </button>
+                        </form>
+                      <?php endif; ?>
+                    </div>
                   </td>
                 </tr>
               <?php } ?>
             </tbody>
           </table>
-
         </div>
       </div>
     </div>

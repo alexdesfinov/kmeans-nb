@@ -38,12 +38,12 @@
                         <table class="table table-hover align-middle" id="datatablesDataset">
                             <thead class="table-dark">
                                 <tr>
-                                    <th scope="col" class="text-center" style="width:50px;">No</th>
+                                    <th scope="col" class="text-center" style="width:50px;" data-orderable="false">No</th>
                                     <th scope="col">Nama</th>
                                     <?php for ($i = 1; $i <= 20; $i++): ?>
                                         <th scope="col" class="text-center">P<?= $i ?></th>
                                     <?php endfor; ?>
-                                    <th scope="col" class="text-center" style="width:130px;">Aksi</th>
+                                    <th scope="col" class="text-center" style="width:130px;" data-orderable="false">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -60,19 +60,20 @@
                                                 <td class="text-center" style="font-size:0.8rem;"><?= htmlspecialchars(jawabanSingkat($data[$col] ?? ''), ENT_QUOTES, 'UTF-8') ?></td>
                                             <?php endfor; ?>
                                             <td class="text-center" style="white-space: nowrap;">
-                                                <a class="btn btn-sm btn-warning" style="border-radius:8px;font-size:0.75rem;"
-                                                    href="media.php?module=inputData&edit=1&id=<?= (int)$data['id'] ?>&jenis=training">
-                                                    <i class="fa fa-pencil"></i>
-                                                </a>
-
-                                                <form method="post" action="" style="display:inline;" class="d-inline form-hapus-item">
-                                                    <input type="hidden" name="hapus_item" value="1">
-                                                    <input type="hidden" name="id" value="<?= (int)$data['id'] ?>">
-                                                    <input type="hidden" name="jenis" value="training">
-                                                    <button type="submit" class="btn btn-sm btn-danger" style="border-radius:8px;font-size:0.75rem;">
-                                                        <i class="fa fa-trash"></i>
-                                                    </button>
-                                                </form>
+                                                <div class="d-flex align-items-center justify-content-center gap-2">
+                                                    <a class="btn btn-sm btn-warning" style="border-radius:8px;font-size:0.75rem;margin:0;"
+                                                        href="media.php?module=inputData&edit=1&id=<?= (int)$data['id'] ?>&jenis=training">
+                                                        <i class="fa fa-pencil"></i>
+                                                    </a>
+                                                    <form method="post" action="" style="display:inline-flex;margin:0;" class="d-inline-flex align-items-center form-hapus-item">
+                                                        <input type="hidden" name="hapus_item" value="1">
+                                                        <input type="hidden" name="id" value="<?= (int)$data['id'] ?>">
+                                                        <input type="hidden" name="jenis" value="training">
+                                                        <button type="submit" class="btn btn-sm btn-danger" style="border-radius:8px;font-size:0.75rem;margin:0;">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             </td>
                                         </tr>
                                     <?php endwhile; ?>
