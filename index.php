@@ -350,6 +350,7 @@ $isLoggedIn = !empty($_SESSION['id']);
                 <div class="nav-links d-none d-md-flex">
                     <a href="#features">Fitur</a>
                     <a href="#how-it-works">Cara Kerja</a>
+                    <a href="#about">About</a>
                     <?php if (!$isLoggedIn): ?>
                         <a href="#login">Masuk</a>
                     <?php endif; ?>
@@ -496,9 +497,58 @@ $isLoggedIn = !empty($_SESSION['id']);
         </div>
     </section>
 
+    <!-- About Section -->
+    <section class="features" id="about" style="padding: 6rem 0; background: #fff;">
+        <div class="container">
+            <div class="row align-items-center justify-content-between g-5">
+                <div class="col-lg-5">
+                    <div class="fade-up visible">
+                        <span class="section-label">Tentang Sekolah</span>
+                        <h2 class="section-title"><span style="background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">SD</span> Negeri 16 Timbalun</h2>
+                        <p class="mt-4" style="text-align: justify; color: var(--secondary); font-size: 0.95rem; line-height: 1.8;">
+                            SD Negeri 16 Timbalun merupakan sekolah dasar negeri di Kelurahan Bungus Timur, Kota Padang, Provinsi Sumatera Barat, yang berdiri sejak tahun 1981. Sekolah ini berstatus negeri di bawah Pemerintah Daerah, memiliki luas tanah 2.200 m², and menyelenggarakan kegiatan belajar pada pagi hari selama enam hari dalam seminggu. Dengan akreditasi B, SD Negeri 16 Timbalun didukung fasilitas akses internet dan listrik PLN sebagai wujud komitmen dalam meningkatkan kualitas pendidikan berbasis teknologi.
+                        </p>
+                        
+                        <!-- Contact Info Cards -->
+                        <div class="mt-5" style="display: flex; flex-direction: column; gap: 1.25rem;">
+                            <a href="https://maps.app.goo.gl/Yt6hq5JGBGPRm7KR9" target="_blank" style="display: flex; align-items: center; gap: 1rem; text-decoration: none; color: inherit; background: var(--body-bg); padding: 16px 20px; border-radius: 16px; border: 1px solid rgba(0,0,0,0.04); transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.02);">
+                                <div style="width: 44px; height: 44px; border-radius: 12px; background: var(--gradient-primary, linear-gradient(135deg, #0f172a, #334155)); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.1rem; flex-shrink: 0;">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <span style="font-size: 0.88rem; font-weight: 500; color: var(--primary-light); line-height: 1.5;">Jln Timbalun, Kec. Bungus Teluk Kabung, Kota Padang, Prov. Sumatera Barat</span>
+                            </a>
+                            
+                            <a href="mailto:sdnenambelastimbalun@gmail.com" style="display: flex; align-items: center; gap: 1rem; text-decoration: none; color: inherit; background: var(--body-bg); padding: 16px 20px; border-radius: 16px; border: 1px solid rgba(0,0,0,0.04); transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.02);">
+                                <div style="width: 44px; height: 44px; border-radius: 12px; background: var(--gradient-primary, linear-gradient(135deg, #0f172a, #334155)); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.1rem; flex-shrink: 0;">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <span style="font-size: 0.88rem; font-weight: 500; color: var(--primary-light);">sdnenambelastimbalun@gmail.com</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6 d-flex align-items-center justify-content-center" style="align-self: center;">
+                    <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(0,0,0,0.06); border-radius: 28px; padding: 1rem; box-shadow: 0 20px 50px rgba(0,0,0,0.05); text-align: center; width: 100%; display: flex; justify-content: center; align-items: center;">
+                        <img src="assets/img/td.jpeg" alt="SD Negeri 16 Timbalun" style="width: 100%; max-width: 500px; height: auto; border-radius: 20px; object-fit: cover; box-shadow: 0 8px 30px rgba(0,0,0,0.06);" />
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Map Embed iframe -->
+            <div class="row mt-5 pt-4">
+                <div class="col-12">
+                    <div style="border-radius: 24px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.08); border: 1.5px solid rgba(0,0,0,0.06); height: 350px;">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1994.5995024025037!2d100.43372080221502!3d-1.0095380123762059!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2fd4bb9e55b36f89%3A0x5ce5011fa5622e5e!2sSDN%2016%20Timbalun%2C%20Kel.%20Bungus%20Timur!5e0!3m2!1sid!2sid!4v1770408073568!5m2!1sid!2sid" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Login Section -->
     <?php if (!$isLoggedIn): ?>
-    <section class="login-section" id="login">
+    <section class="login-section" id="login" style="padding: 6rem 0; background: var(--body-bg); border-top: 1px solid rgba(0,0,0,0.03);">
         <div class="container">
             <div class="row justify-content-center align-items-center g-5">
                 <div class="col-lg-5">
