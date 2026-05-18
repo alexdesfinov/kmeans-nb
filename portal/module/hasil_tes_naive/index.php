@@ -71,9 +71,9 @@ function getPredBadgeClass(string $pred): string {
                 <table class="table table-bordered table-hover table-sm align-middle" id="datatablesHasilNB">
                     <thead class="table-dark">
                         <tr>
-                            <th style="width:8mm" class="text-center">No</th>
+                            <th style="width:8mm" class="text-center" data-orderable="false">No</th>
                             <th>Nama</th>
-                            <th style="width:35mm" class="text-center">Prediksi</th>
+                            <th style="width:35mm" class="text-center" data-orderable="false">Prediksi</th>
                         </tr>
                     </thead>
                     <tbody>

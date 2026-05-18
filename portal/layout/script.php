@@ -8,9 +8,10 @@ foreach ($js as $key => $value) { ?>
 <script>
   $(document).ready(function() {
 
-    $('#datatables').DataTable();
-    $('#datatables2').DataTable();
-    $('#datatablesDataset').DataTable();
+    $('#datatables').DataTable({ "order": [[1, "asc"]] });
+    $('#datatables2').DataTable({ "order": [[1, "asc"]] });
+    $('#datatablesDataset').DataTable({ "order": [[1, "asc"]] });
+    $('#datatablesHasilNB').DataTable({ "order": [[1, "asc"]] });
     $('[data-toggle="tooltip"]').tooltip()
 
     $('.owl-carousel').owlCarousel();
