@@ -10,19 +10,19 @@ $centroidError = false;
 if (isset($_POST['proses_kmeans'])) {
 
     $ids = [];
-    foreach (['c1', 'c2', 'c3', 'c4'] as $key) {
+    foreach (['c1', 'c2', 'c3'] as $key) {
         $ids[] = (int)($_POST[$key] ?? 0);
     }
 
     if (in_array(0, $ids, true)) {
-        echo "<div class='alert alert-danger border-0 text-white font-weight-bold' style='background:#f43f5e; border-radius:12px; font-size:0.85rem; padding:12px 18px; margin-bottom:20px;'><i class='fa fa-exclamation-circle me-2'></i>Harus memilih C1 sampai C4.</div>";
+        echo "<div class='alert alert-danger border-0 text-white font-weight-bold' style='background:#f43f5e; border-radius:12px; font-size:0.85rem; padding:12px 18px; margin-bottom:20px;'><i class='fa fa-exclamation-circle me-2'></i>Harus memilih C1 sampai C3.</div>";
         $centroidError = true;
-    } elseif (count(array_unique($ids)) !== 4) {
+    } elseif (count(array_unique($ids)) !== 3) {
         echo "<div class='alert alert-danger border-0 text-white font-weight-bold' style='background:#f43f5e; border-radius:12px; font-size:0.85rem; padding:12px 18px; margin-bottom:20px;'><i class='fa fa-exclamation-circle me-2'></i>Centroid tidak boleh memilih ID yang sama.</div>";
         $centroidError = true;
     } else {
         $vectors = getVectorsByIds($conn, $ids, $tableName);
-        if (count($vectors) === 4) {
+        if (count($vectors) === 3) {
             saveCentroidsToDB($conn, $vectors, $ids);
         } else {
             echo "<div class='alert alert-danger border-0 text-white font-weight-bold' style='background:#f43f5e; border-radius:12px; font-size:0.85rem; padding:12px 18px; margin-bottom:20px;'><i class='fa fa-exclamation-circle me-2'></i>Gagal membuat centroid dari ID yang dipilih.</div>";
@@ -42,7 +42,7 @@ $initCentroids = getInitialCentroidsFromDB($conn);
 $k = count($initCentroids);
 
 if ($isPrint) {
-    $doProcess = ($k >= 4) && !$centroidError;
+    $doProcess = ($k >= 3) && !$centroidError;
 } else {
     $doProcess = isset($_POST['proses_kmeans']) && !$centroidError;
 }
@@ -62,7 +62,7 @@ if (!$dataKosong && $doProcess) {
 }
 
 if ($dataKosong) {
-    echo "<div class='text-center py-5'><div style='font-size:3.5rem;color:#cbd5e1;margin-bottom:1.2rem;'>📊</div><h5 class='alert alert-warning' style='display:inline-block; border-radius:12px; border:none; padding:12px 24px; font-weight:700;'>BELUM ADA DATA TRAINING</h5><p style='color:#64748b; font-size:0.85rem;'>Silakan masukkan data training terlebih dahulu sebelum memproses K-Means.</p></div>";
+    echo "<div class='text-center py-5'><div style='font-size:3.5rem;color:#cbd5e1;margin-bottom:1.2rem;'><i class='fa fa-bar-chart'></i></div><h5 class='alert alert-warning' style='display:inline-block; border-radius:12px; border:none; padding:12px 24px; font-weight:700;'>BELUM ADA DATA TRAINING</h5><p style='color:#64748b; font-size:0.85rem;'>Silakan masukkan data training terlebih dahulu sebelum memproses K-Means.</p></div>";
 } else {
     $rowsTrain = fetchDatasetByJenis($conn, "training", $tableName, $colJenis);
     $centroidSources = getCentroidSources($conn);
@@ -75,14 +75,14 @@ if ($dataKosong) {
                 <i class="fa fa-sliders"></i>
                 <div>
                     <h5 class="mb-0" style="font-weight:750; color:#1e293b; font-size:1.05rem;">Konfigurasi Centroid Awal</h5>
-                    <p class="mb-0" style="font-size:0.75rem; color:#64748b;">Pilih 4 responden berbeda sebagai titik pusat kluster awal</p>
+                    <p class="mb-0" style="font-size:0.75rem; color:#64748b;">Pilih 3 responden berbeda sebagai titik pusat kluster awal</p>
                 </div>
             </div>
 
             <form method="post">
                 <div class="row">
                     <!-- C1 -->
-                    <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
+                    <div class="col-lg-4 col-md-6 mb-3 mb-lg-0">
                         <label class="centroid-label-modern">Centroid Awal C1</label>
                         <select name="c1" class="form-select" style="border-radius:10px; border:1.5px solid #cbd5e1; font-size:0.85rem; padding:10px 14px; width:100%; cursor:pointer;" required>
                             <option value="">-- Pilih Responden --</option>
@@ -95,7 +95,7 @@ if ($dataKosong) {
                     </div>
 
                     <!-- C2 -->
-                    <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
+                    <div class="col-lg-4 col-md-6 mb-3 mb-lg-0">
                         <label class="centroid-label-modern">Centroid Awal C2</label>
                         <select name="c2" class="form-select" style="border-radius:10px; border:1.5px solid #cbd5e1; font-size:0.85rem; padding:10px 14px; width:100%; cursor:pointer;" required>
                             <option value="">-- Pilih Responden --</option>
@@ -108,25 +108,12 @@ if ($dataKosong) {
                     </div>
 
                     <!-- C3 -->
-                    <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
+                    <div class="col-lg-4 col-md-6 mb-3 mb-lg-0">
                         <label class="centroid-label-modern">Centroid Awal C3</label>
                         <select name="c3" class="form-select" style="border-radius:10px; border:1.5px solid #cbd5e1; font-size:0.85rem; padding:10px 14px; width:100%; cursor:pointer;" required>
                             <option value="">-- Pilih Responden --</option>
                             <?php foreach ($rowsTrain as $r): ?>
                                 <option value="<?= (int)$r['id'] ?>" <?= ((int)$r['id'] === (int)($centroidSources[3] ?? 0)) ? 'selected' : '' ?>>
-                                    <?= htmlspecialchars($r['nama']) ?> (ID: <?= (int)$r['id'] ?>)
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-
-                    <!-- C4 -->
-                    <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
-                        <label class="centroid-label-modern">Centroid Awal C4</label>
-                        <select name="c4" class="form-select" style="border-radius:10px; border:1.5px solid #cbd5e1; font-size:0.85rem; padding:10px 14px; width:100%; cursor:pointer;" required>
-                            <option value="">-- Pilih Responden --</option>
-                            <?php foreach ($rowsTrain as $r): ?>
-                                <option value="<?= (int)$r['id'] ?>" <?= ((int)$r['id'] === (int)($centroidSources[4] ?? 0)) ? 'selected' : '' ?>>
                                     <?= htmlspecialchars($r['nama']) ?> (ID: <?= (int)$r['id'] ?>)
                                 </option>
                             <?php endforeach; ?>
@@ -154,7 +141,7 @@ $finalLabels = [];
 
 if (!$dataKosong && $doProcess && isset($hybrid) && is_array($hybrid)) {
     if (count($initCentroids) < $k) {
-        echo "<div class='alert alert-warning border-0 text-dark font-weight-bold' style='background:#fef08a; border-radius:12px; font-size:0.85rem; padding:12px 18px; margin-bottom:20px;'><i class='fa fa-exclamation-triangle me-2'></i>Centroid awal belum lengkap. Pilih & Proses C1–C4 dulu.</div>";
+        echo "<div class='alert alert-warning border-0 text-dark font-weight-bold' style='background:#fef08a; border-radius:12px; font-size:0.85rem; padding:12px 18px; margin-bottom:20px;'><i class='fa fa-exclamation-triangle me-2'></i>Centroid awal belum lengkap. Pilih & Proses C1-C3 dulu.</div>";
     } else {
         $trace = kmeansRunWithTrace($hybrid['X_train_km'], $initCentroids, $k, $maxIter);
         $finalLabels = $trace['final']['labels'];
@@ -364,9 +351,9 @@ if (!$dataKosong && $doProcess && isset($hybrid) && is_array($hybrid)) {
                             $accentColor = '#10b981';
                             $bgLight = 'rgba(16, 185, 129, 0.03)';
                         } else {
-                            $badgeClass = 'cluster-normal';
-                            $accentColor = '#64748b';
-                            $bgLight = 'rgba(100, 116, 139, 0.03)';
+                            $badgeClass = 'cluster-ringan';
+                            $accentColor = '#10b981';
+                            $bgLight = 'rgba(16, 185, 129, 0.03)';
                         }
                         ?>
 
@@ -458,7 +445,7 @@ if (!$dataKosong && $doProcess && isset($hybrid) && is_array($hybrid)) {
                                         <i class="fa fa-circle-o-notch fa-spin me-2 text-primary"></i> Tabel Perhitungan Iterasi <?= (int)$it['iter'] ?>
                                     </h6>
                                     <span class="badge" style="background:#e2e8f0; color:#475569; font-weight:700; padding:6px 12px; border-radius:8px;">
-                                        Status: <?= $it['changed'] ? 'Mencari Centroid...' : 'Konvergen ✓' ?>
+                                        Status: <?= $it['changed'] ? 'Mencari Centroid...' : 'Konvergen' ?>
                                     </span>
                                 </div>
 

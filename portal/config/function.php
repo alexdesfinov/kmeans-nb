@@ -164,12 +164,12 @@ function jawabanKeAngkaFlexible(string $s): int
 function kategoriMap(): array
 {
 	return [
-		'k1'   => ['p1', 'p7', 'p15'],
-		'k2' => ['p2', 'p6', 'p17'],
-		'k3' => ['p3', 'p4', 'p8', 'p11', 'p12', 'p19'],
-		'k4'     => ['p5', 'p9', 'p10'],
-		'k5'  => ['p13', 'p16', 'p18'],
-		'k6'  => ['p14', 'p20'],
+		'k1' => ['p7', 'p11', 'p17'],
+		'k2' => ['p1', 'p5', 'p14'],
+		'k3' => ['p3', 'p15'],
+		'k4' => ['p2', 'p6'],
+		'k5' => ['p9', 'p10', 'p13', 'p16', 'p18'],
+		'k6' => ['p4', 'p8', 'p12', 'p19', 'p20'],
 	];
 }
 
@@ -188,11 +188,9 @@ function rowToVectorKategori(array $row): array
 
 function kategoriExcel(int $nilai): int
 {
-	if ($nilai <= 3)  return 0;
-	if ($nilai <= 7)  return 1;
-	if ($nilai <= 10) return 2;
-	if ($nilai <= 13) return 3;
-	return 4;
+	if ($nilai <= 2) return 0;
+	if ($nilai <= 5) return 1;
+	return 2;
 }
 
 function rowToVectorKategoriNB(array $row): array
@@ -246,7 +244,7 @@ function saveCentroidsToDB(mysqli $conn, array $centroidVectors, array $sourceId
 function getCentroidSources(mysqli $conn): array
 {
 	$map = [];
-	$sql = "SELECT id_centroid, source_id FROM centroid ORDER BY id_centroid ASC";
+	$sql = "SELECT id_centroid, source_id FROM centroid ORDER BY id_centroid ASC LIMIT 3";
 	$res = $conn->query($sql);
 	if (!$res) return $map;
 
@@ -259,7 +257,7 @@ function getCentroidSources(mysqli $conn): array
 function getInitialCentroidsFromDB(mysqli $conn): array
 {
 	$centroids = [];
-	$sql = "SELECT data_centroid FROM centroid ORDER BY id_centroid ASC";
+	$sql = "SELECT data_centroid FROM centroid ORDER BY id_centroid ASC LIMIT 3";
 	$res = mysqli_query($conn, $sql);
 
 	while ($row = mysqli_fetch_assoc($res)) {
@@ -516,10 +514,9 @@ function kmeansRunWithTrace(array $X, array $initCentroids, int $k = 4, int $max
 function mapClusterNamesFixed(int $k): array
 {
 	$names = [
-		0 => "Kecanduan Parah",
-		1 => "Kecanduan Sedang",
+		0 => "Kecanduan Sedang",
+		1 => "Kecanduan Parah",
 		2 => "Kecanduan Ringan",
-		3 => "Normal",
 	];
 
 	$map = [];
@@ -543,7 +540,7 @@ function normalizeNbLabel(string $label): string
 	};
 }
 
-function nbTrainCategorical(array $X, array $y, int $valueCount = 6, float $alpha = 1.0): array
+function nbTrainCategorical(array $X, array $y, int $valueCount = 3, float $alpha = 0.0): array
 {
 	$classes = array_values(array_unique($y));
 	$classCount = [];
@@ -612,6 +609,10 @@ function nbPredictOne(array $model, array $x): array
 			}
 
 			$num = ($model['counts'][$cls][$j][$val] ?? 0) + $model['alpha'];
+			if ($den <= 0 || $num <= 0) {
+				$logp = -INF;
+				break;
+			}
 			$logp += log($num / $den);
 		}
 
@@ -629,7 +630,7 @@ function nbPredictOne(array $model, array $x): array
 // 7. PIPELINE HYBRID
 // ============================================================================================
 
-function hybridTrainFromDb(mysqli $conn, int $k = 4, int $maxIter = 50, string $table = "dataset", string $colJenis = "jenisData", ?array $initCentroids = null): array
+function hybridTrainFromDb(mysqli $conn, int $k = 3, int $maxIter = 50, string $table = "dataset", string $colJenis = "jenisData", ?array $initCentroids = null): array
 {
 	$trainRows = fetchDatasetByJenis($conn, "training", $table, $colJenis);
 
@@ -650,7 +651,7 @@ function hybridTrainFromDb(mysqli $conn, int $k = 4, int $maxIter = 50, string $
 		$y[] = normalizeNbLabel($rawLabel);
 	}
 
-	$nb = nbTrainCategorical($X_nb, $y, 5, 1.0);
+	$nb = nbTrainCategorical($X_nb, $y, 3, 0.0);
 
 	return [
 		'trainRows' => $trainRows,

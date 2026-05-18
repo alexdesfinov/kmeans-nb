@@ -17,7 +17,7 @@ if (!$res || $res->num_rows === 0) {
 $initCentroids = getInitialCentroidsFromDB($conn);
 $k = count($initCentroids);
 
-if ($k < 2) {
+if ($k < 3) {
     echo "<div class='alert alert-warning mt-3'>Centroid belum ada / belum lengkap. Pilih centroid dan proses K-Means dulu.</div>";
     return;
 }
@@ -39,7 +39,6 @@ function getPredBadgeClass(string $pred): string {
     if (strpos($lower, 'parah') !== false) return 'cluster-parah';
     if (strpos($lower, 'sedang') !== false) return 'cluster-sedang';
     if (strpos($lower, 'ringan') !== false) return 'cluster-ringan';
-    if (strpos($lower, 'normal') !== false) return 'cluster-normal';
     return '';
 }
 ?>
