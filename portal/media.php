@@ -30,6 +30,20 @@ $aksi = "module/" . ($_GET['module'] ?? '') . "/action.php";
 
 <head>
   <?php include 'layout/head.php'; ?>
+  <?php if (($_SESSION['level'] ?? 'user') === 'user'): ?>
+    <style>
+      #sidenav-main {
+        display: none !important;
+      }
+      .main-content {
+        margin-left: 0 !important;
+      }
+      .navbar-main {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+      }
+    </style>
+  <?php endif; ?>
 </head>
 
 <body class="g-sidenav-show  bg-gray-100">

@@ -28,12 +28,33 @@ $questions = [
 $opts = allowedJawabanList();
 
 // =====================
+// CHECK EXISTING RESPONSE
+// =====================
+$userNama = $_SESSION['nama'] ?? '';
+$existingRecord = null;
+if ($userNama !== '') {
+    $stmt = $conn->prepare("SELECT * FROM `dataset_testing` WHERE `nama` = ? LIMIT 1");
+    if ($stmt) {
+        $stmt->bind_param("s", $userNama);
+        $stmt->execute();
+        $existingRecord = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+    }
+}
+
+// =====================
 // STATE DEFAULT
 // =====================
 $old = [
-    'nama' => '',
+    'nama' => $userNama,
     'p'    => array_fill(1, 20, '')
 ];
+
+if ($existingRecord) {
+    for ($i = 1; $i <= 20; $i++) {
+        $old['p'][$i] = $existingRecord["p$i"] ?? '';
+    }
+}
 
 $successMsg = '';
 $errorMsg   = '';
@@ -45,80 +66,321 @@ if (isset($_POST['submit'])) {
 
     // PAKSA jenis data (aman, user tidak bisa manipulasi)
     $_POST['jenisData'] = 'testing';
+    
+    // Paksa nama sesuai nama session agar tidak dimanipulasi
+    $_POST['nama'] = $userNama;
+
+    $editCtx = null;
+    if ($existingRecord) {
+        $editCtx = [
+            'isEdit' => true,
+            'jenis' => 'testing',
+            'id' => (int)$existingRecord['id']
+        ];
+    }
 
     $state = handleInsertDatasetFromPost(
         $conn,
         "dataset",
         "jenisData",
-        null // tidak ada edit context
+        $editCtx
     );
 
     if (!empty($state['successMsg'])) {
-        $successMsg = "Terima kasih atas partisipasinya";
-        // Reset state on successful submit so the form is ready for a new respondent
-        $old = [
-            'nama' => '',
-            'p'    => array_fill(1, 20, '')
-        ];
+        $successMsg = $existingRecord ? "Respon kuesioner Anda berhasil diperbarui!" : "Respon kuesioner Anda berhasil disimpan!";
+        
+        // Re-fetch existing record to get latest state
+        if ($userNama !== '') {
+            $stmt = $conn->prepare("SELECT * FROM `dataset_testing` WHERE `nama` = ? LIMIT 1");
+            if ($stmt) {
+                $stmt->bind_param("s", $userNama);
+                $stmt->execute();
+                $existingRecord = $stmt->get_result()->fetch_assoc();
+                $stmt->close();
+            }
+        }
+        if ($existingRecord) {
+            for ($i = 1; $i <= 20; $i++) {
+                $old['p'][$i] = $existingRecord["p$i"] ?? '';
+            }
+        }
     } else {
         $errorMsg   = $state['errorMsg'] ?? '';
         $old        = $state['old'] ?? $old;
     }
 }
+
+$showEditMode = isset($_GET['edit']) && $_GET['edit'] === '1';
+$showSuccessScreen = $existingRecord && !$showEditMode;
 ?>
 
-<!-- Alerts -->
-<?php if ($successMsg): ?>
-    <div class="alert alert-success border-0 text-white font-weight-bold" style="background:#10b981; border-radius:12px; font-size:0.85rem; padding:12px 18px; margin-bottom:20px;">
-        <i class="fa fa-check-circle me-2"></i><?= htmlspecialchars($successMsg) ?>
-    </div>
+<style>
+    /* Hide Side Navigation Bar specifically on this page */
+    #sidenav-main {
+        display: none !important;
+    }
+    /* Stretch Main Content Area to 100% full width */
+    .main-content {
+        margin-left: 0 !important;
+    }
+    /* Make top breadcrumb container full width and clean */
+    .navbar-main {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    /* Success Screen Styles */
+    .success-screen-card {
+        background: #ffffff;
+        border-radius: 24px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04);
+        border: 1px solid rgba(0, 0, 0, 0.04);
+        padding: 40px;
+        text-align: center;
+        max-width: 600px;
+        margin: 40px auto;
+        animation: fadeInUp 0.6s ease-out;
+    }
+    .success-icon-wrapper {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: rgba(16, 185, 129, 0.1);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 24px;
+    }
+    .success-pulse-icon {
+        font-size: 3.5rem;
+        color: #10b981;
+        animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .success-title {
+        font-weight: 800;
+        color: #1e293b;
+        font-size: 1.5rem;
+        margin-bottom: 12px;
+        letter-spacing: -0.5px;
+    }
+    .success-subtitle {
+        color: #64748b;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin-bottom: 30px;
+    }
+    .success-details-box {
+        background: #f8fafc;
+        border-radius: 16px;
+        padding: 20px 24px;
+        margin-bottom: 32px;
+        border: 1px solid #e2e8f0;
+    }
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+    }
+    .detail-row:not(:last-child) {
+        border-bottom: 1px solid #e2e8f0;
+    }
+    .detail-label {
+        font-size: 0.82rem;
+        font-weight: 650;
+        color: #64748b;
+    }
+    .detail-val {
+        font-size: 0.85rem;
+        font-weight: 750;
+        color: #1e293b;
+    }
+    .badge-success-premium {
+        background: #10b981;
+        color: #ffffff;
+        padding: 4px 12px;
+        border-radius: 8px;
+        font-size: 0.72rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .success-action-row {
+        margin-top: 16px;
+    }
+    .btn-edit-jawaban-premium {
+        background: var(--gradient-primary, linear-gradient(135deg, #0f172a, #334155)) !important;
+        color: #ffffff !important;
+        border: none;
+        border-radius: 12px;
+        padding: 14px 28px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none !important;
+        transition: all 0.3s;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+    }
+    .btn-edit-jawaban-premium:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.25);
+    }
+    
+    /* Edit Mode Banner */
+    .edit-banner-card {
+        background: #fffbeb;
+        border: 1.5px solid #fcd34d;
+        border-radius: 16px;
+        padding: 16px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+        animation: fadeInDown 0.4s ease-out;
+    }
+    .edit-banner-content {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+    .edit-banner-icon {
+        font-size: 1.8rem;
+        color: #d97706;
+    }
+    .edit-banner-title {
+        font-weight: 800;
+        color: #92400e;
+        margin-bottom: 2px;
+        font-size: 0.92rem;
+    }
+    .edit-banner-subtitle {
+        color: #b45309;
+        font-size: 0.78rem;
+        margin-bottom: 0;
+    }
+    .btn-cancel-edit-premium {
+        background: #ffffff !important;
+        color: #b45309 !important;
+        border: 1.5px solid #fcd34d;
+        border-radius: 10px;
+        padding: 8px 16px;
+        font-weight: 700;
+        font-size: 0.8rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        text-decoration: none !important;
+        transition: all 0.2s;
+    }
+    .btn-cancel-edit-premium:hover {
+        background: #fffbeb !important;
+        color: #92400e !important;
+    }
+
+    /* Keyframes */
+    @keyframes scaleIn {
+        0% { transform: scale(0); opacity: 0; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes fadeInUp {
+        0% { transform: translateY(20px); opacity: 0; }
+        100% { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes fadeInDown {
+        0% { transform: translateY(-20px); opacity: 0; }
+        100% { transform: translateY(0); opacity: 1; }
+    }
+</style>
+
+<!-- Alerts (Only show when not on the success screen to avoid duplicates) -->
+<?php if (!$showSuccessScreen): ?>
+    <?php if ($successMsg): ?>
+        <div class="alert alert-success border-0 text-white font-weight-bold" style="background:#10b981; border-radius:12px; font-size:0.85rem; padding:12px 18px; margin-bottom:20px;">
+            <i class="fa fa-check-circle me-2"></i><?= htmlspecialchars($successMsg) ?>
+        </div>
+    <?php endif; ?>
+
+    <?php if ($errorMsg): ?>
+        <div class="alert alert-danger border-0 text-white font-weight-bold" style="background:#f43f5e; border-radius:12px; font-size:0.85rem; padding:12px 18px; margin-bottom:20px;">
+            <i class="fa fa-exclamation-circle me-2"></i><?= htmlspecialchars($errorMsg) ?>
+        </div>
+    <?php endif; ?>
 <?php endif; ?>
 
-<?php if ($errorMsg): ?>
-    <div class="alert alert-danger border-0 text-white font-weight-bold" style="background:#f43f5e; border-radius:12px; font-size:0.85rem; padding:12px 18px; margin-bottom:20px;">
-        <i class="fa fa-exclamation-circle me-2"></i><?= htmlspecialchars($errorMsg) ?>
-    </div>
-<?php endif; ?>
+<?php if ($showSuccessScreen): ?>
+    <!-- Premium Success Notification Screen -->
+    <?php if ($successMsg): ?>
+        <div class="alert alert-success border-0 text-white font-weight-bold" style="background:#10b981; border-radius:12px; font-size:0.85rem; padding:12px 18px; margin-bottom:20px; animation: fadeInUp 0.5s ease-out;">
+            <i class="fa fa-check-circle me-2"></i><?= htmlspecialchars($successMsg) ?>
+        </div>
+    <?php endif; ?>
 
-<!-- Header Brand Info -->
-<div class="d-flex align-items-center mb-4">
-    <div class="icon icon-shape icon-gradient-dark shadow text-center border-radius-md d-inline-flex align-items-center justify-content-center me-3" style="width:48px;height:48px;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" class="bi bi-file-text-fill" viewBox="0 0 16 16">
-            <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M5 4h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1m-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5M5 8h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1m0 2h3a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1"/>
-        </svg>
-    </div>
-    <div>
-        <h5 class="mb-0" style="font-weight:700;">Isi Kuesioner Deteksi</h5>
-        <p class="mb-0" style="font-size:0.78rem;color:#627594;">Ukur tingkat kecanduan internet anak Anda secara real-time</p>
-    </div>
-</div>
+    <div class="success-screen-card">
+        <div class="success-icon-wrapper">
+            <i class="fa fa-check success-pulse-icon"></i>
+        </div>
+        <h3 class="success-title">Kuesioner Selesai Terisi</h3>
+        <p class="success-subtitle">Terima kasih! Respon kuesioner deteksi kecanduan internet Anda telah berhasil terekam dalam sistem.</p>
+        
+        <div class="success-details-box">
+            <div class="detail-row">
+                <span class="detail-label"><i class="fa fa-user me-2"></i> Responden</span>
+                <span class="detail-val"><?= htmlspecialchars($userNama) ?></span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label"><i class="fa fa-check-square-o me-2"></i> Jumlah Soal</span>
+                <span class="detail-val">20 Pertanyaan (Selesai)</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label"><i class="fa fa-info-circle me-2"></i> Status</span>
+                <span class="badge-success-premium">Terisi & Aktif</span>
+            </div>
+        </div>
 
-<form method="post" id="wizardForm">
+        <div class="success-action-row">
+            <a href="?module=inputDataUser&edit=1" class="btn-edit-jawaban-premium">
+                <i class="fa fa-pencil"></i> Edit Jawaban Kuesioner
+            </a>
+        </div>
+    </div>
+<?php else: ?>
+    <?php if ($showEditMode): ?>
+        <!-- Edit Mode Warning Banner -->
+        <div class="edit-banner-card">
+            <div class="edit-banner-content">
+                <i class="fa fa-pencil-square edit-banner-icon"></i>
+                <div>
+                    <h6 class="edit-banner-title">Mode Edit Jawaban</h6>
+                    <p class="edit-banner-subtitle">Anda sedang memperbarui kuesioner Anda. Perubahan akan disimpan saat menekan "Kirim Jawaban".</p>
+                </div>
+            </div>
+            <a href="?module=inputDataUser" class="btn-cancel-edit-premium">
+                <i class="fa fa-times"></i> Batal Edit
+            </a>
+        </div>
+    <?php endif; ?>
+
+    <!-- Header Brand Info -->
+    <div class="d-flex align-items-center mb-4">
+        <div class="icon icon-shape icon-gradient-dark shadow text-center border-radius-md d-inline-flex align-items-center justify-content-center me-3" style="width:48px;height:48px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" class="bi bi-file-text-fill" viewBox="0 0 16 16">
+                <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M5 4h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1m-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5M5 8h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1m0 2h3a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1"/>
+            </svg>
+        </div>
+        <div>
+            <h5 class="mb-0" style="font-weight:700;"><?= $showEditMode ? 'Edit Jawaban Kuesioner' : 'Isi Kuesioner Deteksi' ?></h5>
+            <p class="mb-0" style="font-size:0.78rem;color:#627594;">Ukur tingkat kecanduan internet anak Anda secara real-time</p>
+        </div>
+    </div>
+
+<form method="post" id="wizardForm" action="?module=inputDataUser">
     <!-- hidden: jenis data selalu testing -->
     <input type="hidden" name="jenisData" id="inputJenisData" value="testing">
 
-    <!-- Identitas Responden Card -->
-    <div class="identitas-card-modern">
-        <div class="identitas-title-section">
-            <i class="fa fa-user"></i>
-            <div>
-                <h5 class="mb-0" style="font-weight:750; color:#1e293b; font-size:1.05rem;">Identitas Responden</h5>
-                <p class="mb-0" style="font-size:0.75rem; color:#64748b;">Lengkapi data dasar responden terlebih dahulu</p>
-            </div>
-        </div>
-
-        <div class="row align-items-center">
-            <div class="col-12">
-                <label style="font-weight:650; font-size:0.8rem; color:#475569; display:block; margin-bottom:8px;">Nama Lengkap Anak</label>
-                <div style="position:relative;">
-                    <input type="text" class="form-control" name="nama" id="inputNama"
-                        value="<?= htmlspecialchars($old['nama'] ?? '') ?>"
-                        placeholder="Masukkan nama lengkap anak Anda" 
-                        style="border-radius:10px; border:1.5px solid #cbd5e1; font-size:0.85rem; padding:11px 16px; width:100%;" required>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Nama responden otomatis diambil dari session -->
+    <input type="hidden" name="nama" id="inputNama" value="<?= htmlspecialchars($old['nama'] ?: ($_SESSION['nama'] ?? '')) ?>">
 
     <!-- Stepper Navigation Panel -->
     <div class="identitas-card-modern" style="padding: 20px 24px !important;">
@@ -267,9 +529,13 @@ if (isset($_POST['submit'])) {
 
     </div>
 </form>
+<?php endif; ?>
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
+    const wizardForm = document.getElementById("wizardForm");
+    if (!wizardForm) return; // Exit cleanly if form is not present (success screen mode)
+    
     let currentStep = 1;
     const totalSteps = 4;
     
