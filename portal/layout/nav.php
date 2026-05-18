@@ -1,8 +1,14 @@
 <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 " id="sidenav-main">
-  <div class="sidenav-header">
+  <div class="sidenav-header" style="display: flex; align-items: center; justify-content: center; height: 80px;">
     <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
-    <a class="navbar-brand m-0 d-flex align-items-center justify-content-center text-center w-100" href="?">
-      <span class="font-weight-bold" style="font-size:0.95rem;letter-spacing:0.5px;text-transform:uppercase;color:var(--fadel-primary); text-align: center; width: 100%; display: block;"><?php echo "SD N 16 Timbalun" ?></span>
+    <a class="navbar-brand m-0 d-flex align-items-center justify-content-center gap-2" href="?" style="padding: 0 !important; margin: 0 !important; display: flex; align-items: center; justify-content: center;">
+      <div style="width: 30px; height: 30px; border-radius: 8px; background: var(--gradient-primary, linear-gradient(135deg, #0f172a, #334155)); display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; box-shadow: 0 4px 10px rgba(15,23,42,0.15);">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: middle;">
+          <path d="M8.211 2.047a.5.5 0 0 0-.422 0l-7.5 3.5a.5.5 0 0 0 .025.917l7.5 3a.5.5 0 0 0 .372 0L14 7.14V13a1 1 0 0 0-1 1v2h3v-2a1 1 0 0 0-1-1V6.739l.786-.314a.5.5 0 0 0 .025-.917l-7.5-3.5z"/>
+          <path d="M4.176 9.032a.5.5 0 0 0-.656.327 5.5 5.5 0 0 0-.27 1.488 5.5 5.5 0 0 0 .27 1.488.5.5 0 1 0 .926-.372 4.5 4.5 0 0 1-.22-1.116c0-.395.077-.78.22-1.116a.5.5 0 0 0-.327-.656z"/>
+        </svg>
+      </div>
+      <span class="font-weight-bold" style="font-size:0.88rem;letter-spacing:0.3px;text-transform:uppercase;color:var(--fadel-primary, #0f172a); line-height: 1; display: inline-block; padding-top: 2px;"><?php echo "SD N 16 Timbalun" ?></span>
     </a>
   </div>
   <hr class="horizontal dark mt-0">
