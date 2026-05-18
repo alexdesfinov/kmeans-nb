@@ -1,5 +1,5 @@
 <?php
-define("TITLE",	"FADEL");
+define("TITLE",	"Sistem Deteksi Kecanduan Internet");
 // define(	"BASE_URL",	"http://brainy.monev-unsada.my.id");
 // assets css
 $css = array(

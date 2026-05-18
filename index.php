@@ -6,7 +6,7 @@
     <meta name="description" content="FADEL — Sistem Deteksi Kecanduan Internet pada SD Negeri 16 Timbalun menggunakan K-Means & Naive Bayes">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>FADEL — Sistem Deteksi Kecanduan Internet</title>
+    <title>SD N 16 TIMBALUN — Sistem Deteksi Kecanduan Internet</title>
     <link rel="icon" href="assets/img/favicon.png">
     <link href="portal/assets/css/inter.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/vendor/bootstrap.min.css">
