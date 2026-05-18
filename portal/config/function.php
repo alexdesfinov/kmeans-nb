@@ -1263,10 +1263,10 @@ function flashRenderAndClear(): void
 	}
 
 	echo '<div class="' . htmlspecialchars($class) . ' mt-3 mb-3 alert-dismissible fade show" style="' . $style . '">';
-	echo '  <span style="display: flex; align-items: center; gap: 10px;">';
-	echo '    <i class="' . htmlspecialchars($icon) . '" style="font-size: 1.1rem;"></i> ';
-	echo      $label;
-	echo '  </span>';
+	echo '  <div style="display: flex; align-items: flex-start; gap: 12px; flex: 1;">';
+	echo '    <i class="' . htmlspecialchars($icon) . '" style="font-size: 1.1rem; margin-top: 2px;"></i> ';
+	echo '    <div style="font-size: 0.88rem; font-weight: 600; line-height: 1.4;">' . $label . '</div>';
+	echo '  </div>';
 	echo '  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="position: static; padding: 0; margin-left: 15px; color: inherit; filter: grayscale(1) invert(0.5); opacity: 0.8;"></button>';
 	echo '</div>';
 
