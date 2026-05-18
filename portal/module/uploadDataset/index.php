@@ -1,7 +1,7 @@
     <div class="row">
         <div class="col-sm-12">
             <?php
-            require_admin();
+            requireAdmin();
             include_once 'aksi.php';
             ?>
             <div class="row">
@@ -30,7 +30,7 @@
                                             </svg>
                                         </div>
                                         <p><strong>Klik untuk pilih file</strong><br><span style="font-size:0.78rem;">Format: CSV / Excel</span></p>
-                                        <input type="file" class="d-none" id="formFile" name="filexls" onchange="document.getElementById('fileName').textContent = this.files[0]?.name || ''">
+                                        <input type="file" class="d-none" id="formFile" name="filexls" accept=".xls, .xlsx, .csv" onchange="document.getElementById('fileName').textContent = this.files[0]?.name || ''">
                                     </div>
                                     <small id="fileName" style="font-weight:600;color:var(--fadel-primary,#1e293b);"></small>
                                 </div>

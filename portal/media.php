@@ -3,10 +3,10 @@ include 'config/koneksi.php';
 include 'config/assets.php';
 include 'config/function.php';
 
-remember_me_try_login($conn);
+rememberMeTryLogin($conn);
 
 if (isset($_GET['logout'])) {
-  logout_user($conn); // ini akan delete token + clear cookie + destroy session + redirect
+  logoutUser($conn); // ini akan delete token + clear cookie + destroy session + redirect
 }
 
 // kalau tetap belum login, lempar ke index
@@ -23,7 +23,7 @@ if (isset($_GET['logout']) || !isset($_SESSION['id'])) {
     header('location:index.php');
   }
 }
-$aksi = "module/" . $_GET['module'] . "/action.php";
+$aksi = "module/" . ($_GET['module'] ?? '') . "/action.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">

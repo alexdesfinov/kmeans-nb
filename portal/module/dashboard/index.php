@@ -80,7 +80,7 @@ $nama = htmlspecialchars($_SESSION['nama'] ?? 'User');
 </div>
 
 <!-- Flash Messages -->
-<?php flash_render_and_clear(); ?>
+<?php flashRenderAndClear(); ?>
 
 <!-- Menu Cards -->
 <div class="row">

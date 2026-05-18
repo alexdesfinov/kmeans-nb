@@ -2,7 +2,7 @@
 include('config/koneksi.php');
 include('config/function.php');
 
-remember_me_try_login($conn);
+rememberMeTryLogin($conn);
 
 // kalau sudah auto-login, langsung ke media
 if (!empty($_SESSION['id'])) {
@@ -11,7 +11,7 @@ if (!empty($_SESSION['id'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  handle_login_post($conn);
+  handleLoginPost($conn);
 }
 
 // TITLE masih dari assets.php
@@ -187,7 +187,7 @@ include('config/assets.php');
           <div class="auth-card">
             <div class="row g-0">
               <div class="col-md-6 auth-form-side">
-                <?php flash_render_and_clear(); ?>
+                <?php flashRenderAndClear(); ?>
                 <h3>Login</h3>
                 <p class="subtitle">Masuk ke portal <?php echo TITLE ?></p>
 

@@ -1,11 +1,11 @@
 <?php
 // pastikan hanya admin
-require_admin();
+requireAdmin();
 ?>
 
 <div class="row">
   <div class="col-sm-12">
-    <?php flash_render_and_clear(); ?>
+    <?php flashRenderAndClear(); ?>
   </div>
 
   <div class="col-sm-12">
@@ -32,7 +32,7 @@ require_admin();
           <table class="table table-hover align-middle" id="datatables">
             <thead class="table-dark">
               <tr>
-                <th class="text-center" style="width:60px;" data-orderable="false">No</th>
+                <th class="text-center" style="width:60px;">No</th>
                 <th>Username</th>
                 <th>Nama</th>
                 <th class="text-center" style="width:120px;">Level</th>

@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../config/koneksi.php';
 // kalau media.php biasanya include helper/function, tambahkan juga:
 require_once __DIR__ . '/../../config/function.php'; // kalau ada
 
-require_admin();
+requireAdmin();
 
 $baseUrl = '../../';
 $logoKiriUrl  = $baseUrl . 'assets/img/logos/logo-kiri.png';

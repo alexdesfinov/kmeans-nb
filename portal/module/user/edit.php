@@ -1,9 +1,9 @@
 <?php
-require_admin();
+requireAdmin();
 
 $id = (int)($_GET['id'] ?? 0);
 if ($id <= 0) {
-  set_flash('alert alert-danger', 'ID user tidak valid', 'fa fa-times');
+  setFlash('alert alert-danger', 'ID user tidak valid', 'fa fa-times');
   header('Location: media.php?module=' . urlencode($_GET['module']));
   exit;
 }
@@ -16,7 +16,7 @@ $u    = mysqli_fetch_assoc($res);
 mysqli_stmt_close($stmt);
 
 if (!$u) {
-  set_flash('alert alert-danger', 'User tidak ditemukan', 'fa fa-times');
+  setFlash('alert alert-danger', 'User tidak ditemukan', 'fa fa-times');
   header('Location: media.php?module=' . urlencode($_GET['module']));
   exit;
 }
@@ -24,7 +24,7 @@ if (!$u) {
 
 <div class="row">
   <div class="col-sm-12">
-    <?php flash_render_and_clear(); ?>
+    <?php flashRenderAndClear(); ?>
   </div>
 
   <div class="col-sm-12">

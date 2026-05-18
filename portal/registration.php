@@ -5,7 +5,7 @@ require_once 'config/function.php';
 require_once 'config/assets.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  handle_register_post($conn);
+  handleRegisterPost($conn);
 }
 ?>
 <!DOCTYPE html>
@@ -179,7 +179,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <div class="auth-card">
             <div class="row g-0">
               <div class="col-md-6 auth-form-side">
-                <?php flash_render_and_clear(); ?>
+                <?php flashRenderAndClear(); ?>
                 <h3>Registrasi</h3>
                 <p class="subtitle">Buat akun untuk akses sistem</p>
 

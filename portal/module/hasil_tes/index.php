@@ -1,5 +1,5 @@
 <?php
-require_admin();
+requireAdmin();
 
 // === Variabel ===
 $tableName = "dataset_training";

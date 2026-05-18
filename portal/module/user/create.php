@@ -1,10 +1,10 @@
 <?php
-require_admin();
+requireAdmin();
 ?>
 
 <div class="row">
   <div class="col-sm-12">
-    <?php flash_render_and_clear(); ?>
+    <?php flashRenderAndClear(); ?>
   </div>
 
   <div class="col-sm-12">

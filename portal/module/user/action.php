@@ -1,10 +1,10 @@
 <?php
 session_start();
-include '../../config/koneksi.php';
-include '../../config/function.php';
+include __DIR__ . '/../../config/koneksi.php';
+include __DIR__ . '/../../config/function.php';
 
 // wajib admin
-require_admin();
+requireAdmin();
 
 $module = $_GET['module'] ?? 'user';
 $act    = $_GET['act'] ?? '';
@@ -22,7 +22,7 @@ if ($act === 'create') {
     $level    = ($_POST['level'] ?? 'user') === 'admin' ? 'admin' : 'user';
 
     if ($username === '' || $password === '' || $nama === '') {
-        set_flash('alert alert-danger', 'Username, password, dan nama wajib diisi', 'fa fa-times');
+        setFlash('alert alert-danger', 'Username, password, dan nama wajib diisi', 'fa fa-times');
         back_to_module($module);
     }
 
@@ -35,7 +35,7 @@ if ($act === 'create') {
     mysqli_stmt_close($stmt);
 
     if ($exists) {
-        set_flash('alert alert-danger', 'Username sudah digunakan', 'fa fa-times');
+        setFlash('alert alert-danger', 'Username sudah digunakan', 'fa fa-times');
         back_to_module($module);
     }
 
@@ -43,7 +43,7 @@ if ($act === 'create') {
 
     $stmt = mysqli_prepare($conn, "INSERT INTO users (username, password, nama, level) VALUES (?, ?, ?, ?)");
     if (!$stmt) {
-        set_flash('alert alert-danger', 'Prepare gagal: ' . mysqli_error($conn), 'fa fa-times');
+        setFlash('alert alert-danger', 'Prepare gagal: ' . mysqli_error($conn), 'fa fa-times');
         back_to_module($module);
     }
 
@@ -53,11 +53,11 @@ if ($act === 'create') {
     mysqli_stmt_close($stmt);
 
     if (!$ok) {
-        set_flash('alert alert-danger', 'Gagal tambah user: ' . $err, 'fa fa-times');
+        setFlash('alert alert-danger', 'Gagal tambah user: ' . $err, 'fa fa-times');
         back_to_module($module);
     }
 
-    set_flash('alert alert-success', 'User berhasil ditambahkan', 'fa fa-check');
+    setFlash('alert alert-success', 'User berhasil ditambahkan', 'fa fa-check');
     back_to_module($module);
 }
 
@@ -68,13 +68,13 @@ if ($act === 'edit') {
     $pass  = (string)($_POST['password'] ?? '');
 
     if ($id <= 0 || $nama === '') {
-        set_flash('alert alert-danger', 'Data tidak valid', 'fa fa-times');
+        setFlash('alert alert-danger', 'Data tidak valid', 'fa fa-times');
         back_to_module($module);
     }
 
     if ($pass !== '') {
         if (strlen($pass) < 6) {
-            set_flash('alert alert-danger', 'Password minimal 6 karakter', 'fa fa-times');
+            setFlash('alert alert-danger', 'Password minimal 6 karakter', 'fa fa-times');
             header('Location: ../../media.php?module=' . urlencode($module) . '&act=edit&id=' . $id);
             exit;
         }
@@ -82,14 +82,14 @@ if ($act === 'edit') {
         $hash = password_hash($pass, PASSWORD_DEFAULT);
         $stmt = mysqli_prepare($conn, "UPDATE users SET password=?, nama=?, level=? WHERE id=?");
         if (!$stmt) {
-            set_flash('alert alert-danger', 'Prepare gagal: ' . mysqli_error($conn), 'fa fa-times');
+            setFlash('alert alert-danger', 'Prepare gagal: ' . mysqli_error($conn), 'fa fa-times');
             back_to_module($module);
         }
         mysqli_stmt_bind_param($stmt, "sssi", $hash, $nama, $level, $id);
     } else {
         $stmt = mysqli_prepare($conn, "UPDATE users SET nama=?, level=? WHERE id=?");
         if (!$stmt) {
-            set_flash('alert alert-danger', 'Prepare gagal: ' . mysqli_error($conn), 'fa fa-times');
+            setFlash('alert alert-danger', 'Prepare gagal: ' . mysqli_error($conn), 'fa fa-times');
             back_to_module($module);
         }
         mysqli_stmt_bind_param($stmt, "ssi", $nama, $level, $id);
@@ -100,7 +100,7 @@ if ($act === 'edit') {
     mysqli_stmt_close($stmt);
 
     if (!$ok) {
-        set_flash('alert alert-danger', 'Gagal edit user: ' . $err, 'fa fa-times');
+        setFlash('alert alert-danger', 'Gagal edit user: ' . $err, 'fa fa-times');
         back_to_module($module);
     }
 
@@ -110,7 +110,7 @@ if ($act === 'edit') {
         $_SESSION['level'] = $level;
     }
 
-    set_flash('alert alert-success', 'User berhasil diupdate', 'fa fa-check');
+    setFlash('alert alert-success', 'User berhasil diupdate', 'fa fa-check');
     back_to_module($module);
 }
 
@@ -118,18 +118,18 @@ if ($act === 'delete') {
     $id = (int)($_POST['id'] ?? 0);
 
     if ($id <= 0) {
-        set_flash('alert alert-danger', 'ID tidak valid', 'fa fa-times');
+        setFlash('alert alert-danger', 'ID tidak valid', 'fa fa-times');
         back_to_module($module);
     }
 
     if ($id === (int)($_SESSION['id'] ?? 0)) {
-        set_flash('alert alert-danger', 'Tidak bisa menghapus akun yang sedang login', 'fa fa-times');
+        setFlash('alert alert-danger', 'Tidak bisa menghapus akun yang sedang login', 'fa fa-times');
         back_to_module($module);
     }
 
     $stmt = mysqli_prepare($conn, "DELETE FROM users WHERE id=?");
     if (!$stmt) {
-        set_flash('alert alert-danger', 'Prepare gagal: ' . mysqli_error($conn), 'fa fa-times');
+        setFlash('alert alert-danger', 'Prepare gagal: ' . mysqli_error($conn), 'fa fa-times');
         back_to_module($module);
     }
 
@@ -139,15 +139,15 @@ if ($act === 'delete') {
     mysqli_stmt_close($stmt);
 
     if (!$ok) {
-        set_flash('alert alert-danger', 'Gagal hapus user: ' . $err, 'fa fa-times');
+        setFlash('alert alert-danger', 'Gagal hapus user: ' . $err, 'fa fa-times');
         back_to_module($module);
     }
 
-    set_flash('alert alert-success', 'User berhasil dihapus', 'fa fa-check');
+    setFlash('alert alert-success', 'User berhasil dihapus', 'fa fa-check');
     back_to_module($module);
 }
 
 
 // default
-set_flash('alert alert-warning', 'Aksi tidak dikenali', 'fa fa-info');
+setFlash('alert alert-warning', 'Aksi tidak dikenali', 'fa fa-info');
 back_to_module($module);

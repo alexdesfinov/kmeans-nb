@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-sm-12">
         <?php
-        require_admin();
+        requireAdmin();
         include_once __DIR__ . '/../../config/aksi.php';
 
         $query = mysqli_query($conn, "SELECT * FROM dataset_testing WHERE jenisData='testing'");
@@ -38,7 +38,7 @@
                         <table class="table table-hover align-middle" id="datatablesDataset">
                             <thead class="table-dark">
                                 <tr>
-                                    <th scope="col" class="text-center" style="width:50px;" data-orderable="false">No</th>
+                                    <th scope="col" class="text-center" style="width:50px;">No</th>
                                     <th scope="col">Nama</th>
                                     <?php for ($i = 1; $i <= 20; $i++): ?>
                                         <th scope="col" class="text-center">P<?= $i ?></th>

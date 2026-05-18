@@ -1,7 +1,7 @@
 <?php
-require 'vendor/autoload.php';
-include_once '../../config/koneksi.php';
-include_once '../../config/function.php';
+require_once __DIR__ . '/vendor/autoload.php';
+include_once __DIR__ . '/../../config/koneksi.php';
+include_once __DIR__ . '/../../config/function.php';
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
@@ -80,7 +80,7 @@ if (isset($_POST['submit'])) {
             $raw = trim((string)($rows[$i][1 + $k] ?? ''));
 
             // normalisasi dulu
-            $val = normalize_jawaban($raw);
+            $val = normalizeJawaban($raw);
 
             // validasi setelah normalisasi
             if ($val === '') {
