@@ -1563,6 +1563,17 @@ p, span, td, th, label, small, a {
   border-top: 1.5px solid #f1f5f9;
 }
 
+.wizard-nav-right {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.wizard-btn-hidden {
+  display: none !important;
+}
+
 .btn-wizard-nav {
   padding: 9px 22px !important;
   font-size: 0.84rem !important;

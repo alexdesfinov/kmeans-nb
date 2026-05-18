@@ -244,15 +244,17 @@ if ($isEdit && $editCtx && !isset($_POST['submit'])) {
 
         <!-- Navigation Buttons -->
         <div class="wizard-nav-wrapper">
-            <button type="button" class="btn btn-wizard-nav btn-wizard-prev" id="btnPrev" style="visibility: hidden;">
+            <button type="button" class="btn btn-wizard-nav btn-wizard-prev" id="btnPrev" style="display: none !important;">
                 <i class="fa fa-arrow-left"></i> Sebelumnya
             </button>
-            <button type="button" class="btn btn-wizard-nav btn-wizard-next" id="btnNext">
-                Selanjutnya <i class="fa fa-arrow-right"></i>
-            </button>
-            <button type="submit" name="submit" class="btn btn-wizard-nav btn-wizard-submit" id="btnSubmit" style="display: none;">
-                <i class="fa fa-save"></i> <?= $isEdit ? 'Update Data' : 'Simpan Respon' ?>
-            </button>
+            <div class="wizard-nav-right">
+                <button type="button" class="btn btn-wizard-nav btn-wizard-next" id="btnNext" style="display: inline-flex !important;">
+                    Selanjutnya <i class="fa fa-arrow-right"></i>
+                </button>
+                <button type="submit" name="submit" class="btn btn-wizard-nav btn-wizard-submit" id="btnSubmit" style="display: none !important;">
+                    <i class="fa fa-save"></i> <?= $isEdit ? 'Update Data' : 'Simpan Respon' ?>
+                </button>
+            </div>
         </div>
 
     </div>
@@ -387,17 +389,17 @@ document.addEventListener("DOMContentLoaded", function() {
         
         // Update buttons visibility
         if (currentStep === 1) {
-            btnPrev.style.visibility = "hidden";
+            btnPrev.style.setProperty("display", "none", "important");
         } else {
-            btnPrev.style.visibility = "visible";
+            btnPrev.style.setProperty("display", "inline-flex", "important");
         }
         
         if (currentStep === totalSteps) {
-            btnNext.style.display = "none";
-            btnSubmit.style.display = "inline-flex";
+            btnNext.style.setProperty("display", "none", "important");
+            btnSubmit.style.setProperty("display", "inline-flex", "important");
         } else {
-            btnNext.style.display = "inline-flex";
-            btnSubmit.style.display = "none";
+            btnNext.style.setProperty("display", "inline-flex", "important");
+            btnSubmit.style.setProperty("display", "none", "important");
         }
 
         // Smooth scroll to top of wizard to keep focus perfect
