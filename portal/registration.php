@@ -19,8 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="icon" type="image/png" href="assets/img/favicon.png">
   <title>Register | <?php echo TITLE ?></title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+  <link href="assets/css/inter.css" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
   <link href="assets/css/nucleo-icons.css" rel="stylesheet" />
   <link href="assets/css/nucleo-svg.css" rel="stylesheet" />
   <link href="assets/css/fontawesome.css" rel="stylesheet" />

@@ -3,8 +3,8 @@ define("TITLE",	"FADEL");
 // define(	"BASE_URL",	"http://brainy.monev-unsada.my.id");
 // assets css
 $css = array(
-	'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css',
-	'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap',
+	'assets/css/bootstrap.min.css',
+	'assets/css/inter.css',
 	'assets/css/animate.css',
 	'assets/css/chartist.css',
 	'assets/css/datatables.css',
@@ -22,16 +22,16 @@ $css = array(
 );
 // assets javascript
 $js = array(
-	'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js',
-	'https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js',
-	'https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js',
+	'assets/js/jquery.min.js',
+	'assets/js/popper.min.js',
+	'assets/js/bootstrap.min.js',
 	// 'assets/js/plugins/perfect-scrollbar.min.js',
 	// 'assets/js/plugins/smooth-scrollbar.min.js',
 	// 'assets/js/soft-ui-dashboard.min3447.js?v=1.0.5',
-	'https://cdn.jsdelivr.net/npm/sweetalert2@11',
-	'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js',
+	'assets/js/sweetalert2.all.min.js',
+	'assets/js/select2.min.js',
 	'assets/js/plugins/owl.carousel.js',
-	'//cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js',
+	'assets/js/jquery.dataTables.min.js',
 );
 //breadcrumb
 $breadcrumb = array();
