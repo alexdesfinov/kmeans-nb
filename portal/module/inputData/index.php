@@ -281,6 +281,13 @@ document.addEventListener("DOMContentLoaded", function() {
     // Dropdowns
     const dropdowns = document.querySelectorAll(".question-dropdown-modern");
     
+    const namaInputEl = document.getElementById("inputNama");
+    if (namaInputEl) {
+        namaInputEl.addEventListener('input', function() {
+            this.value = this.value.replace(/[^a-zA-Z\s'.]/g, '');
+        });
+    }
+    
     const stepTitles = {
         1: "Langkah 1: Soal 1-5",
         2: "Langkah 2: Soal 6-10",
@@ -431,6 +438,18 @@ document.addEventListener("DOMContentLoaded", function() {
             Swal.fire({
                 title: 'Data Belum Lengkap',
                 text: 'Silakan isi Nama Responden terlebih dahulu.',
+                icon: 'warning',
+                confirmButtonColor: '#1e293b'
+            });
+            namaInput.focus();
+            return false;
+        }
+        
+        const namaRegex = /^[a-zA-Z\s'.]+$/;
+        if (!namaRegex.test(namaInput.value)) {
+            Swal.fire({
+                title: 'Format Nama Salah',
+                text: 'Nama hanya boleh mengandung huruf dan spasi.',
                 icon: 'warning',
                 confirmButtonColor: '#1e293b'
             });

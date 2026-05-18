@@ -821,9 +821,12 @@ function handleInsertDatasetFromPost(mysqli $conn, string $tableName = "dataset"
 	}
 
 	try {
-		$nama  = trim($_POST["nama"] ?? "");
+		$nama  = ucwords(strtolower(trim($_POST["nama"] ?? "")));
 		if ($nama === "") {
 			throw new Exception("Nama wajib diisi.");
+		}
+		if (!preg_match("/^[a-zA-Z\s'.]+$/", $nama)) {
+			throw new Exception("Nama hanya boleh mengandung huruf dan spasi.");
 		}
 
 		$jawaban = [];
@@ -998,13 +1001,19 @@ function handleLoginPost(mysqli $conn): void
 
 function handleRegisterPost(mysqli $conn): void
 {
-	$nama     = trim($_POST['nama'] ?? '');
+	$nama     = ucwords(strtolower(trim($_POST['nama'] ?? '')));
 	$username = trim($_POST['username'] ?? '');
 	$password = $_POST['password'] ?? '';
 	$pass2    = $_POST['password2'] ?? '';
 
 	if ($nama === '' || $username === '' || $password === '' || $pass2 === '') {
 		setFlash('alert alert-danger', 'Lengkapi semua field', 'fa fa-times', ['credidential' => $_POST]);
+		header('Location: registration.php');
+		exit;
+	}
+
+	if (!preg_match("/^[a-zA-Z\s'.]+$/", $nama)) {
+		setFlash('alert alert-danger', 'Nama hanya boleh mengandung huruf dan spasi', 'fa fa-times', ['credidential' => $_POST]);
 		header('Location: registration.php');
 		exit;
 	}

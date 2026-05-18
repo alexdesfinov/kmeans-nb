@@ -260,6 +260,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     const cpass = document.getElementById('Cpassword');
     const msg = document.getElementById('passwordMatch');
     const btn = document.getElementById('submit');
+    const namaInput = document.querySelector('input[name="nama"]');
+
+    if (namaInput) {
+      namaInput.addEventListener('input', function() {
+        this.value = this.value.replace(/[^a-zA-Z\s'.]/g, '');
+      });
+    }
 
     function checkPasswordMatch() {
       if (!pass.value || !cpass.value) {
