@@ -23,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
   <link href="assets/css/nucleo-icons.css" rel="stylesheet" />
   <link href="assets/css/nucleo-svg.css" rel="stylesheet" />
+  <link href="assets/css/fontawesome.css" rel="stylesheet" />
   <link id="pagestyle" href="assets/css/soft-ui-dashboard.min3447.css?v=1.0.5" rel="stylesheet" />
 
   <style>
@@ -174,7 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-lg-10 col-xl-9">
-          <a href="index.php" class="back-link"><i class="ni ni-bold-left"></i> Kembali ke Login</a>
+          <a href="index.php" class="back-link"><i class="fa fa-arrow-left"></i> Kembali ke Login</a>
           <div class="auth-card">
             <div class="row g-0">
               <div class="col-md-6 auth-form-side">
