@@ -335,7 +335,7 @@
     <!-- Navbar -->
     <nav class="fadel-nav" id="mainNav">
         <div class="container d-flex align-items-center justify-content-between">
-            <a class="nav-brand" href="?">FADEL</a>
+            <a class="nav-brand" href="?">SD NEGERI 16 TIMBALUN</a>
             <div class="d-flex align-items-center">
                 <div class="nav-links d-none d-md-flex">
                     <a href="#features">Fitur</a>
@@ -491,7 +491,7 @@
                 <div class="col-lg-5">
                     <div class="login-info-side fade-up">
                         <span class="section-label">Masuk</span>
-                        <h2>Akses Portal FADEL</h2>
+                        <h2>Akses Portal SD Negeri 16 Timbalun</h2>
                         <p>Masuk ke sistem untuk mengelola data, menjalankan analisis, atau mengisi kuesioner sebagai responden.</p>
                         <div>
                             <span class="info-badge"><i class="fas fa-shield-alt"></i> Sistem Aman & Terlindungi</span>
@@ -530,8 +530,8 @@
     <!-- Footer -->
     <footer class="site-footer">
         <div class="container">
-            <p>© <script>document.write(new Date().getFullYear())</script> <strong>FADEL</strong> — Sistem Deteksi Kecanduan Internet</p>
-            <p style="font-size:0.78rem;margin-top:4px;">SD Negeri 16 Timbalun · Padang · Made by <a href="#">Antigravity</a></p>
+            <p>© <script>document.write(new Date().getFullYear())</script> <strong>SD NEGERI 16 TIMBALUN</strong> — Sistem Deteksi Kecanduan Internet</p>
+            <p style="font-size:0.78rem;margin-top:4px;">SD Negeri 16 Timbalun · Padang · Made by <a href="#">Moch Reza</a></p>
         </div>
     </footer>
 
