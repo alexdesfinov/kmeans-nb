@@ -1,0 +1,240 @@
+#mainContent { position: relative; }
+
+.math-tooltip-wrapper{position:relative; display:inline-block;}
+.math-tooltip{
+  visibility:hidden; opacity:0;
+  position:absolute; z-index:9999;
+  background:#111; color:#fff;
+  padding:10px 12px; border-radius:8px;
+  width: 900px; max-width: fit-content;
+  left:50%; transform:translateX(-50%);
+  bottom:125%;
+  transition:opacity .15s ease;
+  font-size:12px; line-height:1.35;
+}
+.math-tooltip-wrapper:hover .math-tooltip{visibility:visible; opacity:1;}
+.math-tip-title{font-weight:700; margin-bottom:6px;}
+.math-tip-eq{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
+
+.nav-link svg {
+  color: #000000;
+  transition: color 0.25s ease;
+}
+
+.nav-link:hover svg {
+  color: #cb0c9f;
+}
+
+.nav-link.active svg {
+  color: #ffffff;          /* biru aktif */
+}
+
+.alert-warning {
+    background: linear-gradient(to bottom, #ffc31e 0%,#fff205 100%);
+    color: #000000;
+}
+
+.question-container {
+  width: 100%;
+  max-width: 100%;
+  background: #e4e3e3;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  overflow: hidden;
+  font-family: "Segoe UI", sans-serif;
+  padding: 20px;
+}
+.question-card {
+  width: 100%;
+  max-width: 100%;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  overflow: hidden;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.question-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.question-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #333;
+  letter-spacing: 0.5px;
+}
+
+.question-body {
+  background: #344767;
+  color: #fff;
+  padding: 18px 20px 22px;
+}
+
+.question-type {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.question-type .arrow {
+  font-size: 14px;
+}
+
+.type-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.type-desc {
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+.question-content {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 16px;
+  color: #333;
+  
+}
+
+.question-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.question-dropdown {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  outline: none;
+}
+
+.question-dropdown:focus {
+  border-color: #ff0000;
+  box-shadow: 0 0 0 2px rgba(11,71,107,0.15);
+}
+
+.question-name {
+  padding: 14px 20px;
+  border-bottom: 1px solid #eee;
+  background: #fff;
+}
+
+.name-body {
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 100%;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  overflow: hidden;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.name-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #ffffff;
+}
+
+.name-input {
+  width: 250px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  outline: none;
+}
+
+.name-input:focus {
+  border-color: #0b476b;
+  box-shadow: 0 0 0 2px rgba(11,71,107,0.15);
+}
+
+.jenis-data {
+   width: 250px;
+}
+
+/* ===============================
+   FIX SWEETALERT AGAR TIDAK NUTUP SIDEBAR
+   =============================== */
+
+/* Paksa Swal hanya menutupi main content */
+#mainContent .swal2-container {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Backdrop hanya di area konten */
+#mainContent .swal2-container.swal2-backdrop-show {
+  background: rgba(0, 0, 0, 0.35) !important;
+}
+
+/* Cegah Swal full-screen bawaan Soft UI */
+body > .swal2-container {
+  background: transparent !important;
+}
+
+/* ===============================
+   CUSTOM SWEETALERT STYLE
+   =============================== */
+
+/* Box utama Swal */
+.swal2-popup {
+  border-radius: 18px !important;       /* rounded */
+  border: 2px solid #cc0c9f !important; /* outline warna tema */
+  padding: 1.8rem !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,.18) !important;
+}
+
+/* Icon (warning, success, etc) */
+.swal2-icon {
+  border-width: 3px !important;
+}
+
+/* Judul */
+.swal2-title {
+  font-size: 1.25rem !important;
+  font-weight: 600 !important;
+}
+
+/* Text */
+.swal2-html-container {
+  font-size: 0.95rem !important;
+  color: #555 !important;
+}
+
+/* Tombol confirm */
+.swal2-confirm {
+  border-radius: 12px !important;
+  padding: 8px 18px !important;
+  box-shadow: 0 4px 12px rgba(204,12,159,.35) !important;
+}
+
+/* Tombol cancel */
+.swal2-cancel {
+  border-radius: 12px !important;
+}
+
+
+/* Responsive: tablet & mobile */
+@media (max-width: 500px) {
+    .name-input {
+        width: 100%;     /* full di layar kecil */
+    }
+
+    .jenis-data {
+        width: 100%;
+    }
+}
