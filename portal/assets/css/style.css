@@ -1611,3 +1611,138 @@ p, span, td, th, label, small, a {
   box-shadow: 0 6px 18px rgba(16, 185, 129, 0.3) !important;
   transform: translateY(-2px);
 }
+
+/* =====================================================
+   MODERN K-MEANS RESULTS & ITERATION STYLES (FADEL)
+   ===================================================== */
+
+/* main K-Means Tabs container */
+.kmeans-tabs-nav {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  border-bottom: 2px solid #f1f5f9;
+  padding-bottom: 12px;
+}
+
+.kmeans-tab-btn {
+  padding: 10px 22px !important;
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+  border-radius: 12px !important;
+  border: 1.5px solid #e2e8f0 !important;
+  background: #ffffff !important;
+  color: #475569 !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.kmeans-tab-btn:hover {
+  background: #f8fafc !important;
+  color: #1e293b !important;
+  border-color: #cbd5e1 !important;
+  transform: translateY(-1px);
+}
+
+.kmeans-tab-btn.active {
+  background: linear-gradient(135deg, #0f172a, #334155) !important;
+  color: #ffffff !important;
+  border-color: #0f172a !important;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15) !important;
+}
+
+/* Iteration capsule sub-tabs */
+.kmeans-subtabs-container {
+  background: #f8fafc;
+  border-radius: 14px;
+  padding: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #e2e8f0;
+}
+
+.kmeans-subtabs-nav {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE 10+ */
+}
+
+.kmeans-subtabs-nav::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
+.kmeans-subtab-btn {
+  padding: 7px 16px !important;
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  border-radius: 8px !important;
+  border: 1px solid transparent !important;
+  background: transparent !important;
+  color: #64748b !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+}
+
+.kmeans-subtab-btn:hover {
+  background: rgba(148, 163, 184, 0.08) !important;
+  color: #1e293b !important;
+}
+
+.kmeans-subtab-btn.active {
+  background: #ffffff !important;
+  color: #1e293b !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Beautiful Distance Highlights */
+.min-distance-badge {
+  background: rgba(16, 185, 129, 0.1) !important;
+  color: #047857 !important;
+  border: 1px solid rgba(16, 185, 129, 0.25) !important;
+  border-radius: 6px !important;
+  padding: 2px 7px !important;
+  font-weight: 800 !important;
+  font-size: 0.8rem !important;
+  display: inline-block !important;
+  box-shadow: 0 1px 2px rgba(16, 185, 129, 0.05) !important;
+}
+
+/* Tab pane transitions */
+.kmeans-tab-pane {
+  display: none;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.kmeans-tab-pane.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.kmeans-iter-pane {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.kmeans-iter-pane.active {
+  display: block;
+  opacity: 1;
+}
+
+/* Custom centroid configuration labels styling */
+.centroid-label-modern {
+  font-weight: 700 !important;
+  font-size: 0.8rem !important;
+  color: #475569 !important;
+  display: block;
+  margin-bottom: 6px;
+}
