@@ -1,3 +1,13 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+include_once 'portal/config/koneksi.php';
+include_once 'portal/config/function.php';
+
+rememberMeTryLogin($conn);
+$isLoggedIn = !empty($_SESSION['id']);
+?>
 <!DOCTYPE html>
 <html lang="id">
 
@@ -340,9 +350,11 @@
                 <div class="nav-links d-none d-md-flex">
                     <a href="#features">Fitur</a>
                     <a href="#how-it-works">Cara Kerja</a>
-                    <a href="#login">Masuk</a>
+                    <?php if (!$isLoggedIn): ?>
+                        <a href="#login">Masuk</a>
+                    <?php endif; ?>
                 </div>
-                <a class="btn-masuk" href="portal">Masuk Portal</a>
+                <a class="btn-masuk" href="portal"><?= $isLoggedIn ? 'Portal' : 'Masuk Portal' ?></a>
             </div>
         </div>
     </nav>
@@ -485,6 +497,7 @@
     </section>
 
     <!-- Login Section -->
+    <?php if (!$isLoggedIn): ?>
     <section class="login-section" id="login">
         <div class="container">
             <div class="row justify-content-center align-items-center g-5">
@@ -526,6 +539,7 @@
             </div>
         </div>
     </section>
+    <?php endif; ?>
 
     <!-- Footer -->
     <footer class="site-footer">
