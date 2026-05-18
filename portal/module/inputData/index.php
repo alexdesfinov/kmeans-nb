@@ -280,7 +280,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const namaInputEl = document.getElementById("inputNama");
     if (namaInputEl) {
         namaInputEl.addEventListener('input', function() {
-            this.value = this.value.replace(/[^a-zA-Z\s.]/g, '');
+            this.value = this.value.replace(/[^a-zA-Z\s.']/g, '');
         });
     }
     
@@ -441,11 +441,11 @@ document.addEventListener("DOMContentLoaded", function() {
             return false;
         }
         
-        const namaRegex = /^[a-zA-Z\s.]+$/;
+        const namaRegex = /^[a-zA-Z\s.']+$/;
         if (!namaRegex.test(namaInput.value)) {
             Swal.fire({
                 title: 'Format Nama Salah',
-                text: 'Nama hanya boleh mengandung huruf, spasi, dan titik.',
+                text: 'Nama hanya boleh mengandung huruf, spasi, tanda kutip, dan titik.',
                 icon: 'warning',
                 confirmButtonColor: '#1e293b'
             });

@@ -78,8 +78,8 @@ if (isset($_POST['submit'])) {
         if ($nama === '') continue;
 
         $excelRow = $i + 1;
-        if (!preg_match("/^[a-zA-Z\s.]+$/", $nama)) {
-            $rowErrors[] = "Baris {$excelRow} nama <b>" . htmlspecialchars($nama) . "</b> tidak valid: Hanya boleh mengandung huruf, spasi, dan titik.";
+        if (!preg_match("/^[a-zA-Z\s.']+$/", $nama)) {
+            $rowErrors[] = "Baris {$excelRow} nama <b>" . htmlspecialchars($nama) . "</b> tidak valid: Hanya boleh mengandung huruf, spasi, tanda kutip, dan titik.";
         }
 
         $p = [];
