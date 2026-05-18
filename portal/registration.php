@@ -264,7 +264,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (namaInput) {
       namaInput.addEventListener('input', function() {
-        this.value = this.value.replace(/[^a-zA-Z\s'.]/g, '');
+        this.value = this.value.replace(/[^a-zA-Z\s.]/g, '');
       });
     }
 

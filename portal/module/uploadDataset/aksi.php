@@ -70,10 +70,14 @@ if (isset($_POST['submit'])) {
 
 
     // Mulai baris ke-2 (skip header)
-    // Mulai baris ke-2 (skip header)
     for ($i = 1; $i < count($rows); $i++) {
-        $nama = trim((string)($rows[$i][1] ?? ''));
+        $nama = ucwords(strtolower(trim((string)($rows[$i][1] ?? ''))));
         if ($nama === '') continue;
+
+        $excelRow = $i + 1;
+        if (!preg_match("/^[a-zA-Z\s.]+$/", $nama)) {
+            $rowErrors[] = "Baris {$excelRow} nama <b>" . htmlspecialchars($nama) . "</b> tidak valid: Hanya boleh mengandung huruf, spasi, dan titik.";
+        }
 
         $p = [];
         for ($k = 1; $k <= 20; $k++) {
@@ -84,12 +88,10 @@ if (isset($_POST['submit'])) {
 
             // validasi setelah normalisasi
             if ($val === '') {
-                $excelRow = $i + 1;
                 $rowErrors[] = "Baris {$excelRow} ({$nama}) kolom p{$k} tidak valid: <b>" . htmlspecialchars($raw) . "</b>";
             }
 
             $p[$k] = $val; // simpan yang sudah rapi
-
         }
 
         // simpan dulu untuk insert nanti (kalau tidak ada error)
