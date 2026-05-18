@@ -1,4 +1,81 @@
 <?php
+$isAdmin = (($_SESSION['level'] ?? 'user') === 'admin');
+
+$showCharts = false;
+$kmeansChartData = [];
+$nbChartData = [];
+$clusterNames = [];
+$renderedClasses = [];
+$nbCounts = [];
+
+if ($isAdmin) {
+    $initCentroids = getInitialCentroidsFromDB($conn);
+    $k = count($initCentroids);
+    
+    $resTrain = $conn->query("SELECT COUNT(*) as total FROM dataset_training WHERE jenisData='training'");
+    $countTrain = ($resTrain) ? (int)$resTrain->fetch_assoc()['total'] : 0;
+    
+    if ($k >= 3 && $countTrain > 0) {
+        $hybrid = hybridTrainFromDb($conn, $k, 50, "dataset_training", "jenisData", $initCentroids);
+        if (is_array($hybrid) && isset($hybrid['X_train_km'])) {
+            $trace = kmeansRunWithTrace($hybrid['X_train_km'], $initCentroids, $k, 50);
+            if (is_array($trace) && isset($trace['final']['labels'])) {
+                $finalLabels = $trace['final']['labels'];
+                
+                // K-Means counts
+                $kmCounts = array_fill(0, $k, 0);
+                foreach ($finalLabels as $lbl) {
+                    if (isset($kmCounts[$lbl])) {
+                        $kmCounts[$lbl]++;
+                    }
+                }
+                
+                // Map names
+                $nameMap = $hybrid['clusterNameMap'];
+                foreach ($nameMap as $cid => $rawName) {
+                    $clusterNames[$cid] = normalizeNbLabel($rawName);
+                    $kmeansChartData[$cid] = $kmCounts[$cid];
+                }
+                
+                // Active dynamic classes ordered naturally: Ringan, Sedang, Parah
+                $order = ['Ringan', 'Sedang', 'Parah'];
+                foreach ($order as $o) {
+                    if (in_array($o, $clusterNames)) {
+                        $renderedClasses[] = $o;
+                    }
+                }
+                foreach ($clusterNames as $ac) {
+                    if (!in_array($ac, $renderedClasses)) {
+                        $renderedClasses[] = $ac;
+                    }
+                }
+                
+                // Naive Bayes counts on testing data
+                $preds = hybridPredictTesting($conn, $hybrid, "dataset_testing", "jenisData");
+                $nbCounts = [
+                    'Ringan' => 0,
+                    'Sedang' => 0,
+                    'Parah' => 0
+                ];
+                foreach ($preds as $p) {
+                    $cls = $p['pred_class'] ?? '';
+                    if (isset($nbCounts[$cls])) {
+                        $nbCounts[$cls]++;
+                    }
+                }
+                
+                $nbChartData = [
+                    'Ringan' => $nbCounts['Ringan'],
+                    'Sedang' => $nbCounts['Sedang'],
+                    'Parah' => $nbCounts['Parah']
+                ];
+                
+                $showCharts = true;
+            }
+        }
+    }
+}
+
 $adminMenus = [
   [
     'title' => 'Input Data',
@@ -68,7 +145,6 @@ $userMenus = [
   ],
 ];
 
-$isAdmin = (($_SESSION['level'] ?? 'user') === 'admin');
 $menus = $isAdmin ? $adminMenus : $userMenus;
 $nama = htmlspecialchars($_SESSION['nama'] ?? 'User');
 ?>
@@ -115,3 +191,227 @@ $nama = htmlspecialchars($_SESSION['nama'] ?? 'User');
   <?php endforeach; ?>
 
 </div>
+
+<?php if ($isAdmin): ?>
+  <?php if ($showCharts): ?>
+    <!-- Charts Section -->
+    <div class="row mt-4">
+      <!-- Chart K-Means -->
+      <div class="col-lg-6 mb-4">
+        <div class="card h-100 shadow-sm border-0" style="border-radius: 16px; background: #ffffff;">
+          <div class="card-header pb-0 bg-transparent border-0 d-flex align-items-center justify-content-between" style="padding: 20px 20px 0 20px;">
+            <div>
+              <h6 class="font-weight-bolder mb-0" style="color: #1e293b; font-size: 1.05rem;">
+                <i class="fa fa-pie-chart me-2 text-danger"></i>Kluster K-Means (Data Training)
+              </h6>
+              <p class="text-xs mb-0 text-secondary">Distribusi tingkat kecanduan internet hasil clustering</p>
+            </div>
+            <span class="badge" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; font-weight: 700; border-radius: 8px; font-size: 0.72rem; padding: 6px 12px;">K-Means</span>
+          </div>
+          <div class="card-body d-flex flex-column align-items-center justify-content-center" style="position: relative; padding: 20px; min-height: 320px;">
+            <div style="width: 100%; max-width: 240px; height: 200px; margin-bottom: 12px; position: relative;">
+              <canvas id="kmeansChart"></canvas>
+            </div>
+            <div class="d-flex justify-content-center gap-4 mt-3" style="width: 100%; font-size: 0.8rem; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 15px;">
+              <?php foreach ($renderedClasses as $cls): 
+                  $cid = array_search($cls, $clusterNames);
+                  $count = ($cid !== false) ? $kmeansChartData[$cid] : 0;
+                  
+                  $dotColor = '#94a3b8';
+                  if (strtolower($cls) === 'ringan') $dotColor = '#10b981';
+                  elseif (strtolower($cls) === 'sedang') $dotColor = '#f59e0b';
+                  elseif (strtolower($cls) === 'parah') $dotColor = '#ef4444';
+              ?>
+                <div class="d-flex align-items-center">
+                  <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:<?= $dotColor ?>; margin-right:6px;"></span>
+                  <span class="font-weight-bold" style="color:#475569;"><?= $cls ?>: <span style="color:#0f172a; font-weight:800;"><?= $count ?></span></span>
+                </div>
+              <?php endforeach; ?>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart Naive Bayes -->
+      <div class="col-lg-6 mb-4">
+        <div class="card h-100 shadow-sm border-0" style="border-radius: 16px; background: #ffffff;">
+          <div class="card-header pb-0 bg-transparent border-0 d-flex align-items-center justify-content-between" style="padding: 20px 20px 0 20px;">
+            <div>
+              <h6 class="font-weight-bolder mb-0" style="color: #1e293b; font-size: 1.05rem;">
+                <i class="fa fa-bar-chart me-2 text-dark"></i>Prediksi Naive Bayes (Data Testing)
+              </h6>
+              <p class="text-xs mb-0 text-secondary">Klasifikasi tingkat kecanduan internet pada data pengujian</p>
+            </div>
+            <span class="badge" style="background: rgba(15, 23, 42, 0.1); color: #0f172a; font-weight: 700; border-radius: 8px; font-size: 0.72rem; padding: 6px 12px;">Naive Bayes</span>
+          </div>
+          <div class="card-body d-flex flex-column align-items-center justify-content-center" style="position: relative; padding: 20px; min-height: 320px;">
+            <div style="width: 100%; height: 200px; margin-bottom: 12px; position: relative;">
+              <canvas id="naiveBayesChart"></canvas>
+            </div>
+            <div class="d-flex justify-content-center gap-4 mt-3" style="width: 100%; font-size: 0.8rem; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 15px;">
+              <?php foreach (['Ringan', 'Sedang', 'Parah'] as $cls): 
+                  $count = $nbChartData[$cls] ?? 0;
+                  
+                  $dotColor = '#94a3b8';
+                  if (strtolower($cls) === 'ringan') $dotColor = '#10b981';
+                  elseif (strtolower($cls) === 'sedang') $dotColor = '#f59e0b';
+                  elseif (strtolower($cls) === 'parah') $dotColor = '#ef4444';
+              ?>
+                <div class="d-flex align-items-center">
+                  <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:<?= $dotColor ?>; margin-right:6px;"></span>
+                  <span class="font-weight-bold" style="color:#475569;"><?= $cls ?>: <span style="color:#0f172a; font-weight:800;"><?= $count ?></span></span>
+                </div>
+              <?php endforeach; ?>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <?php else: ?>
+    <!-- Notice Card -->
+    <div class="row mt-4">
+      <div class="col-12">
+        <div class="card shadow-sm border-0" style="border-radius: 16px; background: #ffffff; padding: 24px;">
+          <div class="text-center py-4">
+            <div style="font-size: 3rem; color: #cbd5e1; margin-bottom: 1rem;"><i class="fa fa-line-chart"></i></div>
+            <h5 style="color: #475569; font-weight: 700; font-size: 1.1rem;">Gagal Memuat Grafik Hasil Analisis</h5>
+            <p style="color: #64748b; font-size: 0.85rem; max-width: 500px; margin: 0.5rem auto 1.5rem auto;">
+              Grafik visualisasi tidak dapat ditampilkan karena data training kosong atau centroid awal K-Means belum dikonfigurasi di portal.
+            </p>
+            <a href="?module=hasil_tes" class="btn px-4 py-2" style="background: var(--gradient-primary, linear-gradient(135deg, #0f172a, #334155)); color: #fff; border-radius: 10px; font-weight: 600; font-size: 0.82rem; text-decoration: none; border: none; box-shadow: 0 4px 12px rgba(15,23,42,0.15);">
+              Konfigurasi Centroid Sekarang
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  <?php endif; ?>
+<?php endif; ?>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    <?php if ($isAdmin && $showCharts): ?>
+    // K-Means Chart
+    const ctxKm = document.getElementById('kmeansChart');
+    if (ctxKm) {
+        new Chart(ctxKm, {
+            type: 'doughnut',
+            data: {
+                labels: <?= json_encode(array_values($clusterNames)) ?>,
+                datasets: [{
+                    data: <?= json_encode(array_values($kmeansChartData)) ?>,
+                    backgroundColor: [
+                        'rgba(245, 158, 11, 0.15)', // Sedang
+                        'rgba(239, 68, 68, 0.15)',  // Parah
+                        'rgba(16, 185, 129, 0.15)'  // Ringan
+                    ].slice(0, <?= $k ?>),
+                    borderColor: [
+                        '#f59e0b', // Sedang
+                        '#ef4444', // Parah
+                        '#10b981'  // Ringan
+                    ].slice(0, <?= $k ?>),
+                    borderWidth: 2,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed !== null) {
+                                    label += context.parsed + ' responden';
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                cutout: '70%'
+            }
+        });
+    }
+
+    // Naive Bayes Chart
+    const ctxNb = document.getElementById('naiveBayesChart');
+    if (ctxNb) {
+        new Chart(ctxNb, {
+            type: 'bar',
+            data: {
+                labels: ['Ringan', 'Sedang', 'Parah'],
+                datasets: [{
+                    label: 'Jumlah Prediksi',
+                    data: [
+                        <?= $nbChartData['Ringan'] ?>,
+                        <?= $nbChartData['Sedang'] ?>,
+                        <?= $nbChartData['Parah'] ?>
+                    ],
+                    backgroundColor: [
+                        'rgba(16, 185, 129, 0.2)',
+                        'rgba(245, 158, 11, 0.2)',
+                        'rgba(239, 68, 68, 0.2)'
+                    ],
+                    borderColor: [
+                        '#10b981',
+                        '#f59e0b',
+                        '#ef4444'
+                    ],
+                    borderWidth: 2,
+                    borderRadius: 8,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0,
+                            color: '#64748b',
+                            font: {
+                                family: 'Inter',
+                                size: 11
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.04)',
+                            drawBorder: false
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#64748b',
+                            font: {
+                                family: 'Inter',
+                                size: 11,
+                                weight: '600'
+                            }
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+    }
+    <?php endif; ?>
+});
+</script>
