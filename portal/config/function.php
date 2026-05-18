@@ -1244,8 +1244,8 @@ function flashRenderAndClear(): void
 	$icon  = $f['icon'] ?? 'fa fa-info';
 	$label = $f['label'] ?? '';
 
-	echo '<div class="' . htmlspecialchars($class) . ' mt-3 mb-3 alert-dismissible fade show">';
-	echo '  <span class="text-white">';
+	echo '<div class="' . htmlspecialchars($class) . ' mt-3 mb-3 alert-dismissible fade show" style="border: none;">';
+	echo '  <span style="font-weight: 600;">';
 	echo '    <i class="' . htmlspecialchars($icon) . '"></i> ';
 	echo      htmlspecialchars($label);
 	echo '  </span>';
