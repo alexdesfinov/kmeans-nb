@@ -153,7 +153,7 @@
             <path d="M1.123 7.81a.5.5 0 0 1 .151-.708l6-4a.5.5 0 0 1 .593 0l6 4a.5.5 0 0 1-.555.83l-.382-.254V13.5A1.5 1.5 0 0 1 11.5 15h-7A1.5 1.5 0 0 1 3 13.5V7.686l-.38.254a.5.5 0 0 1-.708-.13z"/>
           </svg>
         </div>
-        <span class="nav-link-text ms-1">Landing Page</span>
+        <span class="nav-link-text ms-1">Home Page</span>
       </a>
     </li>
 
