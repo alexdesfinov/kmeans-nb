@@ -27,8 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   <style>
     :root {
-      --fadel-primary: #cb0c9f;
-      --gradient-primary: linear-gradient(135deg, #7928ca 0%, #cb0c9f 100%);
+      --fadel-primary: #1e293b;
+      --gradient-primary: linear-gradient(135deg, #0f172a 0%, #334155 100%);
       --fadel-dark: #344767;
       --fadel-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     }
@@ -133,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     .auth-form-side .form-control:focus {
       border-color: var(--fadel-primary);
-      box-shadow: 0 0 0 3px rgba(203,12,159,0.1);
+      box-shadow: 0 0 0 3px rgba(30,41,59,0.08);
     }
 
     .btn-auth {
@@ -146,12 +146,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       font-size: 0.92rem;
       width: 100%;
       transition: all 0.3s;
-      box-shadow: 0 4px 16px rgba(203,12,159,0.3);
+      box-shadow: 0 4px 16px rgba(15,23,42,0.2);
     }
 
     .btn-auth:hover:not([disabled]) {
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(203,12,159,0.45);
+      box-shadow: 0 8px 24px rgba(15,23,42,0.35);
     }
 
     .back-link {

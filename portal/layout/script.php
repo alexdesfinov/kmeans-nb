@@ -24,7 +24,7 @@ foreach ($js as $key => $value) { ?>
       text: "Anda akan diarahkan ke laman login",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#cb0c9f',
+      confirmButtonColor: '#1e293b',
       cancelButtonColor: '#ccc',
       confirmButtonText: 'Logout',
       cancelButtonText: 'Cancel'
@@ -52,7 +52,7 @@ foreach ($js as $key => $value) { ?>
       showCancelButton: true,
       confirmButtonText: 'Hapus',
       cancelButtonText: 'Cancel',
-      confirmButtonColor: '#cb0c9f',
+      confirmButtonColor: '#1e293b',
       cancelButtonColor: '#ccc'
     }).then((result) => {
       if (result.isConfirmed) form.submit();
@@ -75,7 +75,7 @@ foreach ($js as $key => $value) { ?>
       showCancelButton: true,
       confirmButtonText: 'Hapus Semua',
       cancelButtonText: 'Cancel',
-      confirmButtonColor: '#cb0c9f',
+      confirmButtonColor: '#1e293b',
       cancelButtonColor: '#ccc'
     }).then((result) => {
       if (result.isConfirmed) form.submit();

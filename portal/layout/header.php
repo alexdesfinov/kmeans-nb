@@ -4,7 +4,7 @@
       <h6 class="font-weight-bolder mb-0">
         <?php
         foreach ($breadcrumb as $key => $bread) {
-          $bc[] = '<a href="' . $bread['link'] . '" class="' . ($key == count($breadcrumb) - 1 ? 'text-primary' : 'text-secondary') . '">' . $bread['text'] . '</a>';
+          $bc[] = '<a href="' . $bread['link'] . '" class="' . ($key == count($breadcrumb) - 1 ? 'text-dark' : 'text-secondary') . '" style="font-weight:700;">' . $bread['text'] . '</a>';
         }
         echo implode(" <span class='breadcrumb-separator' style='padding:0 8px;opacity:0.4;'>›</span> ", $bc);
         ?>
@@ -29,7 +29,7 @@
           </a>
         </li>
         <li class="nav-item ms-auto ms-md-0 d-flex align-items-center">
-          <a class="btn bg-gradient-primary btn-sm mb-0 me-0 me-md-3" onclick="logout()" style="border-radius:10px;">
+          <a class="btn btn-sm mb-0 me-0 me-md-3" onclick="logout()" style="border-radius:10px;background:var(--gradient-primary,linear-gradient(135deg,#0f172a,#334155));color:#fff;border:none;">
             <i class="fa fa-sign-out-alt me-1"></i>Logout
           </a>
         </li>

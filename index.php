@@ -13,19 +13,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #cb0c9f;
-            --primary-light: #e84dc5;
-            --primary-dark: #a00a7e;
-            --dark: #344767;
+            --primary: #1e293b;
+            --primary-light: #475569;
+            --primary-dark: #0f172a;
+            --accent: #64748b;
+            --dark: #0f172a;
             --secondary: #627594;
             --body-bg: #f0f2f5;
-            --gradient-primary: linear-gradient(135deg, #7928ca 0%, #cb0c9f 100%);
-            --gradient-hero: linear-gradient(135deg, #1a0533 0%, #2d1054 40%, #4a1a6b 70%, #1a0533 100%);
+            --gradient-primary: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+            --gradient-hero: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #334155 70%, #0f172a 100%);
             --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: var(--font); color: var(--dark); overflow-x: hidden; }
+        body { font-family: var(--font); color: var(--primary); overflow-x: hidden; }
 
         /* ===== NAVBAR ===== */
         .fadel-nav {
@@ -43,9 +44,9 @@
             font-weight: 800; font-size: 1.4rem; color: #fff;
             text-decoration: none; letter-spacing: -0.5px;
         }
-        .fadel-nav.scrolled .nav-brand { color: var(--dark); }
+        .fadel-nav.scrolled .nav-brand { color: var(--primary); }
         .fadel-nav .nav-links a {
-            color: rgba(255,255,255,0.8); text-decoration: none;
+            color: rgba(255,255,255,0.7); text-decoration: none;
             font-weight: 500; font-size: 0.9rem; margin-left: 2rem;
             transition: color 0.3s;
         }
@@ -53,14 +54,14 @@
         .fadel-nav .nav-links a:hover { color: #fff; }
         .fadel-nav.scrolled .nav-links a:hover { color: var(--primary); }
         .fadel-nav .btn-masuk {
-            background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25);
             color: #fff; padding: 8px 24px; border-radius: 10px;
             font-weight: 600; font-size: 0.85rem; transition: all 0.3s;
             text-decoration: none; margin-left: 2rem;
         }
         .fadel-nav.scrolled .btn-masuk {
             background: var(--gradient-primary); border: none; color: #fff;
-            box-shadow: 0 4px 16px rgba(203,12,159,0.3);
+            box-shadow: 0 4px 16px rgba(15,23,42,0.25);
         }
         .fadel-nav .btn-masuk:hover { transform: translateY(-2px); }
 
@@ -74,23 +75,23 @@
         .hero::before {
             content: ''; position: absolute;
             width: 600px; height: 600px;
-            background: radial-gradient(circle, rgba(203,12,159,0.15) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(100,116,139,0.12) 0%, transparent 70%);
             top: -100px; right: -100px; border-radius: 50%;
         }
         .hero::after {
             content: ''; position: absolute;
             width: 400px; height: 400px;
-            background: radial-gradient(circle, rgba(121,40,202,0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(71,85,105,0.08) 0%, transparent 70%);
             bottom: -50px; left: -50px; border-radius: 50%;
         }
         .hero-content { position: relative; z-index: 2; }
         .hero-badge {
             display: inline-block;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.08);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.12);
             padding: 6px 18px; border-radius: 50px;
-            color: rgba(255,255,255,0.9); font-size: 0.8rem;
+            color: rgba(255,255,255,0.8); font-size: 0.8rem;
             font-weight: 500; margin-bottom: 1.5rem;
             letter-spacing: 0.5px;
         }
@@ -100,34 +101,34 @@
             margin-bottom: 1.5rem; letter-spacing: -1.5px;
         }
         .hero h1 span {
-            background: var(--gradient-primary);
+            background: linear-gradient(135deg, #94a3b8, #e2e8f0);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
         .hero p {
-            color: rgba(255,255,255,0.7);
+            color: rgba(255,255,255,0.6);
             font-size: 1.1rem; line-height: 1.7;
             max-width: 500px; margin-bottom: 2rem;
         }
         .hero-cta {
             display: inline-flex; align-items: center; gap: 12px;
-            background: var(--gradient-primary); color: #fff;
+            background: #fff; color: var(--primary);
             padding: 14px 32px; border-radius: 14px;
             font-weight: 700; font-size: 0.95rem;
             text-decoration: none; transition: all 0.3s;
-            box-shadow: 0 8px 32px rgba(203,12,159,0.35);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
         }
-        .hero-cta:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(203,12,159,0.5); color: #fff; }
+        .hero-cta:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); color: var(--primary); }
 
         /* Hero Visual */
         .hero-visual {
             position: relative; z-index: 2;
         }
         .hero-card {
-            background: rgba(255,255,255,0.06);
+            background: rgba(255,255,255,0.05);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.08);
             border-radius: 24px; padding: 2.5rem;
             color: #fff;
         }
@@ -136,23 +137,22 @@
         }
         .hero-card .stat-item {
             flex: 1; text-align: center;
-            background: rgba(255,255,255,0.05);
+            background: rgba(255,255,255,0.04);
             border-radius: 16px; padding: 1.2rem 0.8rem;
         }
         .hero-card .stat-item .num {
             font-size: 1.8rem; font-weight: 800;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            color: #e2e8f0;
         }
         .hero-card .stat-item .label {
-            font-size: 0.7rem; opacity: 0.6;
+            font-size: 0.7rem; opacity: 0.5;
             text-transform: uppercase; letter-spacing: 1px;
             margin-top: 4px;
         }
         .hero-card .algo-tag {
             display: inline-block;
-            background: rgba(203,12,159,0.15);
-            color: var(--primary-light);
+            background: rgba(148,163,184,0.15);
+            color: #94a3b8;
             padding: 4px 14px; border-radius: 8px;
             font-size: 0.75rem; font-weight: 600;
             margin-right: 8px; margin-bottom: 8px;
@@ -165,7 +165,7 @@
         }
         .section-label {
             display: inline-block;
-            background: rgba(203,12,159,0.08);
+            background: rgba(30,41,59,0.06);
             color: var(--primary);
             padding: 6px 18px; border-radius: 50px;
             font-size: 0.75rem; font-weight: 700;
@@ -174,7 +174,7 @@
         }
         .section-title {
             font-size: 2.2rem; font-weight: 800;
-            color: var(--dark); letter-spacing: -0.8px;
+            color: var(--primary); letter-spacing: -0.8px;
             margin-bottom: 0.75rem;
         }
         .section-desc {
@@ -201,7 +201,7 @@
         }
         .feature-card h5 {
             font-weight: 700; font-size: 1.05rem;
-            margin-bottom: 0.5rem; color: var(--dark);
+            margin-bottom: 0.5rem; color: var(--primary);
         }
         .feature-card p {
             color: var(--secondary); font-size: 0.85rem;
@@ -224,11 +224,11 @@
             color: #fff; font-weight: 800; font-size: 1.4rem;
             display: inline-flex; align-items: center; justify-content: center;
             margin-bottom: 1.25rem;
-            box-shadow: 0 8px 24px rgba(203,12,159,0.3);
+            box-shadow: 0 8px 24px rgba(15,23,42,0.25);
         }
         .step-card h5 {
             font-weight: 700; font-size: 1.05rem;
-            margin-bottom: 0.5rem; color: var(--dark);
+            margin-bottom: 0.5rem; color: var(--primary);
         }
         .step-card p {
             color: var(--secondary); font-size: 0.85rem;
@@ -253,7 +253,7 @@
         }
         .login-card h3 {
             font-weight: 800; font-size: 1.6rem;
-            margin-bottom: 0.5rem; color: var(--dark);
+            margin-bottom: 0.5rem; color: var(--primary);
         }
         .login-card .subtitle {
             color: var(--secondary); font-size: 0.9rem;
@@ -261,7 +261,7 @@
         }
         .login-card label {
             font-weight: 600; font-size: 0.82rem;
-            color: var(--dark); margin-bottom: 6px;
+            color: var(--primary); margin-bottom: 6px;
         }
         .login-card .form-control {
             border: 1.5px solid #e0e3e8;
@@ -271,18 +271,18 @@
         }
         .login-card .form-control:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(203,12,159,0.1);
+            box-shadow: 0 0 0 3px rgba(30,41,59,0.08);
         }
         .login-card .btn-login {
             background: var(--gradient-primary); color: #fff;
             border: none; border-radius: 12px;
             padding: 13px; font-weight: 700; font-size: 0.95rem;
             width: 100%; transition: all 0.3s;
-            box-shadow: 0 4px 16px rgba(203,12,159,0.3);
+            box-shadow: 0 4px 16px rgba(15,23,42,0.2);
         }
         .login-card .btn-login:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(203,12,159,0.45);
+            box-shadow: 0 8px 24px rgba(15,23,42,0.35);
         }
         .login-info-side {
             display: flex; flex-direction: column; justify-content: center;
@@ -290,7 +290,7 @@
         }
         .login-info-side h2 {
             font-weight: 800; font-size: 2rem;
-            color: var(--dark); letter-spacing: -0.5px;
+            color: var(--primary); letter-spacing: -0.5px;
             margin-bottom: 1rem;
         }
         .login-info-side p {
@@ -306,12 +306,12 @@
 
         /* ===== FOOTER ===== */
         .site-footer {
-            background: var(--dark); color: rgba(255,255,255,0.6);
+            background: var(--dark); color: rgba(255,255,255,0.5);
             padding: 3rem 0; text-align: center;
             font-size: 0.85rem;
         }
         .site-footer strong { color: #fff; }
-        .site-footer a { color: var(--primary-light); text-decoration: none; }
+        .site-footer a { color: #94a3b8; text-decoration: none; }
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
@@ -384,8 +384,8 @@
                             <span class="algo-tag">Euclidean</span>
                             <span class="algo-tag">Laplace α=1.0</span>
                         </div>
-                        <div style="margin-top:1.2rem;padding-top:1.2rem;border-top:1px solid rgba(255,255,255,0.08);">
-                            <div style="font-size:0.7rem;opacity:0.5;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Klasifikasi</div>
+                        <div style="margin-top:1.2rem;padding-top:1.2rem;border-top:1px solid rgba(255,255,255,0.06);">
+                            <div style="font-size:0.7rem;opacity:0.4;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Klasifikasi</div>
                             <div style="display:flex;gap:8px;flex-wrap:wrap;">
                                 <span style="background:rgba(130,214,22,0.15);color:#82d616;padding:4px 12px;border-radius:8px;font-size:0.72rem;font-weight:600;">Normal</span>
                                 <span style="background:rgba(251,207,51,0.15);color:#fbcf33;padding:4px 12px;border-radius:8px;font-size:0.72rem;font-weight:600;">Ringan</span>
@@ -410,7 +410,7 @@
             <div class="row g-4">
                 <div class="col-md-6 col-lg-3">
                     <div class="feature-card fade-up">
-                        <div class="feature-icon" style="background:linear-gradient(135deg,#7928ca,#cb0c9f);">
+                        <div class="feature-icon" style="background:linear-gradient(135deg,#0f172a,#334155);">
                             <i class="fas fa-project-diagram"></i>
                         </div>
                         <h5>K-Means Clustering</h5>

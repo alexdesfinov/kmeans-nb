@@ -38,12 +38,8 @@ $aksi = "module/" . $_GET['module'] . "/action.php";
     <?php include 'layout/header.php'; ?>
     <div class="container-fluid py-4">
       <?php
-      $page = isset($_GET['module']) ? $_GET['module'] : 'dashboard.php';
-      if (isset($_GET['module'])) {
-        $act = isset($_GET['act']) ? '/' . $_GET['act'] . '.php' : '/index.php';
-      } else {
-        $act = '';
-      }
+      $page = isset($_GET['module']) ? $_GET['module'] : 'dashboard';
+      $act = isset($_GET['act']) ? '/' . $_GET['act'] . '.php' : '/index.php';
 
       $target = 'module/' . $page . $act;
 

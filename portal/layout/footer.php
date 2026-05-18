@@ -5,7 +5,7 @@
         <div class="copyright text-center text-sm text-muted text-lg-start">
           © <script>document.write(new Date().getFullYear())</script>
           <strong>FADEL</strong> — Sistem Deteksi Kecanduan Internet.
-          Made by <a href="#" class="font-weight-bold" style="color:var(--fadel-primary);">Antigravity</a>
+          Made by <a href="#" class="font-weight-bold" style="color:var(--fadel-primary,#1e293b);">Antigravity</a>
         </div>
       </div>
       <div class="col-lg-6">

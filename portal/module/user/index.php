@@ -45,7 +45,7 @@ require_admin();
               $q = mysqli_query($conn, "SELECT id, username, nama, level FROM users ORDER BY id DESC");
               while ($row = mysqli_fetch_assoc($q)) {
                 $no++;
-                $levelColor = $row['level'] === 'admin' ? 'background:rgba(203,12,159,0.1);color:#cb0c9f;' : 'background:rgba(23,193,232,0.1);color:#17c1e8;';
+                $levelColor = $row['level'] === 'admin' ? 'background:rgba(30,41,59,0.1);color:#1e293b;' : 'background:rgba(23,193,232,0.1);color:#17c1e8;';
               ?>
                 <tr>
                   <td><?php echo $no; ?></td>
