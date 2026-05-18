@@ -164,8 +164,165 @@ if (!$dataKosong && $doProcess && isset($hybrid) && is_array($hybrid)) {
 
 <?php if (!$dataKosong && $doProcess && isset($hybrid) && is_array($hybrid) && is_array($trace)): ?>
     
-    <!-- MAIN TAB NAVIGATION -->
-    <?php if (!$isPrint): ?>
+    <?php if ($isPrint): ?>
+        <!-- ========================================== -->
+        <!--   TAMPILAN KHUSUS PRINT (STANDARD A4)     -->
+        <!-- ========================================== -->
+        
+        <!-- BAGIAN I: HASIL CLUSTERING PER KLUSTER -->
+        <?php for ($c = 0; $c < $k; $c++): ?>
+            <?php
+            $status = $hybrid['clusterNameMap'][$c] ?? '-';
+            $noAnggota = 1;
+            ?>
+            <h5 style="margin-top:20px; font-weight:bold; font-size:13px; text-transform:uppercase;">
+                KLUSTER <?= $c + 1 ?> (<?= htmlspecialchars($status) ?>)
+            </h5>
+            <table class="table table-bordered table-sm" style="width:100%; border-collapse:collapse;">
+                <thead>
+                    <tr>
+                        <th style="width:8%; text-align:center;">No</th>
+                        <th>Nama Responden</th>
+                        <th style="text-align:center; width:10%;">K1</th>
+                        <th style="text-align:center; width:10%;">K2</th>
+                        <th style="text-align:center; width:10%;">K3</th>
+                        <th style="text-align:center; width:10%;">K4</th>
+                        <th style="text-align:center; width:10%;">K5</th>
+                        <th style="text-align:center; width:10%;">K6</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($hybrid['trainRows'] as $i => $row): ?>
+                        <?php
+                        $cid = $finalLabels[$i] ?? -1;
+                        if ($cid !== $c) continue;
+                        $vec = $hybrid['X_train_km'][$i] ?? [0, 0, 0, 0, 0, 0];
+                        ?>
+                        <tr>
+                            <td style="text-align:center;"><?= $noAnggota++ ?></td>
+                            <td><?= htmlspecialchars($row['nama'] ?? '-') ?></td>
+                            <td style="text-align:center;"><?= (int)$vec[0] ?></td>
+                            <td style="text-align:center;"><?= (int)$vec[1] ?></td>
+                            <td style="text-align:center;"><?= (int)$vec[2] ?></td>
+                            <td style="text-align:center;"><?= (int)$vec[3] ?></td>
+                            <td style="text-align:center;"><?= (int)$vec[4] ?></td>
+                            <td style="text-align:center;"><?= (int)$vec[5] ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                    <?php if ($noAnggota === 1): ?>
+                        <tr>
+                            <td colspan="8" style="text-align:center;">Tidak ada anggota di kluster ini.</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        <?php endfor; ?>
+
+        <!-- BAGIAN II: DETAIL PERHITUNGAN ITERASI -->
+        <h5 style="margin-top:35px; font-weight:bold; font-size:13px; text-transform:uppercase;">
+            Detail Perhitungan Iterasi K-Means
+        </h5>
+        <?php foreach ($trace['iterations'] as $it): ?>
+            <h6 style="margin-top:20px; font-weight:bold; font-size:12.5px;">
+                Tabel Perhitungan Iterasi <?= (int)$it['iter'] ?> (Status: <?= $it['changed'] ? 'Mencari Centroid...' : 'Konvergen' ?>)
+            </h6>
+            <table class="table table-bordered table-sm" style="width:100%; border-collapse:collapse;">
+                <thead>
+                    <tr>
+                        <th style="width:5%; text-align:center;">No</th>
+                        <th>Nama</th>
+                        <th style="text-align:center; width:6%;">K1</th>
+                        <th style="text-align:center; width:6%;">K2</th>
+                        <th style="text-align:center; width:6%;">K3</th>
+                        <th style="text-align:center; width:6%;">K4</th>
+                        <th style="text-align:center; width:6%;">K5</th>
+                        <th style="text-align:center; width:6%;">K6</th>
+                        <?php for ($c = 1; $c <= $k; $c++): ?>
+                            <th style="text-align:center; width:8%;">C<?= $c ?></th>
+                        <?php endfor; ?>
+                        <th style="text-align:center; width:8%;">Cluster</th>
+                        <th style="text-align:center; width:12%;">Keterangan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($hybrid['trainRows'] as $i => $row): ?>
+                        <?php
+                        $vec = $hybrid['X_train_km'][$i];
+                        $cid = $it['labels'][$i];
+                        $minD = $it['minDist'][$i];
+                        $ket  = $hybrid['clusterNameMap'][$cid] ?? '-';
+                        ?>
+                        <tr>
+                            <td style="text-align:center;"><?= $i + 1 ?></td>
+                            <td><?= htmlspecialchars($row['nama'] ?? '-') ?></td>
+                            <?php for ($d = 0; $d < 6; $d++): ?>
+                                <td style="text-align:center;"><?= (int)$vec[$d] ?></td>
+                            <?php endfor; ?>
+                            <?php for ($c = 0; $c < $k; $c++): ?>
+                                <?php
+                                $dist = (float)$it['dist'][$i][$c];
+                                $distTxt = number_format($dist, 2, '.', '');
+                                ?>
+                                <td style="text-align:center;"><?= $distTxt ?></td>
+                            <?php endfor; ?>
+                            <td style="text-align:center;">C<?= $cid + 1 ?></td>
+                            <td style="text-align:center;"><?= htmlspecialchars($ket) ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                    
+                    <!-- Centroid Awal Iterasi -->
+                    <tr style="background:#f2f2f2; font-weight:bold;">
+                        <td colspan="2">Centroid Awal Iterasi Ini</td>
+                        <td colspan="6"></td>
+                        <td colspan="<?= $k ?>"></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <?php for ($c = 0; $c < $k; $c++): ?>
+                        <tr style="background:#f9f9f9;">
+                            <td style="font-weight:bold;">C<?= $c + 1 ?></td>
+                            <td>Pusat Kluster</td>
+                            <?php for ($d = 0; $d < 6; $d++): ?>
+                                <?php $v = number_format((float)$it['centroids'][$c][$d], 1, '.', ''); ?>
+                                <td style="text-align:center; font-weight:bold;"><?= $v ?></td>
+                            <?php endfor; ?>
+                            <td colspan="<?= $k ?>"></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    <?php endfor; ?>
+
+                    <!-- Centroid Baru -->
+                    <tr style="background:#e6f7ff; font-weight:bold;">
+                        <td colspan="2">Centroid Baru (Hasil Update)</td>
+                        <td colspan="6"></td>
+                        <td colspan="<?= $k ?>"></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <?php for ($c = 0; $c < $k; $c++): ?>
+                        <tr style="background:#f0faff;">
+                            <td style="font-weight:bold; color:#1890ff;">C<?= $c + 1 ?></td>
+                            <td style="color:#1890ff;">Pusat Baru</td>
+                            <?php for ($d = 0; $d < 6; $d++): ?>
+                                <?php $v = number_format((float)$it['newCentroids'][$c][$d], 1, '.', ''); ?>
+                                <td style="text-align:center; font-weight:bold; color:#1890ff;"><?= $v ?></td>
+                            <?php endfor; ?>
+                            <td colspan="<?= $k ?>"></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    <?php endfor; ?>
+                </tbody>
+            </table>
+        <?php endforeach; ?>
+
+    <?php else: ?>
+        <!-- ========================================== -->
+        <!--   TAMPILAN MONITOR LAYAR (MODERN & TABS)   -->
+        <!-- ========================================== -->
+        
+        <!-- MAIN TAB NAVIGATION -->
         <div class="kmeans-tabs-nav">
             <button type="button" class="kmeans-tab-btn active" data-target="pane-hasil-akhir">
                 <i class="fa fa-check-circle"></i> Hasil Akhir Clustering
@@ -174,340 +331,341 @@ if (!$dataKosong && $doProcess && isset($hybrid) && is_array($hybrid)) {
                 <i class="fa fa-history"></i> Detail Proses Iterasi
             </button>
         </div>
-    <?php endif; ?>
 
-    <!-- TAB CONTENT PANES -->
-    <div class="kmeans-tab-panes-container">
-        
-        <!-- MAIN TAB 1: HASIL AKHIR CLUSTERING -->
-        <div class="kmeans-tab-pane active" id="pane-hasil-akhir">
-            <div class="identitas-card-modern">
-                <div class="identitas-title-section">
-                    <i class="fa fa-users" style="background:rgba(16,185,129,0.08); color:#10b981;"></i>
-                    <div>
-                        <h5 class="mb-0" style="font-weight:750; color:#1e293b; font-size:1.05rem;">Hasil Akhir Clustering (Per Kluster)</h5>
-                        <p class="mb-0" style="font-size:0.75rem; color:#64748b;">Pengelompokan responden berdasarkan tingkat kecanduan internet</p>
-                    </div>
-                </div>
-
-                <?php for ($c = 0; $c < $k; $c++): ?>
-                    <?php
-                    $status = $hybrid['clusterNameMap'][$c] ?? '-';
-                    $noAnggota = 1;
-                    $statusLower = strtolower($status);
-                    if (strpos($statusLower, 'parah') !== false) {
-                        $badgeClass = 'cluster-parah';
-                        $accentColor = '#ef4444';
-                        $bgLight = 'rgba(239, 68, 68, 0.03)';
-                    } elseif (strpos($statusLower, 'sedang') !== false) {
-                        $badgeClass = 'cluster-sedang';
-                        $accentColor = '#f59e0b';
-                        $bgLight = 'rgba(245, 158, 11, 0.03)';
-                    } elseif (strpos($statusLower, 'ringan') !== false) {
-                        $badgeClass = 'cluster-ringan';
-                        $accentColor = '#10b981';
-                        $bgLight = 'rgba(16, 185, 129, 0.03)';
-                    } else {
-                        $badgeClass = 'cluster-normal';
-                        $accentColor = '#64748b';
-                        $bgLight = 'rgba(100, 116, 139, 0.03)';
-                    }
-                    ?>
-
-                    <div style="border-radius:12px; border:1px solid #e2e8f0; padding:18px; margin-bottom:20px; background:<?= $bgLight ?>; border-left: 5px solid <?= $accentColor ?>;">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h6 class="fw-bold mb-0" style="color:#1e293b; font-size:0.92rem;">
-                                KLUSTER <?= $c + 1 ?>
-                            </h6>
-                            <span class="cluster-badge <?= $badgeClass ?>" style="padding: 5px 12px; font-weight:700; border-radius:8px; font-size:0.72rem; text-transform:uppercase;">
-                                <?= htmlspecialchars($status) ?>
-                            </span>
-                        </div>
-
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0" style="font-size:0.84rem;">
-                                <thead class="table-dark">
-                                    <tr>
-                                        <th class="text-center" width="6%" data-orderable="false" style="padding:10px;">No</th>
-                                        <th style="padding:10px;">Nama Responden</th>
-                                        <th class="text-center" width="10%">K1</th>
-                                        <th class="text-center" width="10%">K2</th>
-                                        <th class="text-center" width="10%">K3</th>
-                                        <th class="text-center" width="10%">K4</th>
-                                        <th class="text-center" width="10%">K5</th>
-                                        <th class="text-center" width="10%">K6</th>
-                                    </tr>
-                                </thead>
-                                <tbody style="background:#fff;">
-                                    <?php foreach ($hybrid['trainRows'] as $i => $row): ?>
-                                        <?php
-                                        $cid = $finalLabels[$i] ?? -1;
-                                        if ($cid !== $c) continue;
-                                        $vec = $hybrid['X_train_km'][$i] ?? [0, 0, 0, 0, 0, 0];
-                                        ?>
-                                        <tr>
-                                            <td class="text-center" style="font-weight:600; color:#64748b;"><?= $noAnggota++ ?></td>
-                                            <td style="font-weight:600; color:var(--fadel-primary);"><?= htmlspecialchars($row['nama'] ?? '-') ?></td>
-                                            <td class="text-center"><?= (int)$vec[0] ?></td>
-                                            <td class="text-center"><?= (int)$vec[1] ?></td>
-                                            <td class="text-center"><?= (int)$vec[2] ?></td>
-                                            <td class="text-center"><?= (int)$vec[3] ?></td>
-                                            <td class="text-center"><?= (int)$vec[4] ?></td>
-                                            <td class="text-center"><?= (int)$vec[5] ?></td>
-                                        </tr>
-                                    <?php endforeach; ?>
-
-                                    <?php if ($noAnggota === 1): ?>
-                                        <tr>
-                                            <td colspan="8" class="text-center text-muted py-3">Tidak ada anggota di kluster ini.</td>
-                                        </tr>
-                                    <?php endif; ?>
-                                </tbody>
-                            </table>
+        <!-- TAB CONTENT PANES -->
+        <div class="kmeans-tab-panes-container">
+            
+            <!-- MAIN TAB 1: HASIL AKHIR CLUSTERING -->
+            <div class="kmeans-tab-pane active" id="pane-hasil-akhir">
+                <div class="identitas-card-modern">
+                    <div class="identitas-title-section">
+                        <i class="fa fa-users" style="background:rgba(16,185,129,0.08); color:#10b981;"></i>
+                        <div>
+                            <h5 class="mb-0" style="font-weight:750; color:#1e293b; font-size:1.05rem;">Hasil Akhir Clustering (Per Kluster)</h5>
+                            <p class="mb-0" style="font-size:0.75rem; color:#64748b;">Pengelompokan responden berdasarkan tingkat kecanduan internet</p>
                         </div>
                     </div>
-                <?php endfor; ?>
-            </div>
-        </div>
 
-        <!-- MAIN TAB 2: DETAIL PROSES K-MEANS -->
-        <div class="kmeans-tab-pane" id="pane-detail-proses">
-            <div class="identitas-card-modern">
-                <div class="identitas-title-section">
-                    <i class="fa fa-history"></i>
-                    <div>
-                        <h5 class="mb-0" style="font-weight:750; color:#1e293b; font-size:1.05rem;">Detail Perhitungan Iterasi K-Means</h5>
-                        <p class="mb-0" style="font-size:0.75rem; color:#64748b;">Lacak pergerakan centroid dan nilai euclidean distance hingga konvergen</p>
-                    </div>
-                </div>
+                    <?php for ($c = 0; $c < $k; $c++): ?>
+                        <?php
+                        $status = $hybrid['clusterNameMap'][$c] ?? '-';
+                        $noAnggota = 1;
+                        $statusLower = strtolower($status);
+                        if (strpos($statusLower, 'parah') !== false) {
+                            $badgeClass = 'cluster-parah';
+                            $accentColor = '#ef4444';
+                            $bgLight = 'rgba(239, 68, 68, 0.03)';
+                        } elseif (strpos($statusLower, 'sedang') !== false) {
+                            $badgeClass = 'cluster-sedang';
+                            $accentColor = '#f59e0b';
+                            $bgLight = 'rgba(245, 158, 11, 0.03)';
+                        } elseif (strpos($statusLower, 'ringan') !== false) {
+                            $badgeClass = 'cluster-ringan';
+                            $accentColor = '#10b981';
+                            $bgLight = 'rgba(16, 185, 129, 0.03)';
+                        } else {
+                            $badgeClass = 'cluster-normal';
+                            $accentColor = '#64748b';
+                            $bgLight = 'rgba(100, 116, 139, 0.03)';
+                        }
+                        ?>
 
-                <!-- Sub-Navigation for Iteration Capsules -->
-                <div class="kmeans-subtabs-container">
-                    <div class="kmeans-subtabs-nav" id="iterTabsNav">
-                        <?php foreach ($trace['iterations'] as $index => $it): ?>
-                            <button type="button" class="kmeans-subtab-btn <?= $index === 0 ? 'active' : '' ?>" data-iter="<?= $it['iter'] ?>">
-                                Iterasi <?= $it['iter'] ?> <?= !$it['changed'] ? ' (Konvergen)' : '' ?>
-                            </button>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
-
-                <!-- Iteration Panes -->
-                <div class="kmeans-iter-panes-container">
-                    <?php foreach ($trace['iterations'] as $index => $it): ?>
-                        <div class="kmeans-iter-pane <?= $index === 0 ? 'active' : '' ?>" data-iter-pane="<?= $it['iter'] ?>">
-                            
+                        <div style="border-radius:12px; border:1px solid #e2e8f0; padding:18px; margin-bottom:20px; background:<?= $bgLight ?>; border-left: 5px solid <?= $accentColor ?>;">
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h6 style="font-weight:800; color:#1e293b; font-size:0.9rem; text-transform:uppercase; letter-spacing:0.5px;">
-                                    <i class="fa fa-circle-o-notch fa-spin me-2 text-primary"></i> Tabel Perhitungan Iterasi <?= (int)$it['iter'] ?>
+                                <h6 class="fw-bold mb-0" style="color:#1e293b; font-size:0.92rem;">
+                                    KLUSTER <?= $c + 1 ?>
                                 </h6>
-                                <span class="badge" style="background:#e2e8f0; color:#475569; font-weight:700; padding:6px 12px; border-radius:8px;">
-                                    Status: <?= $it['changed'] ? 'Mencari Centroid...' : 'Konvergen ✓' ?>
+                                <span class="cluster-badge <?= $badgeClass ?>" style="padding: 5px 12px; font-weight:700; border-radius:8px; font-size:0.72rem; text-transform:uppercase;">
+                                    <?= htmlspecialchars($status) ?>
                                 </span>
                             </div>
 
                             <div class="table-responsive">
-                                <table class="table table-hover align-middle" style="font-size:0.8rem;">
+                                <table class="table table-hover align-middle mb-0" style="font-size:0.84rem;">
                                     <thead class="table-dark">
                                         <tr>
-                                            <th class="text-center" width="5%" data-orderable="false" style="padding:10px 6px;">No</th>
-                                            <th style="padding:10px 8px;">Nama</th>
-                                            <th class="text-center" style="padding:10px 4px;">K1</th>
-                                            <th class="text-center" style="padding:10px 4px;">K2</th>
-                                            <th class="text-center" style="padding:10px 4px;">K3</th>
-                                            <th class="text-center" style="padding:10px 4px;">K4</th>
-                                            <th class="text-center" style="padding:10px 4px;">K5</th>
-                                            <th class="text-center" style="padding:10px 4px;">K6</th>
-
-                                            <?php for ($c = 1; $c <= $k; $c++): ?>
-                                                <th class="text-center" style="padding:10px 6px; background:#334155;">C<?= $c ?></th>
-                                            <?php endfor; ?>
-
-                                            <th class="text-center" style="padding:10px 6px; background:#0f172a;">Cluster</th>
-                                            <th class="text-center" style="padding:10px 8px; background:#0f172a;">Keterangan</th>
+                                            <th class="text-center" width="6%" data-orderable="false" style="padding:10px;">No</th>
+                                            <th style="padding:10px;">Nama Responden</th>
+                                            <th class="text-center" width="10%">K1</th>
+                                            <th class="text-center" width="10%">K2</th>
+                                            <th class="text-center" width="10%">K3</th>
+                                            <th class="text-center" width="10%">K4</th>
+                                            <th class="text-center" width="10%">K5</th>
+                                            <th class="text-center" width="10%">K6</th>
                                         </tr>
                                     </thead>
                                     <tbody style="background:#fff;">
                                         <?php foreach ($hybrid['trainRows'] as $i => $row): ?>
                                             <?php
-                                            $vec = $hybrid['X_train_km'][$i];
-                                            $cid = $it['labels'][$i];
-                                            $minD = $it['minDist'][$i];
-                                            $ket  = $hybrid['clusterNameMap'][$cid] ?? '-';
+                                            $cid = $finalLabels[$i] ?? -1;
+                                            if ($cid !== $c) continue;
+                                            $vec = $hybrid['X_train_km'][$i] ?? [0, 0, 0, 0, 0, 0];
                                             ?>
                                             <tr>
-                                                <td class="text-center" style="font-weight:600; color:#64748b;"><?= $i + 1 ?></td>
-                                                <td style="font-weight:600; color:#1e293b;"><?= htmlspecialchars($row['nama'] ?? '-') ?></td>
-
-                                                <?php for ($d = 0; $d < 6; $d++): ?>
-                                                    <td class="text-center"><?= (int)$vec[$d] ?></td>
-                                                <?php endfor; ?>
-
-                                                <?php for ($c = 0; $c < $k; $c++): ?>
-                                                    <?php
-                                                    $dist = (float)$it['dist'][$i][$c];
-                                                    $isMin = (abs($dist - (float)$minD) < 0.0000001);
-                                                    $tip = buildDistanceTip($i, $c, $vec, $it['centroids'][$c], $dist);
-                                                    $distTxt = rtrim(rtrim(number_format($dist, 2, '.', ''), '0'), '.');
-                                                    ?>
-                                                    <td class="text-center">
-                                                        <?php if ($isMin): ?>
-                                                            <span class="math-tooltip-wrapper min-distance-badge">
-                                                                <?= $distTxt ?>
-                                                                <span class="math-tooltip"><?= $tip ?></span>
-                                                            </span>
-                                                        <?php else: ?>
-                                                            <span class="math-tooltip-wrapper" style="color:#64748b;">
-                                                                <?= $distTxt ?>
-                                                                <span class="math-tooltip"><?= $tip ?></span>
-                                                            </span>
-                                                        <?php endif; ?>
-                                                    </td>
-                                                <?php endfor; ?>
-
-                                                <td class="text-center" style="font-weight:700; color:#1e293b;">C<?= $cid + 1 ?></td>
-                                                <td class="text-center">
-                                                    <?php
-                                                    $statusLower = strtolower($ket);
-                                                    if (strpos($statusLower, 'parah') !== false) {
-                                                        $bColor = 'rgba(239, 68, 68, 0.1)'; $tColor = '#ef4444';
-                                                    } elseif (strpos($statusLower, 'sedang') !== false) {
-                                                        $bColor = 'rgba(245, 158, 11, 0.1)'; $tColor = '#d97706';
-                                                    } elseif (strpos($statusLower, 'ringan') !== false) {
-                                                        $bColor = 'rgba(16, 185, 129, 0.1)'; $tColor = '#059669';
-                                                    } else {
-                                                        $bColor = 'rgba(100, 116, 139, 0.1)'; $tColor = '#475569';
-                                                    }
-                                                    ?>
-                                                    <span style="background:<?= $bColor ?>; color:<?= $tColor ?>; font-weight:700; font-size:0.7rem; border-radius:6px; padding:3px 8px; text-transform:uppercase;">
-                                                        <?= htmlspecialchars($ket) ?>
-                                                    </span>
-                                                </td>
+                                                <td class="text-center" style="font-weight:600; color:#64748b;"><?= $noAnggota++ ?></td>
+                                                <td style="font-weight:600; color:var(--fadel-primary);"><?= htmlspecialchars($row['nama'] ?? '-') ?></td>
+                                                <td class="text-center"><?= (int)$vec[0] ?></td>
+                                                <td class="text-center"><?= (int)$vec[1] ?></td>
+                                                <td class="text-center"><?= (int)$vec[2] ?></td>
+                                                <td class="text-center"><?= (int)$vec[3] ?></td>
+                                                <td class="text-center"><?= (int)$vec[4] ?></td>
+                                                <td class="text-center"><?= (int)$vec[5] ?></td>
                                             </tr>
                                         <?php endforeach; ?>
 
-                                        <!-- Centroid (Dipakai di Iterasi Ini) -->
-                                        <tr style="background:#fffbeb; font-weight:700;">
-                                            <td colspan="2" style="background:#fffbeb;">Centroid Awal Iterasi Ini</td>
-                                            <td colspan="6" style="background:#fffbeb;"></td>
-                                            <td colspan="<?= $k ?>" style="background:#fffbeb;"></td>
-                                            <td style="background:#fffbeb;"></td>
-                                            <td style="background:#fffbeb;"></td>
-                                        </tr>
+                                        <?php if ($noAnggota === 1): ?>
+                                            <tr>
+                                                <td colspan="8" class="text-center text-muted py-3">Tidak ada anggota di kluster ini.</td>
+                                            </tr>
+                                        <?php endif; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    <?php endfor; ?>
+                </div>
+            </div>
 
-                                        <?php for ($c = 0; $c < $k; $c++): ?>
-                                            <tr style="background:#fffbeb;">
-                                                <td style="background:#fffbeb; font-weight:700; color:#d97706;">C<?= $c + 1 ?></td>
-                                                <td style="background:#fffbeb; font-weight:600; color:#d97706;">Pusat Kluster</td>
-                                                <?php for ($d = 0; $d < 6; $d++): ?>
-                                                    <?php $v = rtrim(rtrim(number_format((float)$it['centroids'][$c][$d], 1, '.', ''), '0'), '.'); ?>
-                                                    <td class="text-center" style="background:#fffbeb; color:#d97706; font-weight:600;"><?= $v ?></td>
+            <!-- MAIN TAB 2: DETAIL PROSES K-MEANS -->
+            <div class="kmeans-tab-pane" id="pane-detail-proses">
+                <div class="identitas-card-modern">
+                    <div class="identitas-title-section">
+                        <i class="fa fa-history"></i>
+                        <div>
+                            <h5 class="mb-0" style="font-weight:750; color:#1e293b; font-size:1.05rem;">Detail Perhitungan Iterasi K-Means</h5>
+                            <p class="mb-0" style="font-size:0.75rem; color:#64748b;">Lacak pergerakan centroid dan nilai euclidean distance hingga konvergen</p>
+                        </div>
+                    </div>
+
+                    <!-- Sub-Navigation for Iteration Capsules -->
+                    <div class="kmeans-subtabs-container">
+                        <div class="kmeans-subtabs-nav" id="iterTabsNav">
+                            <?php foreach ($trace['iterations'] as $index => $it): ?>
+                                <button type="button" class="kmeans-subtab-btn <?= $index === 0 ? 'active' : '' ?>" data-iter="<?= $it['iter'] ?>">
+                                    Iterasi <?= $it['iter'] ?> <?= !$it['changed'] ? ' (Konvergen)' : '' ?>
+                                </button>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+
+                    <!-- Iteration Panes -->
+                    <div class="kmeans-iter-panes-container">
+                        <?php foreach ($trace['iterations'] as $index => $it): ?>
+                            <div class="kmeans-iter-pane <?= $index === 0 ? 'active' : '' ?>" data-iter-pane="<?= $it['iter'] ?>">
+                                
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h6 style="font-weight:800; color:#1e293b; font-size:0.9rem; text-transform:uppercase; letter-spacing:0.5px;">
+                                        <i class="fa fa-circle-o-notch fa-spin me-2 text-primary"></i> Tabel Perhitungan Iterasi <?= (int)$it['iter'] ?>
+                                    </h6>
+                                    <span class="badge" style="background:#e2e8f0; color:#475569; font-weight:700; padding:6px 12px; border-radius:8px;">
+                                        Status: <?= $it['changed'] ? 'Mencari Centroid...' : 'Konvergen ✓' ?>
+                                    </span>
+                                </div>
+
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle" style="font-size:0.8rem;">
+                                        <thead class="table-dark">
+                                            <tr>
+                                                <th class="text-center" width="5%" data-orderable="false" style="padding:10px 6px;">No</th>
+                                                <th style="padding:10px 8px;">Nama</th>
+                                                <th class="text-center" style="padding:10px 4px;">K1</th>
+                                                <th class="text-center" style="padding:10px 4px;">K2</th>
+                                                <th class="text-center" style="padding:10px 4px;">K3</th>
+                                                <th class="text-center" style="padding:10px 4px;">K4</th>
+                                                <th class="text-center" style="padding:10px 4px;">K5</th>
+                                                <th class="text-center" style="padding:10px 4px;">K6</th>
+
+                                                <?php for ($c = 1; $c <= $k; $c++): ?>
+                                                    <th class="text-center" style="padding:10px 6px; background:#334155;">C<?= $c ?></th>
                                                 <?php endfor; ?>
+
+                                                <th class="text-center" style="padding:10px 6px; background:#0f172a;">Cluster</th>
+                                                <th class="text-center" style="padding:10px 8px; background:#0f172a;">Keterangan</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody style="background:#fff;">
+                                            <?php foreach ($hybrid['trainRows'] as $i => $row): ?>
+                                                <?php
+                                                $vec = $hybrid['X_train_km'][$i];
+                                                $cid = $it['labels'][$i];
+                                                $minD = $it['minDist'][$i];
+                                                $ket  = $hybrid['clusterNameMap'][$cid] ?? '-';
+                                                ?>
+                                                <tr>
+                                                    <td class="text-center" style="font-weight:600; color:#64748b;"><?= $i + 1 ?></td>
+                                                    <td style="font-weight:600; color:#1e293b;"><?= htmlspecialchars($row['nama'] ?? '-') ?></td>
+
+                                                    <?php for ($d = 0; $d < 6; $d++): ?>
+                                                        <td class="text-center"><?= (int)$vec[$d] ?></td>
+                                                    <?php endfor; ?>
+
+                                                    <?php for ($c = 0; $c < $k; $c++): ?>
+                                                        <?php
+                                                        $dist = (float)$it['dist'][$i][$c];
+                                                        $isMin = (abs($dist - (float)$minD) < 0.0000001);
+                                                        $tip = buildDistanceTip($i, $c, $vec, $it['centroids'][$c], $dist);
+                                                        $distTxt = rtrim(rtrim(number_format($dist, 2, '.', ''), '0'), '.');
+                                                        ?>
+                                                        <td class="text-center">
+                                                            <?php if ($isMin): ?>
+                                                                <span class="math-tooltip-wrapper min-distance-badge">
+                                                                    <?= $distTxt ?>
+                                                                    <span class="math-tooltip"><?= $tip ?></span>
+                                                                </span>
+                                                            <?php else: ?>
+                                                                <span class="math-tooltip-wrapper" style="color:#64748b;">
+                                                                    <?= $distTxt ?>
+                                                                    <span class="math-tooltip"><?= $tip ?></span>
+                                                                </span>
+                                                            <?php endif; ?>
+                                                        </td>
+                                                    <?php endfor; ?>
+
+                                                    <td class="text-center" style="font-weight:700; color:#1e293b;">C<?= $cid + 1 ?></td>
+                                                    <td class="text-center">
+                                                        <?php
+                                                        $statusLower = strtolower($ket);
+                                                        if (strpos($statusLower, 'parah') !== false) {
+                                                            $bColor = 'rgba(239, 68, 68, 0.1)'; $tColor = '#ef4444';
+                                                        } elseif (strpos($statusLower, 'sedang') !== false) {
+                                                            $bColor = 'rgba(245, 158, 11, 0.1)'; $tColor = '#d97706';
+                                                        } elseif (strpos($statusLower, 'ringan') !== false) {
+                                                            $bColor = 'rgba(16, 185, 129, 0.1)'; $tColor = '#059669';
+                                                        } else {
+                                                            $bColor = 'rgba(100, 116, 139, 0.1)'; $tColor = '#475569';
+                                                        }
+                                                        ?>
+                                                        <span style="background:<?= $bColor ?>; color:<?= $tColor ?>; font-weight:700; font-size:0.7rem; border-radius:6px; padding:3px 8px; text-transform:uppercase;">
+                                                            <?= htmlspecialchars($ket) ?>
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; ?>
+
+                                            <!-- Centroid (Dipakai di Iterasi Ini) -->
+                                            <tr style="background:#fffbeb; font-weight:700;">
+                                                <td colspan="2" style="background:#fffbeb;">Centroid Awal Iterasi Ini</td>
+                                                <td colspan="6" style="background:#fffbeb;"></td>
                                                 <td colspan="<?= $k ?>" style="background:#fffbeb;"></td>
                                                 <td style="background:#fffbeb;"></td>
                                                 <td style="background:#fffbeb;"></td>
                                             </tr>
-                                        <?php endfor; ?>
 
-                                        <!-- Centroid Baru (Hasil Update) -->
-                                        <tr style="background:#f0fdf4; font-weight:700;">
-                                            <td colspan="2" style="background:#f0fdf4;">Centroid Baru (Hasil Update)</td>
-                                            <td colspan="6" style="background:#f0fdf4;"></td>
-                                            <td colspan="<?= $k ?>" style="background:#f0fdf4;"></td>
-                                            <td style="background:#f0fdf4;"></td>
-                                            <td style="background:#f0fdf4;"></td>
-                                        </tr>
+                                            <?php for ($c = 0; $c < $k; $c++): ?>
+                                                <tr style="background:#fffbeb;">
+                                                    <td style="background:#fffbeb; font-weight:700; color:#d97706;">C<?= $c + 1 ?></td>
+                                                    <td style="background:#fffbeb; font-weight:600; color:#d97706;">Pusat Kluster</td>
+                                                    <?php for ($d = 0; $d < 6; $d++): ?>
+                                                        <?php $v = rtrim(rtrim(number_format((float)$it['centroids'][$c][$d], 1, '.', ''), '0'), '.'); ?>
+                                                        <td class="text-center" style="background:#fffbeb; color:#d97706; font-weight:600;"><?= $v ?></td>
+                                                    <?php endfor; ?>
+                                                    <td colspan="<?= $k ?>" style="background:#fffbeb;"></td>
+                                                    <td style="background:#fffbeb;"></td>
+                                                    <td style="background:#fffbeb;"></td>
+                                                </tr>
+                                            <?php endfor; ?>
 
-                                        <?php for ($c = 0; $c < $k; $c++): ?>
-                                            <tr style="background:#f0fdf4;">
-                                                <td style="background:#f0fdf4; font-weight:700; color:#16a34a;">C<?= $c + 1 ?></td>
-                                                <td style="background:#f0fdf4; font-weight:600; color:#16a34a;">Pusat Baru</td>
-                                                <?php for ($d = 0; $d < 6; $d++): ?>
-                                                    <?php $v = rtrim(rtrim(number_format((float)$it['newCentroids'][$c][$d], 1, '.', ''), '0'), '.'); ?>
-                                                    <td class="text-center" style="background:#f0fdf4; color:#16a34a; font-weight:600;"><?= $v ?></td>
-                                                <?php endfor; ?>
+                                            <!-- Centroid Baru (Hasil Update) -->
+                                            <tr style="background:#f0fdf4; font-weight:700;">
+                                                <td colspan="2" style="background:#f0fdf4;">Centroid Baru (Hasil Update)</td>
+                                                <td colspan="6" style="background:#f0fdf4;"></td>
                                                 <td colspan="<?= $k ?>" style="background:#f0fdf4;"></td>
                                                 <td style="background:#f0fdf4;"></td>
                                                 <td style="background:#f0fdf4;"></td>
                                             </tr>
-                                        <?php endfor; ?>
 
-                                    </tbody>
-                                </table>
-                            </div>
+                                            <?php for ($c = 0; $c < $k; $c++): ?>
+                                                <tr style="background:#f0fdf4;">
+                                                    <td style="background:#f0fdf4; font-weight:700; color:#16a34a;">C<?= $c + 1 ?></td>
+                                                    <td style="background:#f0fdf4; font-weight:600; color:#16a34a;">Pusat Baru</td>
+                                                    <?php for ($d = 0; $d < 6; $d++): ?>
+                                                        <?php $v = rtrim(rtrim(number_format((float)$it['newCentroids'][$c][$d], 1, '.', ''), '0'), '.'); ?>
+                                                        <td class="text-center" style="background:#f0fdf4; color:#16a34a; font-weight:600;"><?= $v ?></td>
+                                                    <?php endfor; ?>
+                                                    <td colspan="<?= $k ?>" style="background:#f0fdf4;"></td>
+                                                    <td style="background:#f0fdf4;"></td>
+                                                    <td style="background:#f0fdf4;"></td>
+                                                </tr>
+                                            <?php endfor; ?>
 
-                            <?php if (!$it['changed']): ?>
-                                <div class="alert alert-success mt-4 border-0 text-white font-weight-bold" style="background:#10b981; border-radius:12px; font-size:0.85rem; padding:14px 20px;">
-                                    <i class="fa fa-check-circle me-2" style="font-size:1.15rem; vertical-align:middle;"></i> Konvergen dicapai pada iterasi <?= (int)$it['iter'] ?>. Nilai centroid pada iterasi ini sudah sama dengan iterasi sebelumnya sehingga perhitungan dihentikan.
+                                        </tbody>
+                                    </table>
                                 </div>
-                            <?php endif; ?>
 
-                        </div>
-                    <?php endforeach; ?>
+                                <?php if (!$it['changed']): ?>
+                                    <div class="alert alert-success mt-4 border-0 text-white font-weight-bold" style="background:#10b981; border-radius:12px; font-size:0.85rem; padding:14px 20px;">
+                                        <i class="fa fa-check-circle me-2" style="font-size:1.15rem; vertical-align:middle;"></i> Konvergen dicapai pada iterasi <?= (int)$it['iter'] ?>. Nilai centroid pada iterasi ini sudah sama dengan iterasi sebelumnya sehingga perhitungan dihentikan.
+                                    </div>
+                                <?php endif; ?>
+
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+
                 </div>
-
             </div>
+
         </div>
 
-    </div>
-
-    <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Main Tabs handler
-        const tabBtns = document.querySelectorAll(".kmeans-tab-btn");
-        const tabPanes = document.querySelectorAll(".kmeans-tab-pane");
-        
-        tabBtns.forEach(btn => {
-            btn.addEventListener("click", function() {
-                const target = this.getAttribute("data-target");
-                
-                // Toggle nav active
-                tabBtns.forEach(b => b.classList.remove("active"));
-                this.classList.add("active");
-                
-                // Toggle pane active
-                tabPanes.forEach(pane => {
-                    if (pane.id === target) {
-                        pane.classList.add("active");
-                    } else {
-                        pane.classList.remove("active");
-                    }
+        <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Main Tabs handler
+            const tabBtns = document.querySelectorAll(".kmeans-tab-btn");
+            const tabPanes = document.querySelectorAll(".kmeans-tab-pane");
+            
+            tabBtns.forEach(btn => {
+                btn.addEventListener("click", function() {
+                    const target = this.getAttribute("data-target");
+                    
+                    // Toggle nav active
+                    tabBtns.forEach(b => b.classList.remove("active"));
+                    this.classList.add("active");
+                    
+                    // Toggle pane active
+                    tabPanes.forEach(pane => {
+                        if (pane.id === target) {
+                            pane.classList.add("active");
+                        } else {
+                            pane.classList.remove("active");
+                        }
+                    });
                 });
             });
-        });
 
-        // Iteration Sub-Tabs handler
-        const subtabBtns = document.querySelectorAll(".kmeans-subtab-btn");
-        const iterPanes = document.querySelectorAll(".kmeans-iter-pane");
-        
-        subtabBtns.forEach(btn => {
-            btn.addEventListener("click", function() {
-                const iterNum = this.getAttribute("data-iter");
-                
-                // Toggle subtab active
-                subtabBtns.forEach(b => b.classList.remove("active"));
-                this.classList.add("active");
-                
-                // Toggle iter pane active
-                iterPanes.forEach(pane => {
-                    const paneIter = pane.getAttribute("data-iter-pane");
-                    if (paneIter === iterNum) {
-                        pane.classList.add("active");
-                    } else {
-                        pane.classList.remove("active");
-                    }
+            // Iteration Sub-Tabs handler
+            const subtabBtns = document.querySelectorAll(".kmeans-subtab-btn");
+            const iterPanes = document.querySelectorAll(".kmeans-iter-pane");
+            
+            subtabBtns.forEach(btn => {
+                btn.addEventListener("click", function() {
+                    const iterNum = this.getAttribute("data-iter");
+                    
+                    // Toggle subtab active
+                    subtabBtns.forEach(b => b.classList.remove("active"));
+                    this.classList.add("active");
+                    
+                    // Toggle iter pane active
+                    iterPanes.forEach(pane => {
+                        const paneIter = pane.getAttribute("data-iter-pane");
+                        if (paneIter === iterNum) {
+                            pane.classList.add("active");
+                        } else {
+                            pane.classList.remove("active");
+                        }
+                    });
                 });
             });
-        });
 
-        // Smooth scroll down to results when they are rendered after form submission
-        const resultsNav = document.querySelector(".kmeans-tabs-nav");
-        if (resultsNav) {
-            setTimeout(function() {
-                resultsNav.scrollIntoView({ behavior: "smooth", block: "start" });
-            }, 150);
-        }
-    });
-    </script>
+            // Smooth scroll down to results when they are rendered after form submission
+            const resultsNav = document.querySelector(".kmeans-tabs-nav");
+            if (resultsNav) {
+                setTimeout(function() {
+                    resultsNav.scrollIntoView({ behavior: "smooth", block: "start" });
+                }, 150);
+            }
+        });
+        </script>
+
+    <?php endif; ?>
 
 <?php endif; ?>
