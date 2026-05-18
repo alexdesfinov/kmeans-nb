@@ -75,8 +75,8 @@ $nama = htmlspecialchars($_SESSION['nama'] ?? 'User');
 
 <!-- Welcome Banner -->
 <div class="welcome-banner animate-in">
-  <h3>Selamat Datang, <?= $nama ?>! 👋</h3>
-  <p>Sistem Deteksi Kecanduan Internet — SD Negeri 16 Timbalun</p>
+  <h3 style="font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 0.5rem; color: #ffffff;">Selamat Datang, <span style="color: #fbcf33; font-weight: 800; text-shadow: 0 2px 8px rgba(251, 207, 51, 0.25);"><?= $nama ?></span>! 👋</h3>
+  <p style="opacity: 0.85; font-size: 0.95rem; font-weight: 500; color: #ffffff;">Sistem Deteksi Kecanduan Internet — SD Negeri 16 Timbalun</p>
 </div>
 
 <!-- Flash Messages -->
