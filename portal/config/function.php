@@ -105,7 +105,7 @@ function haversineLabel(float $latitudeFrom, float $longitudeFrom, float $latitu
 	$latTo = deg2rad($latitudeTo);
 	$lonTo = deg2rad($longitudeTo);
 
-	return "2 * arcsin(√(sin<sup>2</sup>((" . $latFrom . " - " . $latTo . ")/2) + cos(" . $latFrom . ") cos(" . $latTo . ") sin<sup>2</sup>((" . $lonFrom . " - " . $lonTo . ")/2)) * EarthRadius " . $earthRadius;
+	return "2 * arcsin(&radic;(sin<sup>2</sup>((" . $latFrom . " - " . $latTo . ")/2) + cos(" . $latFrom . ") cos(" . $latTo . ") sin<sup>2</sup>((" . $lonFrom . " - " . $lonTo . ")/2)) * EarthRadius " . $earthRadius;
 }
 
 function haversineGreatCircleDistance(float $latitudeFrom, float $longitudeFrom, float $latitudeTo, float $longitudeTo, float $earthRadius = 6371.0): float
@@ -709,7 +709,7 @@ function buildDistanceTip(int $rowNo, int $cNo, array $x, array $c, float $dist)
 	$label = "D" . ($rowNo + 1) . "C" . ($cNo + 1);
 
 	return "<div class='math-tip-title'>{$label}</div>
-            <div class='math-tip-eq'>{$label} = √(" . implode(" + ", $parts) . ") = <b>{$distStr}</b></div>";
+            <div class='math-tip-eq'>{$label} = &radic;(" . implode(" + ", $parts) . ") = <b>{$distStr}</b></div>";
 }
 
 function jawabanSingkat(string $v): string
@@ -747,13 +747,19 @@ function normalizeJawaban(string $v): string
 {
 	$v = trim($v);
 	$v = mb_strtolower($v, 'UTF-8');
-
-	$v = str_replace(['–', '—'], '-', $v);
+	$v = str_replace(['_', "\xE2\x80\x93", "\xE2\x80\x94"], '-', $v);
 	$v = preg_replace('/\s+/', ' ', $v);
 	$v = str_replace(' ', '-', $v);
 	$v = preg_replace('/-+/', '-', $v);
 
 	$map = [
+		'tp'               => 'Tidak Pernah',
+		'j'                => 'Jarang',
+		'jj'               => 'Jarang',
+		'kk'               => 'Kadang-Kadang',
+		's'                => 'Sering',
+		'ss'               => 'Sangat Sering',
+		'sl'               => 'Selalu',
 		'tidak-pernah'     => 'Tidak Pernah',
 		'jarang'           => 'Jarang',
 		'kadang-kadang'    => 'Kadang-Kadang',
