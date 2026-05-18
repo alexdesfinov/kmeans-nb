@@ -62,11 +62,7 @@ if ($isEdit && $editCtx && !isset($_POST['submit'])) {
 
 ?>
 
-<?php if ($successMsg): ?>
-    <div class="alert alert-success border-0 text-white font-weight-bold" style="background:#10b981; border-radius:12px; font-size:0.85rem; padding:12px 18px; margin-bottom:20px;">
-        <i class="fa fa-check-circle me-2"></i><?= $successMsg ?>
-    </div>
-<?php endif; ?>
+<?php flashRenderAndClear(); ?>
 <?php if ($errorMsg): ?>
     <div class="alert alert-danger border-0 text-white font-weight-bold" style="background:#f43f5e; border-radius:12px; font-size:0.85rem; padding:12px 18px; margin-bottom:20px;">
         <i class="fa fa-exclamation-circle me-2"></i><?= htmlspecialchars($errorMsg) ?>

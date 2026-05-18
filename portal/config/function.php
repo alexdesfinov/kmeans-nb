@@ -859,8 +859,10 @@ function handleInsertDatasetFromPost(mysqli $conn, string $tableName = "dataset"
 
 			updateDataset($conn, $targetTable, $idEdit, $nama, $jawaban);
 
-			$successMsg = "Data berhasil diupdate.";
-			return compact('successMsg', 'errorMsg', 'old');
+			setFlash('alert alert-success', 'Data berhasil diupdate.', 'fa fa-check');
+			$module = $_GET['module'] ?? 'inputData';
+			echo "<script>window.location.href = 'media.php?module=$module';</script>";
+			exit;
 		}
 
 		$jenis = $_POST["jenisData"] ?? "";
@@ -872,7 +874,10 @@ function handleInsertDatasetFromPost(mysqli $conn, string $tableName = "dataset"
 
 		insertDataset($conn, $targetTable, $nama, $jenis, $jawaban);
 
-		$successMsg = "Data berhasil diinput ke <b>$jenis</b>.";
+		setFlash('alert alert-success', "Data berhasil diinput ke <b>$jenis</b>.", 'fa fa-check');
+		$module = $_GET['module'] ?? 'inputData';
+		echo "<script>window.location.href = 'media.php?module=$module';</script>";
+		exit;
 	} catch (Exception $e) {
 		$errorMsg = $e->getMessage();
 	}

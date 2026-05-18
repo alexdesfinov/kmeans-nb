@@ -37,8 +37,9 @@ if (isset($_POST['submit'])) {
     }
 
     if (!empty($err)) {
-        echo '<div class="alert alert-danger"><ul><li>' . implode('</li><li>', $err) . '</li></ul></div>';
-        return;
+        $_SESSION['import_errors'] = $err;
+        echo "<script>window.location.href = 'media.php?module=uploadDataset';</script>";
+        exit;
     }
 
 
@@ -48,8 +49,9 @@ if (isset($_POST['submit'])) {
         $spreadsheet = $reader->load($file_tmp);
         $rows = $spreadsheet->getActiveSheet()->toArray(null, true, true, false);
     } catch (Exception $e) {
-        echo '<div class="alert alert-danger">Gagal membaca Excel: ' . htmlspecialchars($e->getMessage()) . '</div>';
-        return;
+        $_SESSION['import_errors'] = ["Gagal membaca Excel: " . htmlspecialchars($e->getMessage())];
+        echo "<script>window.location.href = 'media.php?module=uploadDataset';</script>";
+        exit;
     }
 
     // === PREPARE INSERT ===
@@ -60,8 +62,9 @@ if (isset($_POST['submit'])) {
 
     $stmt = mysqli_prepare($conn, $sql);
     if (!$stmt) {
-        echo '<div class="alert alert-danger">Prepare SQL gagal: ' . mysqli_error($conn) . '</div>';
-        return;
+        $_SESSION['import_errors'] = ["Prepare SQL gagal: " . mysqli_error($conn)];
+        echo "<script>window.location.href = 'media.php?module=uploadDataset';</script>";
+        exit;
     }
 
     $inserted = 0;
@@ -100,10 +103,11 @@ if (isset($_POST['submit'])) {
 
     // kalau ada error, batalkan import (jangan truncate / insert)
     if (!empty($rowErrors)) {
-        echo '<div class="alert alert-danger"><b>Import dibatalkan.</b> Ada data jawaban yang tidak sesuai.</div>';
-        echo '<div class="alert alert-warning"><ul><li>' . implode('</li><li>', $rowErrors) . '</li></ul></div>';
+        $_SESSION['import_errors'] = $rowErrors;
+        $_SESSION['import_error_title'] = "Import dibatalkan. Ada data jawaban yang tidak sesuai.";
         mysqli_stmt_close($stmt);
-        return;
+        echo "<script>window.location.href = 'media.php?module=uploadDataset';</script>";
+        exit;
     }
 
     // ===============================
@@ -150,8 +154,7 @@ if (isset($_POST['submit'])) {
 
     mysqli_stmt_close($stmt);
 
-    echo '<div class="alert alert-success">
-        Dataset lama berhasil dihapus.<br>
-        Berhasil import <b>' . $inserted . '</b> baris sebagai <b>' . htmlspecialchars($jenisData) . '</b>.
-    </div>';
+    setFlash('alert alert-success', "Dataset lama berhasil dihapus.<br>Berhasil import <b>{$inserted}</b> baris sebagai <b>" . htmlspecialchars($jenisData) . "</b>.", 'fa fa-check');
+    echo "<script>window.location.href = 'media.php?module=uploadDataset';</script>";
+    exit;
 }

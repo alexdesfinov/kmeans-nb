@@ -3,6 +3,23 @@
             <?php
             requireAdmin();
             include_once 'aksi.php';
+            flashRenderAndClear();
+
+            if (isset($_SESSION['import_errors'])) {
+                $errors = $_SESSION['import_errors'];
+                $title = $_SESSION['import_error_title'] ?? "Terjadi kesalahan saat import data.";
+                unset($_SESSION['import_errors']);
+                unset($_SESSION['import_error_title']);
+
+                echo '<div class="alert alert-danger border-0 text-white font-weight-bold" style="background:#f43f5e; border-radius:12px; font-size:0.85rem; padding:12px 18px; margin-bottom:20px; animation: fadeInDown 0.3s ease-out;">';
+                echo '<i class="fa fa-exclamation-circle me-2"></i><b>' . htmlspecialchars($title) . '</b>';
+                echo '<ul class="mb-0 mt-2" style="padding-left:20px; font-weight: 500;">';
+                foreach ($errors as $e) {
+                    echo '<li>' . $e . '</li>';
+                }
+                echo '</ul>';
+                echo '</div>';
+            }
             ?>
             <div class="row">
                 <div class="col-lg-6 col-md-8">
