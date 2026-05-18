@@ -7,6 +7,7 @@
         $query = mysqli_query($conn, "SELECT * FROM dataset_training WHERE jenisData='training'");
         $totalRows = mysqli_num_rows($query);
         ?>
+        <?php flashRenderAndClear(); ?>
 
         <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between mb-4">
             <div class="d-flex align-items-center mb-2 mb-md-0">

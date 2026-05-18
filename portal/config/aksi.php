@@ -14,27 +14,35 @@ if (isset($_POST['hapus_berdasarkan_jenis'])) {
     // Whitelist biar aman (hindari jenisData ngawur)
     $allowed = ['training', 'testing'];
     if (!in_array($jenis, $allowed, true)) {
-        echo "<div class='alert alert-danger'>Jenis data tidak valid.</div>";
-        return;
+        setFlash('alert alert-danger', 'Jenis data tidak valid.', 'fa fa-times');
+        $module = ($jenis === 'testing') ? 'dataTesting' : 'dataTraining';
+        echo "<script>window.location.href = 'media.php?module=$module';</script>";
+        exit;
     }
 
     // Prepared statement
     $stmt = mysqli_prepare($conn, "DELETE FROM {$tableName} WHERE jenisData = ?");
     if (!$stmt) {
-        echo "<div class='alert alert-danger'>Gagal prepare query.</div>";
-        return;
+        setFlash('alert alert-danger', 'Gagal prepare query.', 'fa fa-times');
+        $module = ($jenis === 'testing') ? 'dataTesting' : 'dataTraining';
+        echo "<script>window.location.href = 'media.php?module=$module';</script>";
+        exit;
     }
 
     mysqli_stmt_bind_param($stmt, "s", $jenis);
 
     if (mysqli_stmt_execute($stmt)) {
         $deleted = mysqli_stmt_affected_rows($stmt);
-        echo "<div class='alert alert-success'>Berhasil menghapus {$deleted} data {$jenis}.</div>";
+        setFlash('alert alert-success', "Berhasil menghapus {$deleted} data {$jenis}.", 'fa fa-check');
     } else {
-        echo "<div class='alert alert-danger'>Gagal menghapus data.</div>";
+        setFlash('alert alert-danger', 'Gagal menghapus data.', 'fa fa-times');
     }
 
     mysqli_stmt_close($stmt);
+
+    $module = ($jenis === 'testing') ? 'dataTesting' : 'dataTraining';
+    echo "<script>window.location.href = 'media.php?module=$module';</script>";
+    exit;
 }
 
 if (isset($_POST['hapus_item']) && $_POST['hapus_item'] == '1') {
@@ -44,8 +52,18 @@ if (isset($_POST['hapus_item']) && $_POST['hapus_item'] == '1') {
 
     if ($id > 0) {
         $stmt = $conn->prepare("DELETE FROM $table WHERE id=?");
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        $stmt->close();
+        if ($stmt) {
+            $stmt->bind_param("i", $id);
+            if ($stmt->execute()) {
+                setFlash('alert alert-success', 'Data berhasil dihapus.', 'fa fa-check');
+            } else {
+                setFlash('alert alert-danger', 'Gagal menghapus data.', 'fa fa-times');
+            }
+            $stmt->close();
+        }
     }
+
+    $module = ($jenis === 'testing') ? 'dataTesting' : 'dataTraining';
+    echo "<script>window.location.href = 'media.php?module=$module';</script>";
+    exit;
 }
