@@ -376,18 +376,45 @@ $isLoggedIn = !empty($_SESSION['id']);
                     </a>
                 </div>
                 <div class="col-lg-5 offset-lg-1 hero-visual d-none d-lg-block">
+                    <?php
+                    $initCentroids = getInitialCentroidsFromDB($conn);
+                    $countCluster = count($initCentroids);
+                    if ($countCluster === 0) {
+                        $countCluster = 3; // fallback default
+                    }
+                    $countPertanyaan = 20; // default 20
+                    $countFitur = count(kategoriMap());
+
+                    $activeClusterNames = mapClusterNamesFixed($countCluster);
+                    $activeClasses = [];
+                    foreach ($activeClusterNames as $name) {
+                        $activeClasses[] = normalizeNbLabel($name);
+                    }
+                    $order = ['Ringan', 'Sedang', 'Parah'];
+                    $renderedClasses = [];
+                    foreach ($order as $o) {
+                        if (in_array($o, $activeClasses)) {
+                            $renderedClasses[] = $o;
+                        }
+                    }
+                    foreach ($activeClasses as $ac) {
+                        if (!in_array($ac, $renderedClasses)) {
+                            $renderedClasses[] = $ac;
+                        }
+                    }
+                    ?>
                     <div class="hero-card">
                         <div class="stat-row">
                             <div class="stat-item">
-                                <div class="num">4</div>
+                                <div class="num"><?= $countCluster ?></div>
                                 <div class="label">Cluster</div>
                             </div>
                             <div class="stat-item">
-                                <div class="num">20</div>
+                                <div class="num"><?= $countPertanyaan ?></div>
                                 <div class="label">Pertanyaan</div>
                             </div>
                             <div class="stat-item">
-                                <div class="num">6</div>
+                                <div class="num"><?= $countFitur ?></div>
                                 <div class="label">Fitur K</div>
                             </div>
                         </div>
@@ -400,10 +427,28 @@ $isLoggedIn = !empty($_SESSION['id']);
                         <div style="margin-top:1.2rem;padding-top:1.2rem;border-top:1px solid rgba(255,255,255,0.06);">
                             <div style="font-size:0.7rem;opacity:0.4;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Klasifikasi</div>
                             <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                                <span style="background:rgba(130,214,22,0.15);color:#82d616;padding:4px 12px;border-radius:8px;font-size:0.72rem;font-weight:600;">Normal</span>
-                                <span style="background:rgba(251,207,51,0.15);color:#fbcf33;padding:4px 12px;border-radius:8px;font-size:0.72rem;font-weight:600;">Ringan</span>
-                                <span style="background:rgba(23,193,232,0.15);color:#17c1e8;padding:4px 12px;border-radius:8px;font-size:0.72rem;font-weight:600;">Sedang</span>
-                                <span style="background:rgba(234,6,6,0.15);color:#ea0606;padding:4px 12px;border-radius:8px;font-size:0.72rem;font-weight:600;">Parah</span>
+                                <?php
+                                foreach ($renderedClasses as $cls) {
+                                    $bg = 'rgba(100, 116, 139, 0.15)'; // gray fallback
+                                    $color = '#94a3b8';
+                                    
+                                    if (strtolower($cls) === 'normal') {
+                                        $bg = 'rgba(130,214,22,0.15)';
+                                        $color = '#82d616';
+                                    } elseif (strtolower($cls) === 'ringan') {
+                                        $bg = 'rgba(251,207,51,0.15)';
+                                        $color = '#fbcf33';
+                                    } elseif (strtolower($cls) === 'sedang') {
+                                        $bg = 'rgba(23,193,232,0.15)';
+                                        $color = '#17c1e8';
+                                    } elseif (strtolower($cls) === 'parah') {
+                                        $bg = 'rgba(234,6,6,0.15)';
+                                        $color = '#ea0606';
+                                    }
+                                    
+                                    echo '<span style="background:' . $bg . ';color:' . $color . ';padding:4px 12px;border-radius:8px;font-size:0.72rem;font-weight:600;">' . htmlspecialchars($cls) . '</span>';
+                                }
+                                ?>
                             </div>
                         </div>
                     </div>
@@ -427,7 +472,7 @@ $isLoggedIn = !empty($_SESSION['id']);
                             <i class="fas fa-project-diagram"></i>
                         </div>
                         <h5>K-Means Clustering</h5>
-                        <p>Mengelompokkan responden ke dalam 4 cluster berdasarkan pola jawaban dengan iterasi transparan.</p>
+                        <p>Mengelompokkan responden ke dalam <?= $countCluster ?> cluster berdasarkan pola jawaban dengan iterasi transparan.</p>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-3">
@@ -490,7 +535,16 @@ $isLoggedIn = !empty($_SESSION['id']);
                     <div class="step-card fade-up">
                         <div class="step-number">3</div>
                         <h5>Lihat Hasil</h5>
-                        <p>Dapatkan klasifikasi: Normal, Ringan, Sedang, atau Parah — lengkap dengan detail proses.</p>
+                        <?php
+                        $listString = implode(', ', $renderedClasses);
+                        if (count($renderedClasses) > 1) {
+                            $lastCommaPos = strrpos($listString, ', ');
+                            if ($lastCommaPos !== false) {
+                                $listString = substr_replace($listString, ' atau ', $lastCommaPos, 2);
+                            }
+                        }
+                        ?>
+                        <p>Dapatkan klasifikasi: <?= htmlspecialchars($listString) ?> — lengkap dengan detail proses.</p>
                     </div>
                 </div>
             </div>
