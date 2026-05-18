@@ -1249,12 +1249,25 @@ function flashRenderAndClear(): void
 	$icon  = $f['icon'] ?? 'fa fa-info';
 	$label = $f['label'] ?? '';
 
-	echo '<div class="' . htmlspecialchars($class) . ' mt-3 mb-3 alert-dismissible fade show" style="border: none;">';
-	echo '  <span style="font-weight: 600;">';
-	echo '    <i class="' . htmlspecialchars($icon) . '"></i> ';
-	echo      htmlspecialchars($label);
+	// Premium unified alert styling
+	$style = "border-radius: 12px; border: none; padding: 14px 20px; font-size: 0.88rem; font-weight: 600; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.02);";
+	
+	if (strpos($class, 'alert-success') !== false) {
+		$style .= " background: #ecfdf5; color: #065f46; border-left: 4px solid #10b981;";
+	} elseif (strpos($class, 'alert-danger') !== false || strpos($class, 'alert-error') !== false) {
+		$style .= " background: #fef2f2; color: #991b1b; border-left: 4px solid #ef4444;";
+	} elseif (strpos($class, 'alert-warning') !== false) {
+		$style .= " background: #fffbeb; color: #92400e; border-left: 4px solid #f59e0b;";
+	} else {
+		$style .= " background: #f0f9ff; color: #075985; border-left: 4px solid #0ea5e9;";
+	}
+
+	echo '<div class="' . htmlspecialchars($class) . ' mt-3 mb-3 alert-dismissible fade show" style="' . $style . '">';
+	echo '  <span style="display: flex; align-items: center; gap: 10px;">';
+	echo '    <i class="' . htmlspecialchars($icon) . '" style="font-size: 1.1rem;"></i> ';
+	echo      $label;
 	echo '  </span>';
-	echo '  <button class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+	echo '  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="position: static; padding: 0; margin-left: 15px; color: inherit; filter: grayscale(1) invert(0.5); opacity: 0.8;"></button>';
 	echo '</div>';
 
 	unset($_SESSION['flash']);
