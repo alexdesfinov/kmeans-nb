@@ -1,10 +1,10 @@
 <?php
-define("TITLE",	"SD NEGERI 16 TIMBALUN");
+define("TITLE",	"FADEL");
 // define(	"BASE_URL",	"http://brainy.monev-unsada.my.id");
 // assets css
 $css = array(
 	'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css',
-	'https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700',
+	'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap',
 	'assets/css/animate.css',
 	'assets/css/chartist.css',
 	'assets/css/datatables.css',

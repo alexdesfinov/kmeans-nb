@@ -66,7 +66,7 @@ if (!$dataKosong && $doProcess) {
 }
 
 if ($dataKosong) {
-    echo "<div><h5 class='text-center alert alert-warning mt-3'>MASUKAN DATA TRAINING</h5></div>";
+    echo "<div class='text-center py-5'><div style='font-size:3rem;color:#d0d5dd;margin-bottom:1rem;'>📊</div><h5 class='alert alert-warning' style='display:inline-block;'>MASUKAN DATA TRAINING</h5></div>";
 } else {
     // ambil data training untuk opsi centroid
     $rowsTrain = fetchDatasetByJenis($conn, "training", $tableName, $colJenis);
@@ -165,7 +165,8 @@ if (!$dataKosong && $doProcess && isset($hybrid) && is_array($hybrid)) {
     <?php if (!$isPrint): ?>
         <div class="card mb-3">
             <div class="card-body">
-                <h5 class="mt-2 text-center">DETAIL PROSES K-MEANS</h5>
+                <h5 class="mt-2 text-center" style="font-weight:800;letter-spacing:-0.3px;">DETAIL PROSES K-MEANS</h5>
+                <p class="text-center mb-4" style="color:#627594;font-size:0.85rem;">Iterasi clustering hingga konvergen</p>
 
                 <?php foreach ($trace['iterations'] as $it): ?>
                     <h6 class="mt-4">Iterasi <?= (int)$it['iter'] ?></h6>
@@ -287,17 +288,29 @@ if (!$dataKosong && $doProcess && isset($hybrid) && is_array($hybrid)) {
 
     <div class="card mb-3">
         <div class="card-body">
-            <h5 class="mt-2">Hasil Akhir Clustering (Per Kluster):</h5>
+            <h5 class="mt-2" style="font-weight:800;">Hasil Akhir Clustering (Per Kluster)</h5>
+            <p style="color:#627594;font-size:0.85rem;margin-bottom:1.5rem;">Pengelompokan responden berdasarkan tingkat kecanduan internet</p>
 
             <?php for ($c = 0; $c < $k; $c++): ?>
                 <?php
                 $status = $hybrid['clusterNameMap'][$c] ?? '-';
                 $noAnggota = 1;
+                // Determine color class based on status
+                $statusLower = strtolower($status);
+                if (strpos($statusLower, 'parah') !== false) {
+                    $badgeClass = 'cluster-parah';
+                } elseif (strpos($statusLower, 'sedang') !== false) {
+                    $badgeClass = 'cluster-sedang';
+                } elseif (strpos($statusLower, 'ringan') !== false) {
+                    $badgeClass = 'cluster-ringan';
+                } else {
+                    $badgeClass = 'cluster-normal';
+                }
                 ?>
 
                 <div class="mt-4 mb-4">
-                    <h6 class="fw-bold text-primary">
-                        Daftar Anggota Kluster <?= $c + 1 ?> (Status: <?= htmlspecialchars($status) ?>)
+                    <h6 class="fw-bold" style="color:var(--fadel-dark,#344767);">
+                        Kluster <?= $c + 1 ?> — <span class="cluster-badge <?= $badgeClass ?>"><?= htmlspecialchars($status) ?></span>
                     </h6>
 
                     <div class="table-responsive">
