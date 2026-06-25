@@ -108,9 +108,9 @@ if (isset($_POST['submit'])) {
     }
 
     // ===============================
-    // 🚨 TRUNCATE TABEL SEBELUM INSERT
+    // DATA DI-APPEND (TIDAK DIHAPUS)
     // ===============================
-    $conn->query("TRUNCATE TABLE {$tableName}");
+    // $conn->query("TRUNCATE TABLE {$tableName}");
 
 
     foreach ($buffer as $item) {
@@ -127,7 +127,7 @@ if (isset($_POST['submit'])) {
 
     $stmt->close();
 
-    setFlash('alert alert-success', "Dataset lama berhasil dihapus.<br>Berhasil import <b>{$inserted}</b> baris sebagai <b>" . htmlspecialchars($jenisData) . "</b>.", 'fa fa-check');
+    setFlash('alert alert-success', "Berhasil mengimpor <b>{$inserted}</b> data baru sebagai <b>" . htmlspecialchars($jenisData) . "</b>.", 'fa fa-check');
     header('Location: media.php?module=uploadDataset');
     exit;
 }
