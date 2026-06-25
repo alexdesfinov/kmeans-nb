@@ -19,7 +19,7 @@ $isLoggedIn = !empty($_SESSION['id']);
     <title>SD N 16 TIMBALUN — Sistem Deteksi Kecanduan Internet</title>
     <link rel="icon" href="assets/img/favicon.png">
     <link href="portal/assets/css/inter.css" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/vendor/bootstrap.min.css">
+    <link rel="stylesheet" href="portal/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/all.min.css">
     <style>
         :root {
@@ -36,7 +36,15 @@ $isLoggedIn = !empty($_SESSION['id']);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px;
+        }
         body { font-family: var(--font); color: var(--primary); overflow-x: hidden; }
+
+        .features, .how-it-works, .login-section {
+            scroll-margin-top: 80px;
+        }
 
         /* ===== NAVBAR ===== */
         .fadel-nav {
@@ -325,11 +333,43 @@ $isLoggedIn = !empty($_SESSION['id']);
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
+            html {
+                scroll-padding-top: 100px;
+            }
+            .hero {
+                padding-top: 120px !important;
+                padding-bottom: 60px !important;
+                min-height: auto !important;
+            }
             .hero h1 { font-size: 2.2rem; }
             .section-title { font-size: 1.6rem; }
             .fadel-nav .nav-links { display: none; }
             .step-connector { display: none; }
             .hero-card { margin-top: 2rem; }
+
+            /* Spacing adjustments to prevent fixed navbar overlap */
+            .features, .how-it-works, .login-section {
+                padding-top: 6rem !important;
+                padding-bottom: 3rem !important;
+                scroll-margin-top: 100px;
+            }
+
+            .fadel-nav .nav-brand {
+                font-size: 1rem;
+                white-space: nowrap;
+            }
+            .fadel-nav {
+                padding: 0.8rem 0;
+            }
+            .fadel-nav.scrolled {
+                padding: 0.5rem 0;
+            }
+            .fadel-nav .btn-masuk {
+                padding: 6px 12px;
+                font-size: 0.78rem;
+                margin-left: 1rem;
+                white-space: nowrap;
+            }
         }
 
         /* ===== ANIMATIONS ===== */
@@ -514,7 +554,7 @@ $isLoggedIn = !empty($_SESSION['id']);
                 <h2 class="section-title">3 Langkah Mudah</h2>
                 <p class="section-desc mx-auto">Proses analisis yang sederhana untuk menghasilkan klasifikasi tingkat kecanduan internet.</p>
             </div>
-            <div class="row justify-content-center">
+            <div class="row justify-content-center g-4">
                 <div class="col-md-4">
                     <div class="step-card fade-up">
                         <div class="step-number">1</div>

@@ -288,7 +288,7 @@ $nama = htmlspecialchars($_SESSION['nama'] ?? 'User');
   <?php endif; ?>
 <?php endif; ?>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="assets/js/plugins/chartjs.min.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     <?php if ($isAdmin && $showCharts): ?>
