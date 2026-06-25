@@ -15,6 +15,12 @@ if (empty($_SESSION['id'])) {
   exit;
 }
 
+// Jika modul yang dipanggil adalah print, render langsung tanpa layout media.php
+if (($_GET['module'] ?? '') === 'print') {
+  include 'module/print/index.php';
+  exit;
+}
+
 $aksi = "module/" . ($_GET['module'] ?? '') . "/action.php";
 ?>
 <!DOCTYPE html>

@@ -10,9 +10,8 @@ require_once __DIR__ . '/../../config/function.php'; // kalau ada
 
 requireAdmin();
 
-$baseUrl = '../../';
-$logoKiriUrl  = $baseUrl . 'assets/img/logos/logo-kiri.png';
-$logoKananUrl = $baseUrl . 'assets/img/logos/logo-kanan.png';
+$logoKiriUrl  = 'assets/img/logos/logo-kiri.png';
+$logoKananUrl = 'assets/img/logos/logo-kanan.png';
 // OPTIONAL: kalau portal kamu wajib login
 // session_start();
 // require_once __DIR__ . '/../../config/session_manager.php';

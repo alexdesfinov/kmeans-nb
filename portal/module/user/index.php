@@ -10,7 +10,7 @@ requireAdmin();
 
   <div class="col-sm-12">
     <div class="card">
-      <div class="card-header d-flex justify-content-between align-items-center" style="border-bottom:1px solid rgba(0,0,0,0.05);">
+      <div class="card-header d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3" style="border-bottom:1px solid rgba(0,0,0,0.05);">
         <div class="d-flex align-items-center">
           <div class="icon icon-shape icon-gradient-primary shadow text-center border-radius-md d-inline-flex align-items-center justify-content-center me-3" style="width:42px;height:42px;">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="white" viewBox="0 0 16 16">
