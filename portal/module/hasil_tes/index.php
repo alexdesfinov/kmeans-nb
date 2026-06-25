@@ -47,7 +47,7 @@ if ($isPrint) {
     $doProcess = isset($_POST['proses_kmeans']) && !$centroidError;
 }
 
-$res = $conn->query("SELECT * FROM {$tableName} WHERE jenisData='training'");
+$res = $conn->query("SELECT 1 FROM {$tableName} WHERE jenisData='training' LIMIT 1");
 $dataKosong = (!$res || $res->num_rows === 0);
 
 if (!$dataKosong && $doProcess) {
@@ -143,7 +143,7 @@ if (!$dataKosong && $doProcess && isset($hybrid) && is_array($hybrid)) {
     if (count($initCentroids) < $k) {
         echo "<div class='alert alert-warning border-0 text-dark font-weight-bold' style='background:#fef08a; border-radius:12px; font-size:0.85rem; padding:12px 18px; margin-bottom:20px;'><i class='fa fa-exclamation-triangle me-2'></i>Centroid awal belum lengkap. Pilih & Proses C1-C3 dulu.</div>";
     } else {
-        $trace = kmeansRunWithTrace($hybrid['X_train_km'], $initCentroids, $k, $maxIter);
+        $trace = $hybrid['kmeans']['trace'] ?? kmeansRunWithTrace($hybrid['X_train_km'], $initCentroids, $k, $maxIter);
         $finalLabels = $trace['final']['labels'];
     }
 }

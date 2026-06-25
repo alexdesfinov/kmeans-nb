@@ -18,7 +18,7 @@ if ($isAdmin) {
     if ($k >= 3 && $countTrain > 0) {
         $hybrid = hybridTrainFromDb($conn, $k, 50, "dataset_training", "jenisData", $initCentroids);
         if (is_array($hybrid) && isset($hybrid['X_train_km'])) {
-            $trace = kmeansRunWithTrace($hybrid['X_train_km'], $initCentroids, $k, 50);
+            $trace = $hybrid['kmeans']['trace'] ?? kmeansRunWithTrace($hybrid['X_train_km'], $initCentroids, $k, 50);
             if (is_array($trace) && isset($trace['final']['labels'])) {
                 $finalLabels = $trace['final']['labels'];
                 

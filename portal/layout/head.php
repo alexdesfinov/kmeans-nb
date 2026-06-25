@@ -6,6 +6,11 @@
 <link rel="icon" type="image/png" href="assets/img/favicon.png">
 <title><?php echo isset($_GET['module']) ? ucwords(str_replace("_", " ", $_GET['module'])) . " | " . TITLE : " Dashboard " . " | " . TITLE ?></title>
 
+<!-- Preload core JS files for instant pagination initialization -->
+<link rel="preload" href="assets/js/jquery.min.js" as="script">
+<link rel="preload" href="assets/js/jquery.dataTables.min.js" as="script">
+<link rel="preload" href="assets/js/bootstrap.min.js" as="script">
+
 <?php
 
 foreach ($css as $key => $value) {

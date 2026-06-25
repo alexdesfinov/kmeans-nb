@@ -25,20 +25,17 @@ if (isset($_POST['submit'])) {
 
     // === VALIDASI JENIS DATA ===
     $jenisData = $_POST['jenisData'] ?? '';
+    $allowed = ['training' => 'dataset_training', 'testing' => 'dataset_testing'];
 
-    if ($jenisData === 'training') {
-        $tableName = "dataset_training";
-    } elseif ($jenisData === 'testing') {
-        $tableName = "dataset_testing";
-    }
-
-    if ($jenisData !== 'training' && $jenisData !== 'testing') {
+    if (!isset($allowed[$jenisData])) {
         $err[] = "Jenis data tidak valid (harus training/testing).";
+    } else {
+        $tableName = $allowed[$jenisData];
     }
 
     if (!empty($err)) {
         $_SESSION['import_errors'] = $err;
-        echo "<script>window.location.href = 'media.php?module=uploadDataset';</script>";
+        header('Location: media.php?module=uploadDataset');
         exit;
     }
 
@@ -50,7 +47,7 @@ if (isset($_POST['submit'])) {
         $rows = $spreadsheet->getActiveSheet()->toArray(null, true, true, false);
     } catch (Exception $e) {
         $_SESSION['import_errors'] = ["Gagal membaca Excel: " . htmlspecialchars($e->getMessage())];
-        echo "<script>window.location.href = 'media.php?module=uploadDataset';</script>";
+        header('Location: media.php?module=uploadDataset');
         exit;
     }
 
@@ -60,10 +57,10 @@ if (isset($_POST['submit'])) {
          p11, p12, p13, p14, p15, p16, p17, p18, p19, p20, {$colJenis})
         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-    $stmt = mysqli_prepare($conn, $sql);
+    $stmt = $conn->prepare($sql);
     if (!$stmt) {
-        $_SESSION['import_errors'] = ["Prepare SQL gagal: " . mysqli_error($conn)];
-        echo "<script>window.location.href = 'media.php?module=uploadDataset';</script>";
+        $_SESSION['import_errors'] = ["Prepare SQL gagal: " . $conn->error];
+        header('Location: media.php?module=uploadDataset');
         exit;
     }
 
@@ -105,56 +102,32 @@ if (isset($_POST['submit'])) {
     if (!empty($rowErrors)) {
         $_SESSION['import_errors'] = $rowErrors;
         $_SESSION['import_error_title'] = "Import dibatalkan. Ada data jawaban yang tidak sesuai.";
-        mysqli_stmt_close($stmt);
-        echo "<script>window.location.href = 'media.php?module=uploadDataset';</script>";
+        $stmt->close();
+        header('Location: media.php?module=uploadDataset');
         exit;
     }
 
     // ===============================
     // 🚨 TRUNCATE TABEL SEBELUM INSERT
     // ===============================
-    mysqli_query($conn, "TRUNCATE TABLE {$tableName}");
+    $conn->query("TRUNCATE TABLE {$tableName}");
 
 
     foreach ($buffer as $item) {
         $nama = $item['nama'];
         $p = $item['p'];
 
-        mysqli_stmt_bind_param(
-            $stmt,
-            str_repeat("s", 22),
-            $nama,
-            $p[1],
-            $p[2],
-            $p[3],
-            $p[4],
-            $p[5],
-            $p[6],
-            $p[7],
-            $p[8],
-            $p[9],
-            $p[10],
-            $p[11],
-            $p[12],
-            $p[13],
-            $p[14],
-            $p[15],
-            $p[16],
-            $p[17],
-            $p[18],
-            $p[19],
-            $p[20],
-            $jenisData
-        );
+        $params = array_merge([$nama], array_values($p), [$jenisData]);
+        $stmt->bind_param(str_repeat("s", 22), ...$params);
 
-        if (mysqli_stmt_execute($stmt)) {
+        if ($stmt->execute()) {
             $inserted++;
         }
     }
 
-    mysqli_stmt_close($stmt);
+    $stmt->close();
 
     setFlash('alert alert-success', "Dataset lama berhasil dihapus.<br>Berhasil import <b>{$inserted}</b> baris sebagai <b>" . htmlspecialchars($jenisData) . "</b>.", 'fa fa-check');
-    echo "<script>window.location.href = 'media.php?module=uploadDataset';</script>";
+    header('Location: media.php?module=uploadDataset');
     exit;
 }

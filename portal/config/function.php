@@ -184,7 +184,7 @@ function fetchDatasetByJenis(mysqli $conn, string $jenis, string $table = "datas
 
 function saveCentroidsToDB(mysqli $conn, array $centroidVectors, array $sourceIds): void
 {
-	mysqli_query($conn, "TRUNCATE TABLE centroid");
+	$conn->query("TRUNCATE TABLE centroid");
 
 	$stmt = $conn->prepare("INSERT INTO centroid (id_centroid, source_id, data_centroid) VALUES (?, ?, ?)");
 
@@ -217,9 +217,9 @@ function getInitialCentroidsFromDB(mysqli $conn): array
 {
 	$centroids = [];
 	$sql = "SELECT data_centroid FROM centroid ORDER BY id_centroid ASC LIMIT 3";
-	$res = mysqli_query($conn, $sql);
+	$res = $conn->query($sql);
 
-	while ($row = mysqli_fetch_assoc($res)) {
+	while ($row = $res->fetch_assoc()) {
 		$vector = array_map(
 			'floatval',
 			explode(',', $row['data_centroid'])
@@ -601,7 +601,19 @@ function hybridTrainFromDb(mysqli $conn, int $k = 3, int $maxIter = 50, string $
 		$X_nb[] = rowToVectorKategoriNB($r);
 	}
 
-	$km = kmeansFit($X_km, $k, $maxIter, $initCentroids);
+	// Gunakan trace jika initCentroids lengkap untuk konsistensi dan menghindari double compute
+	if (is_array($initCentroids) && count($initCentroids) === $k && $k > 0) {
+		$trace = kmeansRunWithTrace($X_km, $initCentroids, $k, $maxIter);
+		$km = [
+			'centroids' => $trace['final']['centroids'],
+			'labels' => $trace['final']['labels'],
+			'iters' => $trace['final']['iter'],
+			'trace' => $trace
+		];
+	} else {
+		$km = kmeansFit($X_km, $k, $maxIter, $initCentroids);
+	}
+
 	$nameMap = mapClusterNamesFixed($k);
 
 	$y = [];
@@ -915,19 +927,19 @@ function handleLoginPost(mysqli $conn): void
 		exit;
 	}
 
-	$stmt = mysqli_prepare($conn, "SELECT id, username, password, nama, level FROM users WHERE username=? LIMIT 1");
+	$stmt = $conn->prepare("SELECT id, username, password, nama, level FROM users WHERE username=? LIMIT 1");
 	if (!$stmt) {
-		setFlash('alert alert-danger', 'Prepare gagal: ' . mysqli_error($conn), 'fa fa-times');
+		setFlash('alert alert-danger', 'Prepare gagal: ' . $conn->error, 'fa fa-times');
 		header('Location: index.php');
 		exit;
 	}
 
-	mysqli_stmt_bind_param($stmt, "s", $user);
-	mysqli_stmt_execute($stmt);
-	$res = mysqli_stmt_get_result($stmt);
+	$stmt->bind_param("s", $user);
+	$stmt->execute();
+	$res = $stmt->get_result();
 
-	$u = mysqli_fetch_assoc($res);
-	mysqli_stmt_close($stmt);
+	$u = $res->fetch_assoc();
+	$stmt->close();
 
 	if (!$u) {
 		setFlash('alert alert-danger', 'Username atau password salah', 'fa fa-times', ['username' => $user]);
@@ -978,17 +990,17 @@ function handleRegisterPost(mysqli $conn): void
 		exit;
 	}
 
-	$stmt = mysqli_prepare($conn, "SELECT 1 FROM users WHERE username=? LIMIT 1");
+	$stmt = $conn->prepare("SELECT 1 FROM users WHERE username=? LIMIT 1");
 	if (!$stmt) {
-		setFlash('alert alert-danger', 'Prepare gagal: ' . mysqli_error($conn), 'fa fa-times', ['credidential' => $_POST]);
+		setFlash('alert alert-danger', 'Prepare gagal: ' . $conn->error, 'fa fa-times', ['credidential' => $_POST]);
 		header('Location: registration.php');
 		exit;
 	}
-	mysqli_stmt_bind_param($stmt, "s", $username);
-	mysqli_stmt_execute($stmt);
-	$res = mysqli_stmt_get_result($stmt);
-	$exists = (mysqli_fetch_row($res) !== null);
-	mysqli_stmt_close($stmt);
+	$stmt->bind_param("s", $username);
+	$stmt->execute();
+	$res = $stmt->get_result();
+	$exists = ($res->fetch_row() !== null);
+	$stmt->close();
 
 	if ($exists) {
 		setFlash('alert alert-danger', 'Username sudah digunakan', 'fa fa-times', ['credidential' => $_POST]);
@@ -998,16 +1010,16 @@ function handleRegisterPost(mysqli $conn): void
 
 	$passHash = password_hash($password, PASSWORD_DEFAULT);
 
-	$stmt = mysqli_prepare($conn, "INSERT INTO users (username, password, nama, level) VALUES (?, ?, ?, 'user')");
+	$stmt = $conn->prepare("INSERT INTO users (username, password, nama, level) VALUES (?, ?, ?, 'user')");
 	if (!$stmt) {
-		setFlash('alert alert-danger', 'Prepare gagal: ' . mysqli_error($conn), 'fa fa-times', ['credidential' => $_POST]);
+		setFlash('alert alert-danger', 'Prepare gagal: ' . $conn->error, 'fa fa-times', ['credidential' => $_POST]);
 		header('Location: registration.php');
 		exit;
 	}
-	mysqli_stmt_bind_param($stmt, "sss", $username, $passHash, $nama);
-	$ok = mysqli_stmt_execute($stmt);
-	$err = mysqli_stmt_error($stmt);
-	mysqli_stmt_close($stmt);
+	$stmt->bind_param("sss", $username, $passHash, $nama);
+	$ok = $stmt->execute();
+	$err = $stmt->error;
+	$stmt->close();
 
 	if (!$ok) {
 		setFlash('alert alert-danger', 'Registrasi gagal: ' . $err, 'fa fa-times', ['credidential' => $_POST]);
@@ -1024,11 +1036,11 @@ function logoutUser(mysqli $conn): void
 {
 	if (!empty($_SESSION['id'])) {
 		$uid = (int)$_SESSION['id'];
-		$stmt = mysqli_prepare($conn, "DELETE FROM user_remember_tokens WHERE user_id=?");
+		$stmt = $conn->prepare("DELETE FROM user_remember_tokens WHERE user_id=?");
 		if ($stmt) {
-			mysqli_stmt_bind_param($stmt, "i", $uid);
-			mysqli_stmt_execute($stmt);
-			mysqli_stmt_close($stmt);
+			$stmt->bind_param("i", $uid);
+			$stmt->execute();
+			$stmt->close();
 		}
 	}
 
@@ -1038,11 +1050,11 @@ function logoutUser(mysqli $conn): void
 		if (preg_match('/^[a-f0-9]{64}$/i', $token)) {
 			$tokenHash = hash('sha256', $token);
 
-			$stmt = mysqli_prepare($conn, "DELETE FROM user_remember_tokens WHERE token_hash=?");
+			$stmt = $conn->prepare("DELETE FROM user_remember_tokens WHERE token_hash=?");
 			if ($stmt) {
-				mysqli_stmt_bind_param($stmt, "s", $tokenHash);
-				mysqli_stmt_execute($stmt);
-				mysqli_stmt_close($stmt);
+				$stmt->bind_param("s", $tokenHash);
+				$stmt->execute();
+				$stmt->close();
 			}
 		}
 	}
@@ -1098,21 +1110,21 @@ function rememberMeCreateToken(mysqli $conn, int $userId, int $days = 30): ?stri
 	$tokenHash = hash('sha256', $token);
 	$expiresAt = date('Y-m-d H:i:s', time() + ($days * 24 * 60 * 60));
 
-	$stmtDel = mysqli_prepare($conn, "DELETE FROM user_remember_tokens WHERE user_id=?");
+	$stmtDel = $conn->prepare("DELETE FROM user_remember_tokens WHERE user_id=?");
 	if ($stmtDel) {
-		mysqli_stmt_bind_param($stmtDel, "i", $userId);
-		mysqli_stmt_execute($stmtDel);
-		mysqli_stmt_close($stmtDel);
+		$stmtDel->bind_param("i", $userId);
+		$stmtDel->execute();
+		$stmtDel->close();
 	}
 
-	$stmt = mysqli_prepare($conn, "INSERT INTO user_remember_tokens (user_id, token_hash, expires_at) VALUES (?, ?, ?)");
+	$stmt = $conn->prepare("INSERT INTO user_remember_tokens (user_id, token_hash, expires_at) VALUES (?, ?, ?)");
 	if (!$stmt) {
 		return null;
 	}
 
-	mysqli_stmt_bind_param($stmt, "iss", $userId, $tokenHash, $expiresAt);
-	$ok = mysqli_stmt_execute($stmt);
-	mysqli_stmt_close($stmt);
+	$stmt->bind_param("iss", $userId, $tokenHash, $expiresAt);
+	$ok = $stmt->execute();
+	$stmt->close();
 
 	if (!$ok) {
 		return null;
@@ -1147,16 +1159,16 @@ function rememberMeTryLogin(mysqli $conn): void
         WHERE t.token_hash=? AND t.expires_at > ?
         LIMIT 1";
 
-	$stmt = mysqli_prepare($conn, $sql);
+	$stmt = $conn->prepare($sql);
 	if (!$stmt) {
 		return;
 	}
 
-	mysqli_stmt_bind_param($stmt, "ss", $tokenHash, $now);
-	mysqli_stmt_execute($stmt);
-	$res = mysqli_stmt_get_result($stmt);
-	$u = mysqli_fetch_assoc($res);
-	mysqli_stmt_close($stmt);
+	$stmt->bind_param("ss", $tokenHash, $now);
+	$stmt->execute();
+	$res = $stmt->get_result();
+	$u = $res->fetch_assoc();
+	$stmt->close();
 
 	if (!$u) {
 		rememberMeClearCookie();

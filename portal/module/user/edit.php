@@ -8,12 +8,12 @@ if ($id <= 0) {
   exit;
 }
 
-$stmt = mysqli_prepare($conn, "SELECT id, username, nama, level FROM users WHERE id=? LIMIT 1");
-mysqli_stmt_bind_param($stmt, "i", $id);
-mysqli_stmt_execute($stmt);
-$res  = mysqli_stmt_get_result($stmt);
-$u    = mysqli_fetch_assoc($res);
-mysqli_stmt_close($stmt);
+$stmt = $conn->prepare("SELECT id, username, nama, level FROM users WHERE id=? LIMIT 1");
+$stmt->bind_param("i", $id);
+$stmt->execute();
+$res  = $stmt->get_result();
+$u    = $res->fetch_assoc();
+$stmt->close();
 
 if (!$u) {
   setFlash('alert alert-danger', 'User tidak ditemukan', 'fa fa-times');

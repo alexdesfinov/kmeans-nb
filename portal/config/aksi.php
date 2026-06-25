@@ -10,34 +10,34 @@ if (isset($_POST['hapus_berdasarkan_jenis'])) {
     
     if (!isset($allowed[$jenis])) {
         setFlash('alert alert-danger', 'Jenis data tidak valid.', 'fa fa-times');
-        echo "<script>window.location.href = 'media.php?module=dataTraining';</script>";
+        header('Location: media.php?module=dataTraining');
         exit;
     }
 
     $tableName = $allowed[$jenis];
 
     // Prepared statement
-    $stmt = mysqli_prepare($conn, "DELETE FROM {$tableName} WHERE jenisData = ?");
+    $stmt = $conn->prepare("DELETE FROM {$tableName} WHERE jenisData = ?");
     if (!$stmt) {
         setFlash('alert alert-danger', 'Gagal prepare query.', 'fa fa-times');
         $module = ($jenis === 'testing') ? 'dataTesting' : 'dataTraining';
-        echo "<script>window.location.href = 'media.php?module=$module';</script>";
+        header('Location: media.php?module=' . $module);
         exit;
     }
 
-    mysqli_stmt_bind_param($stmt, "s", $jenis);
+    $stmt->bind_param("s", $jenis);
 
-    if (mysqli_stmt_execute($stmt)) {
-        $deleted = mysqli_stmt_affected_rows($stmt);
+    if ($stmt->execute()) {
+        $deleted = $stmt->affected_rows;
         setFlash('alert alert-success', "Berhasil menghapus {$deleted} data {$jenis}.", 'fa fa-check');
     } else {
         setFlash('alert alert-danger', 'Gagal menghapus data.', 'fa fa-times');
     }
 
-    mysqli_stmt_close($stmt);
+    $stmt->close();
 
     $module = ($jenis === 'testing') ? 'dataTesting' : 'dataTraining';
-    echo "<script>window.location.href = 'media.php?module=$module';</script>";
+    header('Location: media.php?module=' . $module);
     exit;
 }
 
@@ -48,7 +48,7 @@ if (isset($_POST['hapus_item']) && $_POST['hapus_item'] == '1') {
     $allowed = ['training' => 'dataset_training', 'testing' => 'dataset_testing'];
     if (!isset($allowed[$jenis])) {
         setFlash('alert alert-danger', 'Jenis data tidak valid.', 'fa fa-times');
-        echo "<script>window.location.href = 'media.php?module=dataTraining';</script>";
+        header('Location: media.php?module=dataTraining');
         exit;
     }
 
@@ -68,6 +68,6 @@ if (isset($_POST['hapus_item']) && $_POST['hapus_item'] == '1') {
     }
 
     $module = ($jenis === 'testing') ? 'dataTesting' : 'dataTraining';
-    echo "<script>window.location.href = 'media.php?module=$module';</script>";
+    header('Location: media.php?module=' . $module);
     exit;
 }

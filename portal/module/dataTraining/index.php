@@ -4,8 +4,8 @@
         requireAdmin();
         include_once __DIR__ . '/../../config/aksi.php';
 
-        $query = mysqli_query($conn, "SELECT * FROM dataset_training WHERE jenisData='training'");
-        $totalRows = mysqli_num_rows($query);
+        $query = $conn->query("SELECT * FROM dataset_training WHERE jenisData='training'");
+        $totalRows = $query->num_rows;
         ?>
         <?php flashRenderAndClear(); ?>
 
@@ -50,7 +50,7 @@
                             <tbody>
                                 <?php if ($totalRows > 0): ?>
                                     <?php $no = 1; ?>
-                                    <?php while ($data = mysqli_fetch_assoc($query)): ?>
+                                    <?php while ($data = $query->fetch_assoc()): ?>
                                         <tr>
                                             <td class="text-center"><?= $no++ ?></td>
                                             <td style="font-weight:500;"><?= htmlspecialchars($data['nama'] ?? '', ENT_QUOTES, 'UTF-8') ?></td>

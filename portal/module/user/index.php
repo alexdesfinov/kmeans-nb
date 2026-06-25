@@ -42,8 +42,8 @@ requireAdmin();
             <tbody>
               <?php
               $no = 0;
-              $q = mysqli_query($conn, "SELECT id, username, nama, level FROM users ORDER BY id DESC");
-              while ($row = mysqli_fetch_assoc($q)) {
+              $q = $conn->query("SELECT id, username, nama, level FROM users ORDER BY id DESC");
+              while ($row = $q->fetch_assoc()) {
                 $no++;
                 $levelColor = $row['level'] === 'admin' ? 'background:rgba(30,41,59,0.1);color:#1e293b;' : 'background:rgba(23,193,232,0.1);color:#17c1e8;';
               ?>

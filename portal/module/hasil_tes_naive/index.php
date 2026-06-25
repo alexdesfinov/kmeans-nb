@@ -6,7 +6,7 @@ $tableName2 = "dataset_testing";
 $colJenis  = "jenisData";
 $maxIter = 50;
 
-$res = $conn->query("SELECT * FROM {$tableName1} WHERE jenisData='training'");
+$res = $conn->query("SELECT 1 FROM {$tableName1} WHERE jenisData='training' LIMIT 1");
 
 if (!$res || $res->num_rows === 0) {
     echo "<div class='text-center py-5'><div style='font-size:3rem;color:#d0d5dd;margin-bottom:1rem;'>📊</div><h5 class='alert alert-warning' style='display:inline-block;'>MASUKAN DATA TRAINING</h5></div>";

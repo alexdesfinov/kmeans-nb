@@ -2796,4 +2796,19 @@ img {
     line-height: 1.3;
   }
 }
+
+/* Prevent Flash of Unstyled Content (FOUC) for DataTables before JS loads */
+#datatablesDataset:not(.dataTable),
+#datatables:not(.dataTable),
+#datatables2:not(.dataTable),
+#datatablesHasilNB:not(.dataTable) {
+  visibility: hidden;
+  opacity: 0;
+}
+.dataTable {
+  visibility: visible !important;
+  opacity: 1 !important;
+  transition: opacity 0.2s ease-in-out;
+}
+
 /*# sourceMappingURL=style.css.map */

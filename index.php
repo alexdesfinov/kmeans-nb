@@ -584,7 +584,7 @@ $isLoggedIn = !empty($_SESSION['id']);
                 
                 <div class="col-lg-6 d-flex align-items-center justify-content-center" style="align-self: center;">
                     <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(0,0,0,0.06); border-radius: 28px; padding: 1rem; box-shadow: 0 20px 50px rgba(0,0,0,0.05); text-align: center; width: 100%; display: flex; justify-content: center; align-items: center;">
-                        <img src="assets/img/td.jpeg" alt="SD Negeri 16 Timbalun" style="width: 100%; max-width: 500px; height: auto; border-radius: 20px; object-fit: cover; box-shadow: 0 8px 30px rgba(0,0,0,0.06);" />
+                        <img src="assets/img/td.jpeg" alt="SD Negeri 16 Timbalun" loading="lazy" style="width: 100%; max-width: 500px; height: auto; border-radius: 20px; object-fit: cover; box-shadow: 0 8px 30px rgba(0,0,0,0.06);" />
                     </div>
                 </div>
             </div>

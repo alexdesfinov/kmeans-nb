@@ -27,12 +27,12 @@ if ($act === 'create') {
     }
 
     // cek username unik
-    $stmt = mysqli_prepare($conn, "SELECT 1 FROM users WHERE username=? LIMIT 1");
-    mysqli_stmt_bind_param($stmt, "s", $username);
-    mysqli_stmt_execute($stmt);
-    $res = mysqli_stmt_get_result($stmt);
-    $exists = (mysqli_fetch_row($res) !== null);
-    mysqli_stmt_close($stmt);
+    $stmt = $conn->prepare("SELECT 1 FROM users WHERE username=? LIMIT 1");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    $exists = ($res->fetch_row() !== null);
+    $stmt->close();
 
     if ($exists) {
         setFlash('alert alert-danger', 'Username sudah digunakan', 'fa fa-times');
@@ -41,16 +41,16 @@ if ($act === 'create') {
 
     $hash = password_hash($password, PASSWORD_DEFAULT);
 
-    $stmt = mysqli_prepare($conn, "INSERT INTO users (username, password, nama, level) VALUES (?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO users (username, password, nama, level) VALUES (?, ?, ?, ?)");
     if (!$stmt) {
-        setFlash('alert alert-danger', 'Prepare gagal: ' . mysqli_error($conn), 'fa fa-times');
+        setFlash('alert alert-danger', 'Prepare gagal: ' . $conn->error, 'fa fa-times');
         back_to_module($module);
     }
 
-    mysqli_stmt_bind_param($stmt, "ssss", $username, $hash, $nama, $level);
-    $ok  = mysqli_stmt_execute($stmt);
-    $err = mysqli_stmt_error($stmt);
-    mysqli_stmt_close($stmt);
+    $stmt->bind_param("ssss", $username, $hash, $nama, $level);
+    $ok  = $stmt->execute();
+    $err = $stmt->error;
+    $stmt->close();
 
     if (!$ok) {
         setFlash('alert alert-danger', 'Gagal tambah user: ' . $err, 'fa fa-times');
@@ -80,24 +80,24 @@ if ($act === 'edit') {
         }
 
         $hash = password_hash($pass, PASSWORD_DEFAULT);
-        $stmt = mysqli_prepare($conn, "UPDATE users SET password=?, nama=?, level=? WHERE id=?");
+        $stmt = $conn->prepare("UPDATE users SET password=?, nama=?, level=? WHERE id=?");
         if (!$stmt) {
-            setFlash('alert alert-danger', 'Prepare gagal: ' . mysqli_error($conn), 'fa fa-times');
+            setFlash('alert alert-danger', 'Prepare gagal: ' . $conn->error, 'fa fa-times');
             back_to_module($module);
         }
-        mysqli_stmt_bind_param($stmt, "sssi", $hash, $nama, $level, $id);
+        $stmt->bind_param("sssi", $hash, $nama, $level, $id);
     } else {
-        $stmt = mysqli_prepare($conn, "UPDATE users SET nama=?, level=? WHERE id=?");
+        $stmt = $conn->prepare("UPDATE users SET nama=?, level=? WHERE id=?");
         if (!$stmt) {
-            setFlash('alert alert-danger', 'Prepare gagal: ' . mysqli_error($conn), 'fa fa-times');
+            setFlash('alert alert-danger', 'Prepare gagal: ' . $conn->error, 'fa fa-times');
             back_to_module($module);
         }
-        mysqli_stmt_bind_param($stmt, "ssi", $nama, $level, $id);
+        $stmt->bind_param("ssi", $nama, $level, $id);
     }
 
-    $ok  = mysqli_stmt_execute($stmt);
-    $err = mysqli_stmt_error($stmt);
-    mysqli_stmt_close($stmt);
+    $ok  = $stmt->execute();
+    $err = $stmt->error;
+    $stmt->close();
 
     if (!$ok) {
         setFlash('alert alert-danger', 'Gagal edit user: ' . $err, 'fa fa-times');
@@ -127,16 +127,16 @@ if ($act === 'delete') {
         back_to_module($module);
     }
 
-    $stmt = mysqli_prepare($conn, "DELETE FROM users WHERE id=?");
+    $stmt = $conn->prepare("DELETE FROM users WHERE id=?");
     if (!$stmt) {
-        setFlash('alert alert-danger', 'Prepare gagal: ' . mysqli_error($conn), 'fa fa-times');
+        setFlash('alert alert-danger', 'Prepare gagal: ' . $conn->error, 'fa fa-times');
         back_to_module($module);
     }
 
-    mysqli_stmt_bind_param($stmt, "i", $id);
-    $ok  = mysqli_stmt_execute($stmt);
-    $err = mysqli_stmt_error($stmt);
-    mysqli_stmt_close($stmt);
+    $stmt->bind_param("i", $id);
+    $ok  = $stmt->execute();
+    $err = $stmt->error;
+    $stmt->close();
 
     if (!$ok) {
         setFlash('alert alert-danger', 'Gagal hapus user: ' . $err, 'fa fa-times');
