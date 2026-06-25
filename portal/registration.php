@@ -21,8 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   <link href="assets/css/inter.css" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-  <link href="assets/css/nucleo-icons.css" rel="stylesheet" />
-  <link href="assets/css/nucleo-svg.css" rel="stylesheet" />
   <link href="assets/css/fontawesome.css" rel="stylesheet" />
   <link id="pagestyle" href="assets/css/soft-ui-dashboard.min3447.css?v=1.0.5" rel="stylesheet" />
 
@@ -251,9 +249,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
   </div>
 
-  <script src="assets/js/core/popper.min.js"></script>
-  <script src="assets/js/core/bootstrap.min.js"></script>
-  <script src="assets/js/soft-ui-dashboard.min3447.js?v=1.0.5"></script>
+  <script src="assets/js/popper.min.js"></script>
+  <script src="assets/js/bootstrap.min.js"></script>
 
   <script>
     const pass = document.getElementById('password');

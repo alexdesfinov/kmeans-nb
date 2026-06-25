@@ -5,19 +5,9 @@ define("TITLE",	"Sistem Deteksi Kecanduan Internet");
 $css = array(
 	'assets/css/bootstrap.min.css',
 	'assets/css/inter.css',
-	'assets/css/animate.css',
-	'assets/css/chartist.css',
 	'assets/css/datatables.css',
-	'assets/css/flag-icon.css',
-	'assets/css/feather-icon.css',
-	'assets/css/flaticon.css',
 	'assets/css/fontawesome.css',
-	'assets/css/icofont.css',
-	'assets/css/nucleo-icons.css',
-	'assets/css/nucleo-svg.css',
-	'assets/css/owl.carousel.css',
 	'assets/css/soft-ui-dashboard.min3447.css?v=1.0.5',
-	'assets/css/themify.css',
 	'assets/css/style.css',
 );
 // assets javascript
@@ -25,12 +15,7 @@ $js = array(
 	'assets/js/jquery.min.js',
 	'assets/js/popper.min.js',
 	'assets/js/bootstrap.min.js',
-	// 'assets/js/plugins/perfect-scrollbar.min.js',
-	// 'assets/js/plugins/smooth-scrollbar.min.js',
-	// 'assets/js/soft-ui-dashboard.min3447.js?v=1.0.5',
 	'assets/js/sweetalert2.all.min.js',
-	'assets/js/select2.min.js',
-	'assets/js/plugins/owl.carousel.js',
 	'assets/js/jquery.dataTables.min.js',
 );
 //breadcrumb

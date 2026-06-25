@@ -13,8 +13,6 @@ foreach ($js as $key => $value) { ?>
     $('#datatablesDataset').DataTable({ "order": [[0, "asc"]] });
     $('#datatablesHasilNB').DataTable({ "order": [[0, "asc"]] });
     $('[data-toggle="tooltip"]').tooltip()
-
-    $('.owl-carousel').owlCarousel();
   });
 </script>
 
