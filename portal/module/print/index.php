@@ -10,8 +10,13 @@ require_once __DIR__ . '/../../config/function.php'; // kalau ada
 
 requireAdmin();
 
-$logoKiriUrl  = 'assets/img/logos/logo-kiri.png';
-$logoKananUrl = 'assets/img/logos/logo-kanan.png';
+if (isset($_GET['module']) && $_GET['module'] === 'print') {
+    $logoKiriUrl  = 'assets/img/logos/logo-kiri.png';
+    $logoKananUrl = 'assets/img/logos/logo-kanan.png';
+} else {
+    $logoKiriUrl  = '../../assets/img/logos/logo-kiri.png';
+    $logoKananUrl = '../../assets/img/logos/logo-kanan.png';
+}
 // OPTIONAL: kalau portal kamu wajib login
 // session_start();
 // require_once __DIR__ . '/../../config/session_manager.php';

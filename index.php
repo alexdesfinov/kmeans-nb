@@ -410,7 +410,7 @@ $isLoggedIn = !empty($_SESSION['id']);
                     </div>
                     <h1>Deteksi <span>Kecanduan Internet</span> dengan Data Mining</h1>
                     <p>Sistem analisis tingkat kecanduan internet menggunakan algoritma hybrid K-Means Clustering & Naive Bayes pada SD Negeri 16 Timbalun.</p>
-                    <a href="#login" class="hero-cta">
+                    <a href="portal/" class="hero-cta">
                         Mulai Analisis
                         <i class="fas fa-arrow-right"></i>
                     </a>

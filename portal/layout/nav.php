@@ -98,7 +98,7 @@
         <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Lainnya</h6>
       </li>
       <li class="nav-item">
-        <a class="nav-link <?php echo ($_GET['module'] ?? '') == 'print' ? 'active' : '' ?> " href="module/print/index.php">
+        <a class="nav-link <?php echo ($_GET['module'] ?? '') == 'print' ? 'active' : '' ?> " href="?module=print">
           <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-printer-fill" viewBox="0 0 16 16">
               <path d="M5 1a2 2 0 0 0-2 2v1h10V3a2 2 0 0 0-2-2zm6 8H5a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1" />
