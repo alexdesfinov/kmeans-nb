@@ -165,7 +165,7 @@ function rowToVectorKategoriNB(array $row): array
 function fetchDatasetByJenis(mysqli $conn, string $jenis, string $table = "dataset", string $colJenis = "jenisData"): array
 {
 	$jenis = ($jenis === 'training') ? 'training' : 'testing';
-	$sql = "SELECT * FROM {$table} WHERE {$colJenis}=? ORDER BY id ASC";
+	$sql = "SELECT id, nama, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17, p18, p19, p20, jenisData FROM {$table} WHERE {$colJenis}=? ORDER BY id ASC";
 	$stmt = $conn->prepare($sql);
 	$stmt->bind_param("s", $jenis);
 	$stmt->execute();
@@ -748,12 +748,7 @@ function insertDataset(mysqli $conn, string $table, string $nama, string $jenis,
 	$types  = str_repeat("s", 22);
 	$params = array_merge([$nama, $jenis], $jawaban20);
 
-	$bind = [];
-	$bind[] = $types;
-	for ($i = 0; $i < count($params); $i++) {
-		$bind[] = &$params[$i];
-	}
-	call_user_func_array([$stmt, "bind_param"], $bind);
+	$stmt->bind_param($types, ...$params);
 
 	$ok = $stmt->execute();
 	if (!$ok) {
@@ -860,12 +855,7 @@ function updateDataset(mysqli $conn, string $table, int $id, string $nama, array
 	$types  = str_repeat("s", 21) . "i";
 	$params = array_merge([$nama], $jawaban20, [$id]);
 
-	$bind = [];
-	$bind[] = $types;
-	for ($i = 0; $i < count($params); $i++) {
-		$bind[] = &$params[$i];
-	}
-	call_user_func_array([$stmt, "bind_param"], $bind);
+	$stmt->bind_param($types, ...$params);
 
 	$ok = $stmt->execute();
 	if (!$ok) {

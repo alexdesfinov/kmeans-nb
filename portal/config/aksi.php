@@ -4,21 +4,17 @@ if (isset($_POST['hapus_berdasarkan_jenis'])) {
 
     // Ambil jenis dari form
     $jenis = $_POST['jenisData'] ?? '';
-
-    if ($jenis === 'training') {
-        $tableName = "dataset_training";
-    } elseif ($jenis === 'testing') {
-        $tableName = "dataset_testing";
-    }
-
-    // Whitelist biar aman (hindari jenisData ngawur)
-    $allowed = ['training', 'testing'];
-    if (!in_array($jenis, $allowed, true)) {
+    
+    // Whitelist biar aman (hindari jenisData ngawur dan SQL injection)
+    $allowed = ['training' => 'dataset_training', 'testing' => 'dataset_testing'];
+    
+    if (!isset($allowed[$jenis])) {
         setFlash('alert alert-danger', 'Jenis data tidak valid.', 'fa fa-times');
-        $module = ($jenis === 'testing') ? 'dataTesting' : 'dataTraining';
-        echo "<script>window.location.href = 'media.php?module=$module';</script>";
+        echo "<script>window.location.href = 'media.php?module=dataTraining';</script>";
         exit;
     }
+
+    $tableName = $allowed[$jenis];
 
     // Prepared statement
     $stmt = mysqli_prepare($conn, "DELETE FROM {$tableName} WHERE jenisData = ?");
@@ -48,7 +44,15 @@ if (isset($_POST['hapus_berdasarkan_jenis'])) {
 if (isset($_POST['hapus_item']) && $_POST['hapus_item'] == '1') {
     $id = (int)($_POST['id'] ?? 0);
     $jenis = $_POST['jenis'] ?? 'training';
-    $table = ($jenis === 'testing') ? 'dataset_testing' : 'dataset_training';
+    
+    $allowed = ['training' => 'dataset_training', 'testing' => 'dataset_testing'];
+    if (!isset($allowed[$jenis])) {
+        setFlash('alert alert-danger', 'Jenis data tidak valid.', 'fa fa-times');
+        echo "<script>window.location.href = 'media.php?module=dataTraining';</script>";
+        exit;
+    }
+
+    $table = $allowed[$jenis];
 
     if ($id > 0) {
         $stmt = $conn->prepare("DELETE FROM $table WHERE id=?");
