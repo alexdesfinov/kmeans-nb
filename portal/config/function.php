@@ -11,19 +11,6 @@ function uploadProfile(string $fuploadName): void
 	move_uploaded_file($_FILES["images"]["tmp_name"], $vfile_upload);
 }
 
-function uploadProduk(string $fuploadName): bool
-{
-	$vdir_upload = "../../assets/images/produk/";
-	$vfile_upload = $vdir_upload . $fuploadName;
-	return move_uploaded_file($_FILES["img"]["tmp_name"], $vfile_upload);
-}
-
-function uploadDirectory(string $fuploadName, string $directory): void
-{
-	$vdir_upload = "../../assets/images/" . $directory . "/";
-	$vfile_upload = $vdir_upload . $fuploadName;
-	move_uploaded_file($_FILES["images"]["tmp_name"], $vfile_upload);
-}
 
 function dateIndonesian(string $date): string
 {
@@ -98,34 +85,6 @@ function timeElapsed(string $timeAgo): string
 	}
 }
 
-function haversineLabel(float $latitudeFrom, float $longitudeFrom, float $latitudeTo, float $longitudeTo, float $earthRadius = 6371.0): string
-{
-	$latFrom = deg2rad($latitudeFrom);
-	$lonFrom = deg2rad($longitudeFrom);
-	$latTo = deg2rad($latitudeTo);
-	$lonTo = deg2rad($longitudeTo);
-
-	return "2 * arcsin(&radic;(sin<sup>2</sup>((" . $latFrom . " - " . $latTo . ")/2) + cos(" . $latFrom . ") cos(" . $latTo . ") sin<sup>2</sup>((" . $lonFrom . " - " . $lonTo . ")/2)) * EarthRadius " . $earthRadius;
-}
-
-function haversineGreatCircleDistance(float $latitudeFrom, float $longitudeFrom, float $latitudeTo, float $longitudeTo, float $earthRadius = 6371.0): float
-{
-	$latFrom = deg2rad($latitudeFrom);
-	$lonFrom = deg2rad($longitudeFrom);
-	$latTo = deg2rad($latitudeTo);
-	$lonTo = deg2rad($longitudeTo);
-
-	$latDelta = $latTo - $latFrom;
-	$lonDelta = $lonTo - $lonFrom;
-
-	$angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) + cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
-	return $angle * $earthRadius;
-}
-
-function tf(mixed $value): string
-{
-	return $value == 1 || $value === true ? 'Yes' : 'No';
-}
 
 // ============================================================================================
 // 2. MAPPING & KONVERSI JAWABAN

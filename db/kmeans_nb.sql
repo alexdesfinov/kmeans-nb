@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `centroid` (
   `source_id` int(11) DEFAULT NULL,
   `data_centroid` varchar(255) NOT NULL,
   PRIMARY KEY (`id_centroid`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data untuk tabel `centroid`

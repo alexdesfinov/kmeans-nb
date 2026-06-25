@@ -15,14 +15,6 @@ if (empty($_SESSION['id'])) {
   exit;
 }
 
-if (isset($_GET['logout']) || !isset($_SESSION['id'])) {
-  session_destroy();
-  if (!isset($_GET['logout'])) {
-    header('location:index.php?r=' . rawurlencode(str_replace($project, '', $_SERVER['REQUEST_URI'])));
-  } else {
-    header('location:index.php');
-  }
-}
 $aksi = "module/" . ($_GET['module'] ?? '') . "/action.php";
 ?>
 <!DOCTYPE html>
@@ -75,4 +67,3 @@ $aksi = "module/" . ($_GET['module'] ?? '') . "/action.php";
 </body>
 
 </html>
-<?php unset($_SESSION['flash']) ?>
