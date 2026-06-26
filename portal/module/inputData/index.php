@@ -278,9 +278,78 @@ document.addEventListener("DOMContentLoaded", function() {
     const dropdowns = document.querySelectorAll(".question-dropdown-modern");
     
     const namaInputEl = document.getElementById("inputNama");
+    const storageKey = "kmeans_nb_draft_inputData_admin";
+
+    function loadFormDraft() {
+        const isEditMode = new URLSearchParams(window.location.search).get('edit') === '1';
+        if (isEditMode) return;
+
+        try {
+            const draftStr = localStorage.getItem(storageKey);
+            if (draftStr) {
+                const draft = JSON.parse(draftStr);
+                if (namaInputEl && draft.nama !== undefined) {
+                    namaInputEl.value = draft.nama;
+                }
+                const jenisDataSelect = document.getElementById("inputJenisData");
+                if (jenisDataSelect && draft.jenisData !== undefined) {
+                    jenisDataSelect.value = draft.jenisData;
+                }
+                for (let i = 1; i <= 20; i++) {
+                    const select = document.querySelector(`select[name="p${i}"]`);
+                    if (select && draft[`p${i}`] !== undefined) {
+                        select.value = draft[`p${i}`];
+                        const card = select.closest(".question-card-modern");
+                        if (card) {
+                            if (select.value !== "") {
+                                card.classList.add("answered");
+                                card.querySelector(".question-status-badge").innerHTML = '<i class="fa fa-check-circle"></i> Selesai';
+                            } else {
+                                card.classList.remove("answered");
+                                card.querySelector(".question-status-badge").innerHTML = '<i class="fa fa-circle-thin"></i> Belum Diisi';
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    function saveFormDraft() {
+        const isEditMode = new URLSearchParams(window.location.search).get('edit') === '1';
+        if (isEditMode) return;
+
+        const draft = {};
+        if (namaInputEl) draft.nama = namaInputEl.value;
+        const jenisDataSelect = document.getElementById("inputJenisData");
+        if (jenisDataSelect) draft.jenisData = jenisDataSelect.value;
+
+        for (let i = 1; i <= 20; i++) {
+            const select = document.querySelector(`select[name="p${i}"]`);
+            if (select) {
+                draft[`p${i}`] = select.value;
+            }
+        }
+        localStorage.setItem(storageKey, JSON.stringify(draft));
+    }
+
+    function clearFormDraft() {
+        localStorage.removeItem(storageKey);
+    }
+
     if (namaInputEl) {
         namaInputEl.addEventListener('input', function() {
             this.value = this.value.replace(/[^a-zA-Z\s.']/g, '');
+            saveFormDraft();
+        });
+    }
+
+    const jenisDataSelect = document.getElementById("inputJenisData");
+    if (jenisDataSelect) {
+        jenisDataSelect.addEventListener('change', function() {
+            saveFormDraft();
         });
     }
     
@@ -422,6 +491,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 card.querySelector(".question-status-badge").innerHTML = '<i class="fa fa-circle-thin"></i> Belum Diisi';
             }
             updateProgress();
+            saveFormDraft();
         });
     });
 
@@ -576,9 +646,12 @@ document.addEventListener("DOMContentLoaded", function() {
             });
             return false;
         }
+
+        clearFormDraft();
     });
 
     // Initialize progress bar state on load
+    loadFormDraft();
     updateProgress();
 });
 </script>

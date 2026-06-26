@@ -546,6 +546,50 @@ document.addEventListener("DOMContentLoaded", function() {
     // Dropdowns
     const dropdowns = document.querySelectorAll(".question-dropdown-modern");
     
+    const storageKey = "kmeans_nb_draft_inputData_user";
+
+    function loadFormDraft() {
+        try {
+            const draftStr = localStorage.getItem(storageKey);
+            if (draftStr) {
+                const draft = JSON.parse(draftStr);
+                for (let i = 1; i <= 20; i++) {
+                    const select = document.querySelector(`select[name="p${i}"]`);
+                    if (select && draft[`p${i}`] !== undefined) {
+                        select.value = draft[`p${i}`];
+                        const card = select.closest(".question-card-modern");
+                        if (card) {
+                            if (select.value !== "") {
+                                card.classList.add("answered");
+                                card.querySelector(".question-status-badge").innerHTML = '<i class="fa fa-check-circle"></i> Selesai';
+                            } else {
+                                card.classList.remove("answered");
+                                card.querySelector(".question-status-badge").innerHTML = '<i class="fa fa-circle-thin"></i> Belum Diisi';
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    function saveFormDraft() {
+        const draft = {};
+        for (let i = 1; i <= 20; i++) {
+            const select = document.querySelector(`select[name="p${i}"]`);
+            if (select) {
+                draft[`p${i}`] = select.value;
+            }
+        }
+        localStorage.setItem(storageKey, JSON.stringify(draft));
+    }
+
+    function clearFormDraft() {
+        localStorage.removeItem(storageKey);
+    }
+    
     const stepTitles = {
         1: "Langkah 1: Soal 1-5",
         2: "Langkah 2: Soal 6-10",
@@ -684,6 +728,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 card.querySelector(".question-status-badge").innerHTML = '<i class="fa fa-circle-thin"></i> Belum Diisi';
             }
             updateProgress();
+            saveFormDraft();
         });
     });
 
@@ -814,9 +859,12 @@ document.addEventListener("DOMContentLoaded", function() {
             });
             return false;
         }
+
+        clearFormDraft();
     });
 
     // Initialize progress bar state on load
+    loadFormDraft();
     updateProgress();
 });
 </script>
