@@ -75,14 +75,14 @@ if ($isEdit && $editCtx && !isset($_POST['submit'])) {
         <div class="identitas-title-section">
             <i class="fa fa-user"></i>
             <div>
-                <h5 class="mb-0" style="font-weight:750; color:#1e293b; font-size:1.05rem;">Identitas Responden</h5>
-                <p class="mb-0" style="font-size:0.75rem; color:#64748b;">Lengkapi data dasar responden terlebih dahulu</p>
+                <h5 class="mb-0" style="font-weight:750; color:#1e293b; font-size:1.05rem;">Identitas Anak</h5>
+                <p class="mb-0" style="font-size:0.75rem; color:#64748b;">Lengkapi data dasar anak terlebih dahulu</p>
             </div>
         </div>
 
         <div class="row align-items-center">
             <div class="col-md-6 mb-3 mb-md-0">
-                <label style="font-weight:650; font-size:0.8rem; color:#475569; display:block; margin-bottom:8px;">Nama Anak / Responden</label>
+                <label style="font-weight:650; font-size:0.8rem; color:#475569; display:block; margin-bottom:8px;">Nama Anak</label>
                 <div style="position:relative;">
                     <input type="text" class="form-control" name="nama" id="inputNama"
                         value="<?= htmlspecialchars($old['nama'] ?? '') ?>"
@@ -91,7 +91,7 @@ if ($isEdit && $editCtx && !isset($_POST['submit'])) {
                 </div>
             </div>
             <div class="col-md-6">
-                <label style="font-weight:650; font-size:0.8rem; color:#475569; display:block; margin-bottom:8px;">Tujuan Jenis Data</label>
+                <label style="font-weight:650; font-size:0.8rem; color:#475569; display:block; margin-bottom:8px;">Jenis Data</label>
                 <?php if (!$isEdit): ?>
                     <select class="form-select" name="jenisData" id="inputJenisData" style="border-radius:10px; border:1.5px solid #cbd5e1; font-size:0.85rem; padding:11px 16px; width:100%; cursor:pointer;" required>
                         <option value="">-- Pilih Jenis Data --</option>
