@@ -206,11 +206,6 @@ include('config/assets.php');
                   </div>
 
                   <button type="submit" class="btn-auth">Masuk</button>
-
-                  <div class="text-center mt-3">
-                    <span style="font-size:0.82rem;color:#627594;">Belum punya akun?</span>
-                    <a href="registration.php" style="font-size:0.82rem;font-weight:600;color:var(--fadel-primary);text-decoration:none;"> Daftar</a>
-                  </div>
                 </form>
               </div>
               <div class="col-md-6 auth-visual-side d-none d-md-flex">

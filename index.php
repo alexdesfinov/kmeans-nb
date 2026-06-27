@@ -673,10 +673,6 @@ $isLoggedIn = !empty($_SESSION['id']);
                                 <label class="form-check-label" for="rememberMe" style="font-size:0.82rem;color:var(--secondary);">Ingat saya</label>
                             </div>
                             <button type="submit" class="btn-login">Masuk</button>
-                            <div class="text-center mt-3">
-                                <span style="font-size:0.82rem;color:var(--secondary);">Belum punya akun?</span>
-                                <a href="portal/registration.php" style="font-size:0.82rem;font-weight:600;color:var(--primary);text-decoration:none;"> Daftar</a>
-                            </div>
                         </form>
                     </div>
                 </div>
