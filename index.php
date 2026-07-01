@@ -390,7 +390,7 @@ $isLoggedIn = !empty($_SESSION['id']);
                 <div class="nav-links d-none d-md-flex">
                     <a href="#features">Fitur</a>
                     <a href="#how-it-works">Cara Kerja</a>
-                    <a href="#about">About</a>
+                    <a href="#about">Tentang</a>
                     <?php if (!$isLoggedIn): ?>
                         <a href="#login">Masuk</a>
                     <?php endif; ?>

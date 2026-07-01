@@ -21,7 +21,22 @@ $js = array(
 //breadcrumb
 $breadcrumb = array();
 $breadcrumb[] = ['text' => '<i class="fa fa-home"></i>', 'link' => '?'];
-$breadcrumb[] = isset($_GET['module']) ? ['text' => ucwords(str_replace("_", " ", $_GET['module'])), 'link' => '?module=' . $_GET['module']] : ['text' => "Dashboard", 'link' => '?'];
+if (isset($_GET['module'])) {
+	$namaModulKustom = [
+		'dataTesting'      => 'Data Testing',
+		'dataTraining'     => 'Data Training',
+		'hasil_tes'        => 'Hasil Kmeans',
+		'hasil_tes_naive'  => 'Hasil Naive Bayes',
+		'inputData'        => 'Input Data',
+		'inputDataUser'    => 'Isi Kuesioner',
+		'user'    		   => 'Master User',
+		'uploadDataset'    => 'Upload Dataset'
+	];
+	$namaTampilan = $namaModulKustom[$_GET['module']] ?? ucwords(str_replace("_", " ", $_GET['module']));
+	$breadcrumb[] = ['text' => $namaTampilan, 'link' => '?module=' . $_GET['module']];
+} else {
+	$breadcrumb[] = ['text' => "Dashboard", 'link' => '?'];
+}
 if (isset($_GET['act'])) {
 	$breadcrumb[] = ['text' => ucwords(str_replace("_", " ", $_GET['act'])), 'link' => '?module=' . $_GET['module'] . '&act=' . $_GET['act']];
 }

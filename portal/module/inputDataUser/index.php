@@ -361,7 +361,7 @@ $showSuccessScreen = $existingRecord && !$showEditMode;
             </svg>
         </div>
         <div>
-            <h5 class="mb-0" style="font-weight:700;"><?= $showEditMode ? 'Edit Jawaban Kuesioner' : 'Isi Kuesioner Deteksi' ?></h5>
+            <h5 class="mb-0" style="font-weight:700;"><?= $showEditMode ? 'Edit Jawaban Kuesioner' : 'Isi Kuesioner' ?></h5>
             <p class="mb-0" style="font-size:0.78rem;color:#627594;">Ukur tingkat kecanduan internet anak Anda secara real-time</p>
         </div>
     </div>
@@ -370,7 +370,7 @@ $showSuccessScreen = $existingRecord && !$showEditMode;
     <!-- hidden: jenis data selalu testing -->
     <input type="hidden" name="jenisData" id="inputJenisData" value="testing">
 
-    <!-- Nama responden otomatis diambil dari session -->
+    <!-- Nama otomatis diambil dari session -->
     <input type="hidden" name="nama" id="inputNama" value="<?= htmlspecialchars($old['nama'] ?: ($_SESSION['nama'] ?? '')) ?>">
 
     <!-- Stepper Navigation Panel -->

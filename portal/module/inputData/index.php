@@ -248,7 +248,7 @@ if ($isEdit && $editCtx && !isset($_POST['submit'])) {
                     Selanjutnya <i class="fa fa-arrow-right"></i>
                 </button>
                 <button type="submit" name="submit" class="btn btn-wizard-nav btn-wizard-submit" id="btnSubmit" style="display: none !important;">
-                    <i class="fa fa-save"></i> <?= $isEdit ? 'Update Data' : 'Simpan Respon' ?>
+                    <i class="fa fa-save"></i> <?= $isEdit ? 'Update Data' : 'Simpan' ?>
                 </button>
             </div>
         </div>
@@ -503,7 +503,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if (!namaInput.value.trim()) {
             Swal.fire({
                 title: 'Data Belum Lengkap',
-                text: 'Silakan isi Nama Responden terlebih dahulu.',
+                text: 'Silakan isi Nama terlebih dahulu.',
                 icon: 'warning',
                 confirmButtonColor: '#1e293b'
             });

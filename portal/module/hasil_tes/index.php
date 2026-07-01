@@ -74,7 +74,7 @@ if ($dataKosong) {
             <div class="identitas-title-section">
                 <i class="fa fa-sliders"></i>
                 <div>
-                    <h5 class="mb-0" style="font-weight:750; color:#1e293b; font-size:1.05rem;">Konfigurasi Centroid Awal</h5>
+                    <h5 class="mb-0" style="font-weight:750; color:#1e293b; font-size:1.05rem;">Konfigurasi Centroid</h5>
                     <p class="mb-0" style="font-size:0.75rem; color:#64748b;">Pilih 3 responden berbeda sebagai titik pusat kluster awal</p>
                 </div>
             </div>
@@ -83,7 +83,7 @@ if ($dataKosong) {
                 <div class="row">
                     <!-- C1 -->
                     <div class="col-lg-4 col-md-6 mb-3 mb-lg-0">
-                        <label class="centroid-label-modern">Centroid Awal C1</label>
+                        <label class="centroid-label-modern">Centroid C1</label>
                         <select name="c1" class="form-select" style="border-radius:10px; border:1.5px solid #cbd5e1; font-size:0.85rem; padding:10px 14px; width:100%; cursor:pointer;" required>
                             <option value="">-- Pilih Responden --</option>
                             <?php foreach ($rowsTrain as $r): ?>
@@ -96,7 +96,7 @@ if ($dataKosong) {
 
                     <!-- C2 -->
                     <div class="col-lg-4 col-md-6 mb-3 mb-lg-0">
-                        <label class="centroid-label-modern">Centroid Awal C2</label>
+                        <label class="centroid-label-modern">Centroid C2</label>
                         <select name="c2" class="form-select" style="border-radius:10px; border:1.5px solid #cbd5e1; font-size:0.85rem; padding:10px 14px; width:100%; cursor:pointer;" required>
                             <option value="">-- Pilih Responden --</option>
                             <?php foreach ($rowsTrain as $r): ?>
@@ -109,7 +109,7 @@ if ($dataKosong) {
 
                     <!-- C3 -->
                     <div class="col-lg-4 col-md-6 mb-3 mb-lg-0">
-                        <label class="centroid-label-modern">Centroid Awal C3</label>
+                        <label class="centroid-label-modern">Centroid C3</label>
                         <select name="c3" class="form-select" style="border-radius:10px; border:1.5px solid #cbd5e1; font-size:0.85rem; padding:10px 14px; width:100%; cursor:pointer;" required>
                             <option value="">-- Pilih Responden --</option>
                             <?php foreach ($rowsTrain as $r): ?>
@@ -141,7 +141,7 @@ $finalLabels = [];
 
 if (!$dataKosong && $doProcess && isset($hybrid) && is_array($hybrid)) {
     if (count($initCentroids) < $k) {
-        echo "<div class='alert alert-warning border-0 text-dark font-weight-bold' style='background:#fef08a; border-radius:12px; font-size:0.85rem; padding:12px 18px; margin-bottom:20px;'><i class='fa fa-exclamation-triangle me-2'></i>Centroid awal belum lengkap. Pilih & Proses C1-C3 dulu.</div>";
+        echo "<div class='alert alert-warning border-0 text-dark font-weight-bold' style='background:#fef08a; border-radius:12px; font-size:0.85rem; padding:12px 18px; margin-bottom:20px;'><i class='fa fa-exclamation-triangle me-2'></i>Centroid belum lengkap. Pilih & Proses C1-C3 dulu.</div>";
     } else {
         $trace = $hybrid['kmeans']['trace'] ?? kmeansRunWithTrace($hybrid['X_train_km'], $initCentroids, $k, $maxIter);
         $finalLabels = $trace['final']['labels'];
@@ -169,7 +169,7 @@ if (!$dataKosong && $doProcess && isset($hybrid) && is_array($hybrid)) {
                 <thead>
                     <tr>
                         <th style="width:8%; text-align:center;">No</th>
-                        <th>Nama Responden</th>
+                        <th>Nama</th>
                         <th style="text-align:center; width:10%;">K1</th>
                         <th style="text-align:center; width:10%;">K2</th>
                         <th style="text-align:center; width:10%;">K3</th>
@@ -372,7 +372,7 @@ if (!$dataKosong && $doProcess && isset($hybrid) && is_array($hybrid)) {
                                     <thead class="table-dark">
                                         <tr>
                                             <th class="text-center" width="6%" data-orderable="false" style="padding:10px;">No</th>
-                                            <th style="padding:10px;">Nama Responden</th>
+                                            <th style="padding:10px;">Nama</th>
                                             <th class="text-center" width="10%">K1</th>
                                             <th class="text-center" width="10%">K2</th>
                                             <th class="text-center" width="10%">K3</th>
