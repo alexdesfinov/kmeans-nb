@@ -1,4 +1,5 @@
 <?php
+requireAdmin();
 
 $questions = [
     1 => "Seberapa sering anak Anda melanggar batas waktu yang Anda tetapkan dalam menggunakan gadget?",

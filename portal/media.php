@@ -1,4 +1,5 @@
 <?php
+define('SECURE_ACCESS', true);
 include 'config/koneksi.php';
 include 'config/assets.php';
 include 'config/function.php';
@@ -15,13 +16,25 @@ if (empty($_SESSION['id'])) {
   exit;
 }
 
+// Validasi modul di awal (whitelist)
+$allowed_modules = [
+  'dashboard', 'dataTesting', 'dataTraining', 'hasil_tes', 
+  'hasil_tes_naive', 'inputData', 'inputDataUser', 'print', 
+  'uploadDataset', 'user'
+];
+$page = isset($_GET['module']) ? $_GET['module'] : 'dashboard';
+if (!in_array($page, $allowed_modules)) {
+  header('Location: media.php?module=dashboard');
+  exit;
+}
+
 // Jika modul yang dipanggil adalah print, render langsung tanpa layout media.php
-if (($_GET['module'] ?? '') === 'print') {
+if ($page === 'print') {
   include 'module/print/index.php';
   exit;
 }
 
-$aksi = "module/" . ($_GET['module'] ?? '') . "/action.php";
+$aksi = "module/" . $page . "/action.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,13 +63,12 @@ $aksi = "module/" . ($_GET['module'] ?? '') . "/action.php";
     <?php include 'layout/header.php'; ?>
     <div class="container-fluid py-4">
       <?php
-      $page = isset($_GET['module']) ? $_GET['module'] : 'dashboard';
-      $act = isset($_GET['act']) ? '/' . $_GET['act'] . '.php' : '/index.php';
-
-      $target = 'module/' . $page . $act;
+      // Sanitasi act agar hanya mengandung huruf dan angka saja (mencegah path traversal)
+      $act_clean = isset($_GET['act']) ? preg_replace('/[^a-zA-Z0-9_]/', '', $_GET['act']) : 'index';
+      $target = 'module/' . $page . '/' . $act_clean . '.php';
 
       if (!file_exists($target)) {
-        echo "<div class='alert alert-danger'>Halaman tidak ditemukan: $target</div>";
+        echo "<div class='alert alert-warning border-radius-lg font-weight-bold p-3' style='background:#fffbeb; color:#92400e; border: 1.5px dashed #f59e0b;'>Halaman yang Anda cari tidak ditemukan.</div>";
       } else {
         include $target;
       }

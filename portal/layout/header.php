@@ -24,7 +24,7 @@
           </a>
         </li>
         <li class="nav-item d-none d-md-flex align-items-center">
-          <a href="../index.php" class="btn btn-sm mb-0" style="border-radius:10px; border: 1.5px solid #627594; color: #627594; display:inline-flex; align-items:center; gap:6px; padding:5px 14px; font-weight:600; font-size:0.75rem; background:transparent;">
+          <a href="../" class="btn btn-sm mb-0" style="border-radius:10px; border: 1.5px solid #627594; color: #627594; display:inline-flex; align-items:center; gap:6px; padding:5px 14px; font-weight:600; font-size:0.75rem; background:transparent;">
             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="#627594" class="bi bi-house-door-fill" viewBox="0 0 16 16" style="vertical-align: middle;">
               <path d="M6.5 14.5v-3.507c0-.235.19-.425.424-.425h2.152c.234 0 .424.19.424.425v3.507c0 .234-.19.425-.424.425H6.924a.425.425 0 0 1-.424-.425z"/>
               <path d="M1.123 7.81a.5.5 0 0 1 .151-.708l6-4a.5.5 0 0 1 .593 0l6 4a.5.5 0 0 1-.555.83l-.382-.254V13.5A1.5 1.5 0 0 1 11.5 15h-7A1.5 1.5 0 0 1 3 13.5V7.686l-.38.254a.5.5 0 0 1-.708-.13z"/>

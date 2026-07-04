@@ -1,4 +1,6 @@
 <?php
+requireUser();
+
 // =====================
 // KONFIGURASI DASAR
 // =====================

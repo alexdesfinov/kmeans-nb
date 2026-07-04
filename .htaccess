@@ -1,0 +1,20 @@
+RewriteEngine On
+
+# 1. Blokir akses langsung via browser ke folder internal (config, layout, module)
+# PHP include/require tetap bisa mengaksesnya secara lokal di server
+RewriteRule ^portal/(config|layout|module)/ - [F,L]
+
+# 2. Alihkan URL /index atau /index.php ke root directory/foldernya (hanya untuk GET request)
+RewriteCond %{REQUEST_METHOD} GET
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s(.*)/index(\.php)? [NC]
+RewriteRule ^ %1/ [R=301,L]
+
+# 3. Alihkan URL akhiran .php ke URL bersih (hanya untuk GET request)
+RewriteCond %{REQUEST_METHOD} GET
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s([^.]+)\.php [NC]
+RewriteRule ^ %1 [R=301,L]
+
+# 4. Arahkan secara internal URL bersih ke file .php yang sesuai di server
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^(.*)$ $1.php [L]

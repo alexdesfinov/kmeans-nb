@@ -1129,6 +1129,15 @@ function requireAdmin(): void
 	}
 }
 
+function requireUser(): void
+{
+	requireLogin();
+	if (($_SESSION['level'] ?? 'user') !== 'user') {
+		header('Location: media.php?module=dashboard');
+		exit;
+	}
+}
+
 // ============================================================================================
 // 12. FLASH MESSAGE
 // ============================================================================================
