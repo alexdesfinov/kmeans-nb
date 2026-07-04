@@ -263,20 +263,88 @@ $htmlNaive = ob_get_clean();
             border: 1px solid #000 !important;
         }
 
-        .section-kmeans table th:nth-child(1),
-        .section-kmeans table td:nth-child(1) {
-            width: 8mm !important;
+        /* 1. Style untuk Tabel Anggota Kluster (8 Kolom) */
+        .section-kmeans table.table-kmeans-member th:nth-child(1),
+        .section-kmeans table.table-kmeans-member td:nth-child(1) {
+            width: 10mm !important;
+            text-align: center !important;
+        }
+        .section-kmeans table.table-kmeans-member th:nth-child(2),
+        .section-kmeans table.table-kmeans-member td:nth-child(2) {
+            width: 80mm !important;
+        }
+        .section-kmeans table.table-kmeans-member th:nth-child(n+3),
+        .section-kmeans table.table-kmeans-member td:nth-child(n+3) {
+            width: 16mm !important;
             text-align: center !important;
         }
 
-        .section-kmeans table th:nth-child(2),
-        .section-kmeans table td:nth-child(2) {
-            width: 70mm !important;
+        /* 2. Style untuk Tabel Detail Iterasi (13 Kolom) agar tidak meluber */
+        .section-kmeans table.table-kmeans-iteration th:nth-child(1),
+        .section-kmeans table.table-kmeans-iteration td:nth-child(1) {
+            width: 8mm !important; /* No */
+            text-align: center !important;
+        }
+        .section-kmeans table.table-kmeans-iteration th:nth-child(2),
+        .section-kmeans table.table-kmeans-iteration td:nth-child(2) {
+            width: 32mm !important; /* Nama */
+            white-space: normal !important; /* Agar nama panjang turun ke bawah */
+            word-wrap: break-word !important;
+        }
+        /* Kolom K1 - K6 (Kolom 3 s.d 8) */
+        .section-kmeans table.table-kmeans-iteration th:nth-child(3),
+        .section-kmeans table.table-kmeans-iteration td:nth-child(3),
+        .section-kmeans table.table-kmeans-iteration th:nth-child(4),
+        .section-kmeans table.table-kmeans-iteration td:nth-child(4),
+        .section-kmeans table.table-kmeans-iteration th:nth-child(5),
+        .section-kmeans table.table-kmeans-iteration td:nth-child(5),
+        .section-kmeans table.table-kmeans-iteration th:nth-child(6),
+        .section-kmeans table.table-kmeans-iteration td:nth-child(6),
+        .section-kmeans table.table-kmeans-iteration th:nth-child(7),
+        .section-kmeans table.table-kmeans-iteration td:nth-child(7),
+        .section-kmeans table.table-kmeans-iteration th:nth-child(8),
+        .section-kmeans table.table-kmeans-iteration td:nth-child(8) {
+            width: 9mm !important;
+            text-align: center !important;
+        }
+        /* Kolom C1 - C3 (Kolom 9 s.d 11) */
+        .section-kmeans table.table-kmeans-iteration th:nth-child(9),
+        .section-kmeans table.table-kmeans-iteration td:nth-child(9),
+        .section-kmeans table.table-kmeans-iteration th:nth-child(10),
+        .section-kmeans table.table-kmeans-iteration td:nth-child(10),
+        .section-kmeans table.table-kmeans-iteration th:nth-child(11),
+        .section-kmeans table.table-kmeans-iteration td:nth-child(11) {
+            width: 12mm !important;
+            text-align: center !important;
+        }
+        /* Kolom Cluster (Kolom 12) */
+        .section-kmeans table.table-kmeans-iteration th:nth-child(12),
+        .section-kmeans table.table-kmeans-iteration td:nth-child(12) {
+            width: 13mm !important;
+            text-align: center !important;
+        }
+        /* Kolom Keterangan (Kolom 13) */
+        .section-kmeans table.table-kmeans-iteration th:nth-child(13),
+        .section-kmeans table.table-kmeans-iteration td:nth-child(13) {
+            width: 25mm !important;
+            text-align: center !important;
+            white-space: normal !important;
+            word-wrap: break-word !important;
         }
 
-        .section-kmeans table th:nth-child(n+3),
-        .section-kmeans table td:nth-child(n+3) {
-            width: 14mm !important;
+        /* 3. Style untuk Tabel Ringkasan Semua Anggota (3 Kolom) */
+        .section-kmeans table.table-kmeans-summary th:nth-child(1),
+        .section-kmeans table.table-kmeans-summary td:nth-child(1) {
+            width: 15mm !important;
+            text-align: center !important;
+        }
+        .section-kmeans table.table-kmeans-summary th:nth-child(2),
+        .section-kmeans table.table-kmeans-summary td:nth-child(2) {
+            width: 110mm !important;
+        }
+        .section-kmeans table.table-kmeans-summary th:nth-child(3),
+        .section-kmeans table.table-kmeans-summary td:nth-child(3) {
+            width: 61mm !important;
             text-align: center !important;
         }
 
@@ -391,7 +459,7 @@ $htmlNaive = ob_get_clean();
             <div style="margin-top:25px;">
                 <h5 style="font-weight:bold;">Daftar Semua Anggota</h5>
 
-                <table class="table table-bordered table-sm" style="width:100%;">
+                <table class="table table-bordered table-sm table-kmeans-summary" style="width:100%;">
                     <thead>
                         <tr>
                             <th style="width:8%; text-align:center;">No</th>

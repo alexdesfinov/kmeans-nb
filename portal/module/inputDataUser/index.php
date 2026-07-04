@@ -306,14 +306,14 @@ $showSuccessScreen = $existingRecord && !$showEditMode;
 
 <?php if ($showSuccessScreen): ?>
     <!-- Premium Success Notification Screen -->
-    <?php flashRenderAndClear(); ?>
+    <?php unset($_SESSION['flash']); ?>
 
     <div class="success-screen-card">
         <div class="success-icon-wrapper">
             <i class="fa fa-check success-pulse-icon"></i>
         </div>
-        <h3 class="success-title">Kuesioner Selesai Terisi</h3>
-        <p class="success-subtitle">Terima kasih! Respon kuesioner deteksi kecanduan internet Anda telah berhasil terekam dalam sistem.</p>
+        <h3 class="success-title">Terima Kasih</h3>
+        <p class="success-subtitle">Jawaban Anda telah berhasil disimpan</p>
         
         <div class="success-details-box">
             <div class="detail-row">

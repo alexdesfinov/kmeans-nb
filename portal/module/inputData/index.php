@@ -69,6 +69,81 @@ if ($isEdit && $editCtx && !isset($_POST['submit'])) {
     </div>
 <?php endif; ?>
 
+<style>
+    /* Edit Mode Banner styles */
+    .edit-banner-card {
+        background: #fffbeb;
+        border: 1.5px solid #fcd34d;
+        border-radius: 16px;
+        padding: 16px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+        animation: fadeInDown 0.4s ease-out;
+    }
+    .edit-banner-content {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+    .edit-banner-icon {
+        font-size: 1.8rem;
+        color: #d97706;
+    }
+    .edit-banner-title {
+        font-weight: 800;
+        color: #92400e;
+        margin-bottom: 2px;
+        font-size: 0.92rem;
+    }
+    .edit-banner-subtitle {
+        color: #b45309;
+        font-size: 0.78rem;
+        margin-bottom: 0;
+    }
+    .btn-cancel-edit-premium {
+        background: #ffffff !important;
+        color: #b45309 !important;
+        border: 1.5px solid #fcd34d;
+        border-radius: 10px;
+        padding: 8px 16px;
+        font-weight: 700;
+        font-size: 0.8rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        text-decoration: none !important;
+        transition: all 0.2s;
+    }
+    .btn-cancel-edit-premium:hover {
+        background: #fffbeb !important;
+        color: #92400e !important;
+    }
+    @keyframes fadeInDown {
+        0% { transform: translateY(-20px); opacity: 0; }
+        100% { transform: translateY(0); opacity: 1; }
+    }
+</style>
+
+<?php if ($isEdit): 
+    $cancelUrl = ($jenisEdit === 'testing') ? '?module=dataTesting' : '?module=dataTraining';
+?>
+    <!-- Edit Mode Warning Banner -->
+    <div class="edit-banner-card">
+        <div class="edit-banner-content">
+            <i class="fa fa-pencil-square edit-banner-icon"></i>
+            <div>
+                <h6 class="edit-banner-title" style="margin-bottom: 2px;">Mode Edit Data (<?= htmlspecialchars(ucfirst($jenisEdit)) ?>)</h6>
+                <p class="edit-banner-subtitle">Anda sedang memperbarui data responden. Perubahan akan disimpan saat menekan "Update Data".</p>
+            </div>
+        </div>
+        <a href="<?= $cancelUrl ?>" class="btn-cancel-edit-premium">
+            <i class="fa fa-times"></i> Batal Edit
+        </a>
+    </div>
+<?php endif; ?>
+
 <form method="post" id="wizardForm">
     <!-- Identitas Responden Card -->
     <div class="identitas-card-modern">

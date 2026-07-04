@@ -165,7 +165,7 @@ if (!$dataKosong && $doProcess && isset($hybrid) && is_array($hybrid)) {
             <h5 style="margin-top:20px; font-weight:bold; font-size:13px; text-transform:uppercase;">
                 KLUSTER <?= $c + 1 ?> (<?= htmlspecialchars($status) ?>)
             </h5>
-            <table class="table table-bordered table-sm" style="width:100%; border-collapse:collapse;">
+            <table class="table table-bordered table-sm table-kmeans-member" style="width:100%; border-collapse:collapse;">
                 <thead>
                     <tr>
                         <th style="width:8%; text-align:center;">No</th>
@@ -213,7 +213,7 @@ if (!$dataKosong && $doProcess && isset($hybrid) && is_array($hybrid)) {
             <h6 style="margin-top:20px; font-weight:bold; font-size:12.5px;">
                 Tabel Perhitungan Iterasi <?= (int)$it['iter'] ?> (Status: <?= $it['changed'] ? 'Mencari Centroid...' : 'Konvergen' ?>)
             </h6>
-            <table class="table table-bordered table-sm" style="width:100%; border-collapse:collapse;">
+            <table class="table table-bordered table-sm table-kmeans-iteration" style="width:100%; border-collapse:collapse;">
                 <thead>
                     <tr>
                         <th style="width:5%; text-align:center;">No</th>
