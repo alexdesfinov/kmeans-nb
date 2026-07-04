@@ -378,6 +378,12 @@ $isLoggedIn = !empty($_SESSION['id']);
             transition: opacity 0.6s ease, transform 0.6s ease;
         }
         .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+        /* Sembunyikan ikon mata bawaan Microsoft Edge/IE */
+        input[type="password"]::-ms-reveal,
+        input[type="password"]::-ms-clear {
+            display: none !important;
+        }
     </style>
 </head>
 
@@ -664,10 +670,15 @@ $isLoggedIn = !empty($_SESSION['id']);
                                 <label>Username</label>
                                 <input type="text" required name="username" class="form-control" placeholder="Masukkan username">
                             </div>
-                            <div class="mb-3">
-                                <label>Password</label>
-                                <input type="password" required name="password" class="form-control" placeholder="Masukkan password">
-                            </div>
+                             <div class="mb-3">
+                                 <label>Password</label>
+                                 <div class="position-relative">
+                                     <input type="password" required name="password" class="form-control" placeholder="Masukkan password" style="padding-right: 45px;">
+                                     <button type="button" class="btn-toggle-password position-absolute end-0 top-50 translate-middle-y border-0 bg-transparent text-secondary" style="padding: 10px; cursor: pointer; outline: none; z-index: 10;">
+                                         <i class="fa fa-eye-slash" style="font-size: 1rem;"></i>
+                                     </button>
+                                 </div>
+                             </div>
                             <div class="form-check form-switch mb-4">
                                 <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe">
                                 <label class="form-check-label" for="rememberMe" style="font-size:0.82rem;color:var(--secondary);">Ingat saya</label>
@@ -719,6 +730,27 @@ $isLoggedIn = !empty($_SESSION['id']);
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
                     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Password visibility toggle
+        document.querySelectorAll(".btn-toggle-password").forEach(function(btn) {
+            btn.addEventListener("click", function() {
+                const container = btn.closest(".position-relative");
+                if (!container) return;
+                const input = container.querySelector("input[type='password'], input[type='text']");
+                const icon = btn.querySelector("i");
+                if (!input || !icon) return;
+
+                const isPassword = input.getAttribute("type") === "password";
+                input.setAttribute("type", isPassword ? "text" : "password");
+                if (isPassword) {
+                    icon.classList.remove("fa-eye-slash");
+                    icon.classList.add("fa-eye");
+                } else {
+                    icon.classList.remove("fa-eye");
+                    icon.classList.add("fa-eye-slash");
                 }
             });
         });

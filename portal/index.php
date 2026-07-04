@@ -173,6 +173,12 @@ include('config/assets.php');
       margin-bottom: 2rem;
     }
     .back-link:hover { color: var(--fadel-primary); }
+    
+    /* Sembunyikan ikon mata bawaan Microsoft Edge/IE */
+    input[type="password"]::-ms-reveal,
+    input[type="password"]::-ms-clear {
+      display: none !important;
+    }
   </style>
 </head>
 
@@ -197,7 +203,12 @@ include('config/assets.php');
 
                   <div class="mb-3">
                     <label>Password</label>
-                    <input type="password" required name="password" class="form-control" placeholder="Masukkan password">
+                    <div class="position-relative">
+                      <input type="password" required name="password" class="form-control" placeholder="Masukkan password" style="padding-right: 45px;">
+                      <button type="button" class="btn-toggle-password position-absolute end-0 top-50 translate-middle-y border-0 bg-transparent text-secondary" style="padding: 10px; cursor: pointer; outline: none; z-index: 10;">
+                        <i class="fa fa-eye-slash" style="font-size: 1rem;"></i>
+                      </button>
+                    </div>
                   </div>
 
                   <div class="form-check form-switch mb-4">
@@ -231,6 +242,29 @@ include('config/assets.php');
 
   <script src="assets/js/popper.min.js"></script>
   <script src="assets/js/bootstrap.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      document.querySelectorAll(".btn-toggle-password").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+          const container = btn.closest(".position-relative");
+          if (!container) return;
+          const input = container.querySelector("input[type='password'], input[type='text']");
+          const icon = btn.querySelector("i");
+          if (!input || !icon) return;
+
+          const isPassword = input.getAttribute("type") === "password";
+          input.setAttribute("type", isPassword ? "text" : "password");
+          if (isPassword) {
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+          } else {
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
+          }
+        });
+      });
+    });
+  </script>
 </body>
 
 </html>

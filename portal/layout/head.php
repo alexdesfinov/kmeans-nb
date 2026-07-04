@@ -27,4 +27,10 @@ foreach ($css as $key => $value) {
   th {
     text-align: left;
   }
+
+  /* Sembunyikan ikon mata bawaan Microsoft Edge/IE */
+  input[type="password"]::-ms-reveal,
+  input[type="password"]::-ms-clear {
+    display: none !important;
+  }
 </style>

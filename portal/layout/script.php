@@ -81,3 +81,28 @@ foreach ($js as $key => $value) { ?>
     });
   });
 </script>
+
+<script>
+  // Global password visibility toggle
+  document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll(".btn-toggle-password").forEach(function(btn) {
+      btn.addEventListener("click", function() {
+        const container = btn.closest(".position-relative");
+        if (!container) return;
+        const input = container.querySelector("input[type='password'], input[type='text']");
+        const icon = btn.querySelector("i");
+        if (!input || !icon) return;
+
+        const isPassword = input.getAttribute("type") === "password";
+        input.setAttribute("type", isPassword ? "text" : "password");
+        if (isPassword) {
+          icon.classList.remove("fa-eye-slash");
+          icon.classList.add("fa-eye");
+        } else {
+          icon.classList.remove("fa-eye");
+          icon.classList.add("fa-eye-slash");
+        }
+      });
+    });
+  });
+</script>

@@ -46,7 +46,12 @@ if (!$u) {
 
             <div class="col-md-12 mb-3">
               <label>Password (opsional)</label>
-              <input type="password" name="password" class="form-control" minlength="6" placeholder="Kosongkan jika tidak diganti">
+              <div class="position-relative">
+                <input type="password" name="password" class="form-control" minlength="6" placeholder="Kosongkan jika tidak diganti" style="padding-right: 45px;">
+                <button type="button" class="btn-toggle-password position-absolute end-0 top-50 translate-middle-y border-0 bg-transparent text-secondary" style="padding: 10px; cursor: pointer; outline: none; z-index: 10;">
+                  <i class="fa fa-eye-slash" style="font-size: 1rem;"></i>
+                </button>
+              </div>
             </div>
 
             <div class="col-md-12 mb-3">
