@@ -61,7 +61,7 @@ if (!$u) {
 
             <div class="col-md-12 mb-3">
               <label>Level</label>
-              <select name="level" class="form-control" required>
+              <select name="level" class="form-select" required>
                 <option value="user" <?php echo ($u['level'] === 'user') ? 'selected' : ''; ?>>User</option>
                 <option value="admin" <?php echo ($u['level'] === 'admin') ? 'selected' : ''; ?>>Admin</option>
               </select>

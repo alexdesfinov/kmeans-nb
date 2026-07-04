@@ -38,7 +38,7 @@ requireAdmin();
 
             <div class="col-md-12 mb-3">
               <label>Level</label>
-              <select name="level" class="form-control" required>
+              <select name="level" class="form-select" required>
                 <option value="user" selected>User</option>
                 <option value="admin">Admin</option>
               </select>

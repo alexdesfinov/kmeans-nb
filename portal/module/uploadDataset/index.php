@@ -126,7 +126,7 @@
                                 </div>
                                 <div class="mb-4">
                                     <label for="JenisData" class="form-label" style="font-weight:600;font-size:0.82rem;">Jenis Data</label>
-                                    <select class="form-control" id="JenisData" name="jenisData" style="border-radius:12px;border:1.5px solid #e0e3e8;padding:10px 14px;">
+                                    <select class="form-select" id="JenisData" name="jenisData" style="border-radius:12px;border:1.5px solid #e0e3e8;padding:10px 14px;cursor:pointer;">
                                         <option value="training">Data Training</option>
                                         <option value="testing">Data Testing</option>
                                     </select>
