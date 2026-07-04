@@ -13,6 +13,13 @@ foreach ($js as $key => $value) { ?>
     $('#datatablesDataset').DataTable({ "order": [[0, "asc"]] });
     $('#datatablesHasilNB').DataTable({ "order": [[0, "asc"]] });
     $('[data-toggle="tooltip"]').tooltip()
+
+    // Bungkus tabel secara dinamis agar hanya tabel yang ter-scroll, sementara search bar tetap fixed
+    $('.dataTable').each(function() {
+      if (!$(this).parent().hasClass('table-responsive-inner')) {
+        $(this).wrap('<div class="table-responsive-inner" style="overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch;"></div>');
+      }
+    });
   });
 </script>
 

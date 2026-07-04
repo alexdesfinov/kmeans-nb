@@ -1759,3 +1759,18 @@ p, span, td, th, label, small, a {
   display: block;
   margin-bottom: 6px;
 }
+
+/* Fix DataTable scroll wrapper behavior so search bar and pagination remain fixed */
+.table-responsive:has(.dataTables_wrapper) {
+  overflow: visible !important;
+}
+
+.dataTables_wrapper {
+  width: 100% !important;
+  overflow: visible !important;
+}
+
+.table-responsive-inner {
+  width: 100%;
+  margin-bottom: 1rem;
+}
