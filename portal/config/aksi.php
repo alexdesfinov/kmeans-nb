@@ -16,25 +16,15 @@ if (isset($_POST['hapus_berdasarkan_jenis'])) {
 
     $tableName = $allowed[$jenis];
 
-    // Prepared statement
-    $stmt = $conn->prepare("DELETE FROM {$tableName} WHERE jenisData = ?");
-    if (!$stmt) {
-        setFlash('alert alert-danger', 'Gagal prepare query.', 'fa fa-times');
-        $module = ($jenis === 'testing') ? 'dataTesting' : 'dataTraining';
-        header('Location: media.php?module=' . $module);
-        exit;
-    }
-
-    $stmt->bind_param("s", $jenis);
-
-    if ($stmt->execute()) {
-        $deleted = $stmt->affected_rows;
-        setFlash('alert alert-success', "Berhasil menghapus {$deleted} data {$jenis}.", 'fa fa-check');
+    // Truncate table reset auto increment
+    if ($conn->query("TRUNCATE TABLE {$tableName}")) {
+        if ($jenis === 'training') {
+            $conn->query("TRUNCATE TABLE centroid");
+        }
+        setFlash('alert alert-success', "Berhasil menghapus seluruh data {$jenis}.", 'fa fa-check');
     } else {
         setFlash('alert alert-danger', 'Gagal menghapus data.', 'fa fa-times');
     }
-
-    $stmt->close();
 
     $module = ($jenis === 'testing') ? 'dataTesting' : 'dataTraining';
     header('Location: media.php?module=' . $module);
