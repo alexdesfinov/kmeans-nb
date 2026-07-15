@@ -453,39 +453,49 @@ $htmlNaive = ob_get_clean();
 
     <div class="section-title">Bagian I: Hasil Clustering K-Means</div>
     <div class="section-kmeans">
-        <?= $htmlKmeans ?>
-        <?php if (defined('PRINT_MODE') && PRINT_MODE): ?>
-
-            <div style="margin-top:25px;">
-                <h5 style="font-weight:bold;">Daftar Semua Anggota</h5>
-
-                <table class="table table-bordered table-sm table-kmeans-summary" style="width:100%;">
-                    <thead>
-                        <tr>
-                            <th style="width:8%; text-align:center;">No</th>
-                            <th>Nama</th>
-                            <th style="width:30%; text-align:center;">Keterangan</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $no = 1;
-                        foreach ($hybrid['trainRows'] as $i => $row):
-                            $cid = $finalLabels[$i] ?? -1;
-                            $ket = $hybrid['clusterNameMap'][$cid] ?? '-';
-                        ?>
-                            <tr>
-                                <td style="text-align:center;"><?= $no++ ?></td>
-                                <td><?= htmlspecialchars($row['nama'] ?? '-') ?></td>
-                                <td style="text-align:center; font-weight:bold;">
-                                    <?= htmlspecialchars($ket) ?>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+        <?php if ($dataKosong): ?>
+            <div style="margin-top:4mm; font-size:12px;">
+                Data training tidak ditemukan.
             </div>
+        <?php elseif ($k < 3): ?>
+            <div style="margin-top:4mm; font-size:12px;">
+                Centroid belum ada / belum lengkap. Pilih centroid dan proses K-Means dulu.
+            </div>
+        <?php else: ?>
+            <?= $htmlKmeans ?>
+            <?php if (defined('PRINT_MODE') && PRINT_MODE && isset($hybrid) && is_array($hybrid)): ?>
 
+                <div style="margin-top:25px;">
+                    <h5 style="font-weight:bold;">Daftar Semua Anggota</h5>
+
+                    <table class="table table-bordered table-sm table-kmeans-summary" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th style="width:8%; text-align:center;">No</th>
+                                <th>Nama</th>
+                                <th style="width:30%; text-align:center;">Keterangan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $no = 1;
+                            foreach ($hybrid['trainRows'] as $i => $row):
+                                $cid = $finalLabels[$i] ?? -1;
+                                $ket = $hybrid['clusterNameMap'][$cid] ?? '-';
+                            ?>
+                                <tr>
+                                    <td style="text-align:center;"><?= $no++ ?></td>
+                                    <td><?= htmlspecialchars($row['nama'] ?? '-') ?></td>
+                                    <td style="text-align:center; font-weight:bold;">
+                                        <?= htmlspecialchars($ket) ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+
+            <?php endif; ?>
         <?php endif; ?>
     </div>
 
@@ -540,12 +550,23 @@ $htmlNaive = ob_get_clean();
         </div>
     <?php endforeach; ?>
 
-    <?php if (count($testingPreds) === 0): ?>
+    <?php if ($dataKosong): ?>
         <div style="margin-top:4mm; font-size:12px;">
-            Data testing tidak ditemukan.
+            Data training tidak ditemukan.
         </div>
+    <?php elseif ($k < 3): ?>
+        <div style="margin-top:4mm; font-size:12px;">
+            Centroid belum ada / belum lengkap. Pilih centroid dan proses K-Means dulu.
+        </div>
+    <?php else: ?>
+        <?php if (count($testingPreds) === 0): ?>
+            <div style="margin-top:4mm; font-size:12px;">
+                Data testing tidak ditemukan.
+            </div>
+        <?php else: ?>
+            <?= $htmlNaive ?>
+        <?php endif; ?>
     <?php endif; ?>
-    <?= $htmlNaive ?>
 
     <div class="print-footer">
         <div></div>
