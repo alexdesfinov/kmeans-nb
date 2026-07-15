@@ -270,7 +270,7 @@ if (!$dataKosong && $doProcess && isset($hybrid) && is_array($hybrid)) {
                             <td style="font-weight:bold;">C<?= $c + 1 ?></td>
                             <td>Pusat Kluster</td>
                             <?php for ($d = 0; $d < 6; $d++): ?>
-                                <?php $v = number_format((float)$it['centroids'][$c][$d], 1, '.', ''); ?>
+                                <?php $v = number_format((float)$it['centroids'][$c][$d], 2, '.', ''); ?>
                                 <td style="text-align:center; font-weight:bold;"><?= $v ?></td>
                             <?php endfor; ?>
                             <td colspan="<?= $k ?>"></td>
@@ -292,7 +292,7 @@ if (!$dataKosong && $doProcess && isset($hybrid) && is_array($hybrid)) {
                             <td style="font-weight:bold; color:#1890ff;">C<?= $c + 1 ?></td>
                             <td style="color:#1890ff;">Pusat Baru</td>
                             <?php for ($d = 0; $d < 6; $d++): ?>
-                                <?php $v = number_format((float)$it['newCentroids'][$c][$d], 1, '.', ''); ?>
+                                <?php $v = number_format((float)$it['newCentroids'][$c][$d], 2, '.', ''); ?>
                                 <td style="text-align:center; font-weight:bold; color:#1890ff;"><?= $v ?></td>
                             <?php endfor; ?>
                             <td colspan="<?= $k ?>"></td>
@@ -491,7 +491,7 @@ if (!$dataKosong && $doProcess && isset($hybrid) && is_array($hybrid)) {
                                                         $dist = (float)$it['dist'][$i][$c];
                                                         $isMin = (abs($dist - (float)$minD) < 0.0000001);
                                                         $tip = buildDistanceTip($i, $c, $vec, $it['centroids'][$c], $dist);
-                                                        $distTxt = rtrim(rtrim(number_format($dist, 2, '.', ''), '0'), '.');
+                                                        $distTxt = number_format($dist, 2, '.', '');
                                                         ?>
                                                         <td class="text-center">
                                                             <?php if ($isMin): ?>
@@ -543,7 +543,7 @@ if (!$dataKosong && $doProcess && isset($hybrid) && is_array($hybrid)) {
                                                     <td style="background:#fffbeb; font-weight:700; color:#d97706;">C<?= $c + 1 ?></td>
                                                     <td style="background:#fffbeb; font-weight:600; color:#d97706;">Pusat Kluster</td>
                                                     <?php for ($d = 0; $d < 6; $d++): ?>
-                                                        <?php $v = rtrim(rtrim(number_format((float)$it['centroids'][$c][$d], 1, '.', ''), '0'), '.'); ?>
+                                                        <?php $v = number_format((float)$it['centroids'][$c][$d], 2, '.', ''); ?>
                                                         <td class="text-center" style="background:#fffbeb; color:#d97706; font-weight:600;"><?= $v ?></td>
                                                     <?php endfor; ?>
                                                     <td colspan="<?= $k ?>" style="background:#fffbeb;"></td>
@@ -566,7 +566,7 @@ if (!$dataKosong && $doProcess && isset($hybrid) && is_array($hybrid)) {
                                                     <td style="background:#f0fdf4; font-weight:700; color:#16a34a;">C<?= $c + 1 ?></td>
                                                     <td style="background:#f0fdf4; font-weight:600; color:#16a34a;">Pusat Baru</td>
                                                     <?php for ($d = 0; $d < 6; $d++): ?>
-                                                        <?php $v = rtrim(rtrim(number_format((float)$it['newCentroids'][$c][$d], 1, '.', ''), '0'), '.'); ?>
+                                                        <?php $v = number_format((float)$it['newCentroids'][$c][$d], 2, '.', ''); ?>
                                                         <td class="text-center" style="background:#f0fdf4; color:#16a34a; font-weight:600;"><?= $v ?></td>
                                                     <?php endfor; ?>
                                                     <td colspan="<?= $k ?>" style="background:#f0fdf4;"></td>

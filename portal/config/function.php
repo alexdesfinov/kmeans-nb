@@ -428,7 +428,7 @@ function kmeansRunWithTrace(array $X, array $initCentroids, int $k = 4, int $max
 
 			$newCentroids[$c] = [];
 			for ($d = 0; $d < $dim; $d++) {
-				$val = round($sum[$d] / count($clusters[$c]), 1);
+				$val = $sum[$d] / count($clusters[$c]);
 				$newCentroids[$c][$d] = $val;
 
 				if (abs($val - (float)$centroids[$c][$d]) > 0.0001) {
