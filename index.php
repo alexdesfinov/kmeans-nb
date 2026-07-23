@@ -461,14 +461,13 @@ $isLoggedIn = !empty($_SESSION['id']);
                             </div>
                             <div class="stat-item">
                                 <div class="num"><?= $countFitur ?></div>
-                                <div class="label">Fitur K</div>
+                                <div class="label">Variabel</div>
                             </div>
                         </div>
                         <div>
                             <span class="algo-tag">K-Means</span>
                             <span class="algo-tag">Naive Bayes</span>
-                            <span class="algo-tag">Euclidean</span>
-                            <span class="algo-tag">Laplace α=1.0</span>
+                            <span class="algo-tag">Data Mining</span>
                         </div>
                         <div style="margin-top:1.2rem;padding-top:1.2rem;border-top:1px solid rgba(255,255,255,0.06);">
                             <div style="font-size:0.7rem;opacity:0.4;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Klasifikasi</div>
@@ -482,14 +481,14 @@ $isLoggedIn = !empty($_SESSION['id']);
                                         $bg = 'rgba(130,214,22,0.15)';
                                         $color = '#82d616';
                                     } elseif (strtolower($cls) === 'ringan') {
-                                        $bg = 'rgba(251,207,51,0.15)';
-                                        $color = '#fbcf33';
+                                        $bg = 'rgba(16,185,129,0.15)';
+                                        $color = '#10b981';
                                     } elseif (strtolower($cls) === 'sedang') {
-                                        $bg = 'rgba(23,193,232,0.15)';
-                                        $color = '#17c1e8';
+                                        $bg = 'rgba(245,158,11,0.15)';
+                                        $color = '#f59e0b';
                                     } elseif (strtolower($cls) === 'parah') {
-                                        $bg = 'rgba(234,6,6,0.15)';
-                                        $color = '#ea0606';
+                                        $bg = 'rgba(239,68,68,0.15)';
+                                        $color = '#ef4444';
                                     }
                                     
                                     echo '<span style="background:' . $bg . ';color:' . $color . ';padding:4px 12px;border-radius:8px;font-size:0.72rem;font-weight:600;">' . htmlspecialchars($cls) . '</span>';

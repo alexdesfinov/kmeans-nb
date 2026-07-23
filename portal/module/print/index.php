@@ -416,6 +416,30 @@ $htmlNaive = ob_get_clean();
         .nb-table td.bold {
             font-weight: 700;
         }
+
+        /* ===== SIGNATURE BLOCK ===== */
+        .ttd-wrapper {
+            margin-top: 12mm;
+            float: right;
+            page-break-inside: avoid;
+            clear: both;
+        }
+
+        .ttd-box {
+            display: inline-block;
+            text-align: center;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .ttd-space {
+            height: 20mm;
+        }
+
+        .ttd-name {
+            font-weight: 700;
+            text-decoration: underline;
+        }
     </style>
 </head>
 
@@ -567,6 +591,19 @@ $htmlNaive = ob_get_clean();
             <?= $htmlNaive ?>
         <?php endif; ?>
     <?php endif; ?>
+
+    <!-- SIGNATURE BLOCK -->
+    <div class="ttd-wrapper">
+        <div class="ttd-box">
+            <div>Padang, <?= date('j') . ' ' . bulan((int)date('n')) . ' ' . date('Y'); ?></div>
+            <div>Mengetahui,</div>
+            <div>Kepala SDN 16 Timbalun</div>
+            <div class="ttd-space"></div>
+            <div class="ttd-name">Nefrizal, M.Pd</div>
+            <div>NIP. 198707072010011004</div>
+        </div>
+    </div>
+    <div style="clear:both;"></div>
 
     <div class="print-footer">
         <div></div>

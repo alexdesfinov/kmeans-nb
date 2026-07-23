@@ -601,22 +601,22 @@ body > .swal2-container {
 }
 
 .cluster-parah {
-  background: rgba(234, 6, 6, 0.1);
-  color: var(--fadel-danger);
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
 }
 
 .cluster-sedang {
-  background: rgba(23, 193, 232, 0.1);
-  color: var(--fadel-info);
+  background: rgba(245, 158, 11, 0.12);
+  color: #d97706;
 }
 
 .cluster-ringan {
-  background: rgba(251, 207, 51, 0.12);
-  color: #b8860b;
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
 }
 
 .cluster-normal {
-  background: rgba(130, 214, 22, 0.1);
+  background: rgba(130, 214, 22, 0.12);
   color: #2d8a0e;
 }
 
