@@ -44,7 +44,20 @@ if (!(Test-Git)) {
         $installerUrl = "https://github.com/git-for-windows/git/releases/download/v2.41.0.windows.1/Git-2.41.0-64-bit.exe"
         $installerPath = "$env:TEMP\Git-Installer.exe"
         
-        Invoke-WebRequest -Uri $installerUrl -OutFile $installerPath
+        try {
+            Invoke-WebRequest -Uri $installerUrl -OutFile $installerPath
+        } catch {
+            Write-Host ""
+            Write-Host "[!] GAGAL TERHUBUNG KE INTERNET" -ForegroundColor Red
+            Write-Host "Tidak dapat mengunduh Git karena komputer tidak terhubung ke internet." -ForegroundColor Yellow
+            Write-Host "Silakan aktifkan koneksi internet Anda dan coba lagi." -ForegroundColor Yellow
+            Write-Host ""
+            Write-Host "===================================================" -ForegroundColor Gray
+            Write-Host "Proses dibatalkan." -ForegroundColor Gray
+            Write-Host "===================================================" -ForegroundColor Gray
+            Read-Host "Tekan Enter untuk keluar..."
+            return
+        }
         
         Write-Host "Menjalankan installer Git. Silakan setujui jika ada permintaan izin administrator (UAC)..." -ForegroundColor Yellow
         Start-Process -FilePath $installerPath -ArgumentList "/VERYSILENT /NORESTART /NOCANCEL /SP-" -NoNewWindow -Wait
@@ -76,7 +89,19 @@ if (!(Test-Path ".git")) {
     git remote add origin $RepoUrl
     
     Write-Host "Mengunduh kode proyek dari GitHub..." -ForegroundColor Cyan
-    git fetch origin
+    $fetchOutput = git fetch origin 2>&1
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host ""
+        Write-Host "[!] GAGAL TERHUBUNG KE INTERNET" -ForegroundColor Red
+        Write-Host "Tidak dapat terhubung ke GitHub / internet." -ForegroundColor Yellow
+        Write-Host "Pastikan komputer Anda terhubung ke internet dan coba lagi." -ForegroundColor Yellow
+        Write-Host ""
+        Write-Host "===================================================" -ForegroundColor Gray
+        Write-Host "Proses dibatalkan." -ForegroundColor Gray
+        Write-Host "===================================================" -ForegroundColor Gray
+        Read-Host "Tekan Enter untuk keluar..."
+        return
+    }
     
     git checkout -b $BranchName
     git branch --set-upstream-to=origin/$BranchName $BranchName
@@ -94,7 +119,19 @@ if (!(Test-Path ".git")) {
     }
     
     Write-Host "Mengambil pembaruan terbaru dari GitHub..." -ForegroundColor Cyan
-    git fetch origin
+    $fetchOutput = git fetch origin 2>&1
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host ""
+        Write-Host "[!] GAGAL TERHUBUNG KE INTERNET" -ForegroundColor Red
+        Write-Host "Tidak dapat memeriksa pembaruan karena komputer Anda belum terhubung ke internet." -ForegroundColor Yellow
+        Write-Host "Silakan aktifkan koneksi internet Anda lalu jalankan kembali script ini." -ForegroundColor Yellow
+        Write-Host ""
+        Write-Host "===================================================" -ForegroundColor Gray
+        Write-Host "Proses dibatalkan." -ForegroundColor Gray
+        Write-Host "===================================================" -ForegroundColor Gray
+        Read-Host "Tekan Enter untuk keluar..."
+        return
+    }
     
     $localHash = git rev-parse HEAD
     $remoteHash = git rev-parse origin/$BranchName
